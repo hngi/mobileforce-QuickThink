@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickthink/registration.dart';
 import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/views/settings_view.dart';
 import 'bottom_navigation_bar.dart';
