@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
+import 'package:quickthink/model/question_model.dart';
 
 enum questionGeneratedState{DataFetched,Busy,NoData}
 
@@ -12,11 +13,11 @@ class QuestionViewModel{
 
   final StreamController<questionGeneratedState> _stateController = StreamController<questionGeneratedState>();
 
-  List<Results> questionResponse;
+  List<QuestionModel> questionResponse;
 
   Stream<questionGeneratedState> get questionState => _stateController.stream;
 
-  Future _getQuestions(apiRequest) async {
+  Future getQuestions(apiRequest) async {
 
     _stateController.add(questionGeneratedState.Busy);
     Response data = await get(apiRequest);
