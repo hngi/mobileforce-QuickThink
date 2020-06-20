@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:quickthink/views/settings_view.dart';
 import 'splashpage/splashpage.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SplashPage(),
+      home: SettingsView(),
     );
   }
 }
