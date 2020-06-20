@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+
+  TextStyle kTextStyle = GoogleFonts.poppins(
+    fontSize: 16.0,
+    fontStyle: FontStyle.normal,
+    color: Colors.white
+ );
 
 class DashBoard extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
       backgroundColor: Color(0xff1c1046),
       floatingActionButton: FloatingActionButton(
@@ -26,31 +39,29 @@ class DashBoard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: "Hello, ",
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              color: Colors.white,
-                            )),
-                        TextSpan(
-                            text: "Tiana",
-                            style: TextStyle(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: "Hello, ",
+                              style: kTextStyle.copyWith(
+                                fontSize: 24.0
+                              )),
+                          TextSpan(
+                              text: "Tiana",
+                              style: kTextStyle.copyWith(
                                 fontSize: 24.0,
-                                color: Colors.white,
-
-                                fontWeight: FontWeight.bold)),
-                        TextSpan(text: '\n'),
-                        TextSpan(
+                                fontWeight: FontWeight.bold
+                              )),
+                          TextSpan(text: '\n'),
+                          TextSpan(
                             text: "Glad you're back",
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               fontSize: 16.0,
-                              color: Colors.white,
-
-                            ),
-                        ),
-                      ]
-                          ),),
+                              fontStyle: FontStyle.normal,
+                              color: Colors.white
+                            )
+                          ),
+                        ]
+                        ),),
 
                       Container(
                         child: CircleAvatar(
@@ -66,7 +77,7 @@ class DashBoard extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: Color(0xff574E76),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
 
@@ -83,7 +94,7 @@ class DashBoard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Image.asset("assets/images/Group 23.png"),
-                                  SizedBox(width: 2.0,),
+                                  SizedBox(width: 5.0,),
                                   Text("1000",
                                       style: TextStyle(
                                           fontSize: 16.0,
@@ -91,17 +102,20 @@ class DashBoard extends StatelessWidget {
                                           fontWeight: FontWeight.w600)),
                                 ],
                               ),
-                              Text("points",
-                                  style: TextStyle(
-                                    color: Color(0xffdadada),
-                                    fontSize: 12,
-                                  )),
+                              Container(
+                                padding: EdgeInsets.only(left: 20.0),
+                                child: Text("points",
+                                    style: TextStyle(
+                                      color: Color(0xffdadada),
+                                      fontSize: 12,
+                                    )),
+                              ),
                             ],
                           ),
                         ),
                       ),
                       Container(
-                        height: 40.0,
+                        height: MediaQuery.of(context).size.height /15.0,
                         child: VerticalDivider(
                           thickness: 2.5,
                           color: Color(0xffDADADA),
@@ -125,11 +139,14 @@ class DashBoard extends StatelessWidget {
                                             fontWeight: FontWeight.w600)),
                                   ],
                                 ),
-                                Text("Ranking",
-                                    style: TextStyle(
-                                      color: Color(0xffdadada),
-                                      fontSize: 12,
-                                    )),
+                                Container(
+                                  padding: EdgeInsets.only(left: 30.0),
+                                  child: Text("Ranking",
+                                      style: TextStyle(
+                                        color: Color(0xffdadada),
+                                        fontSize: 12,
+                                      )),
+                                ),
                               ],
                             ),
                           ))
@@ -147,10 +164,11 @@ class DashBoard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       "Choose number of questions",
-                      style: TextStyle(
+                      style: kTextStyle.copyWith(
                           color: Colors.white,
                           fontSize: 16.0,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w500
+                      )
                     ),
                     QuestionSelectionCard(
                       questionNum: 10,
@@ -193,10 +211,10 @@ class QuestionSelectionCard extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             "$questionNum questions",
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xfffff7e6)),
+            style: kTextStyle.copyWith(
+              color: Color(0xffFFF7E6),
+              fontWeight: FontWeight.w600,
+            )
           )),
       onPressed: () {},
     );

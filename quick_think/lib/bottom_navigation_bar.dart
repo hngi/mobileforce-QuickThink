@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/screens/dashboard.dart';
 import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/views/settings_view.dart';
 import 'screens/leaderboard.dart';
@@ -20,7 +21,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     with TickerProviderStateMixin {
   int _lastSelected = 0;
 //static String fname=name;
-  final widgetOptions = [Home(), LeaderBoard(), SettingsView()];
+  final widgetOptions = [DashBoard(), LeaderBoard(), SettingsView()];
 
   void _selectedTab(int index) {
     setState(() {
