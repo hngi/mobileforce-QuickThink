@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/views/settings_view.dart';
+import 'bottom_navigation_bar.dart';
 import 'splashpage/splashpage.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SettingsView(),
+      home: BottomNavBar(),
     );
   }
 }
