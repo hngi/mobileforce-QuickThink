@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
+import 'package:flutter_svg/flutter_svg.dart';
 
-class Results extends StatefulWidget {
+class Result extends StatefulWidget {
   @override
-  _ResultsState createState() => _ResultsState();
+  _ResultState createState() => _ResultState();
 }
 
-class _ResultsState extends State<Results> {
+class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Color(0xFF1C1046),
       body: SafeArea(
-        
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          
           children: <Widget>[
-            SizedBox(
-          height: 300.0,
-        ),
             Center(
               child: Text(
                 "Congrats Tiana!!",
@@ -46,22 +46,20 @@ class _ResultsState extends State<Results> {
               color: Color(0xFF1C1046),
               shadowColor: Colors.black,
               elevation: 30.0,
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 130.0,
-                    ),
-                    Text(
-                      "80 points",
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 32.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+              child: ListTile(
+                leading: SvgPicture.asset(
+                  "images/coin.svg"),
+                title: Text(
+                  "80 points",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32.0,
+                    color: Colors.white,
+                  ),
+                ),
+                trailing: SizedBox(
+                  width: 35.0,
                 ),
               ),
             ),
@@ -72,21 +70,14 @@ class _ResultsState extends State<Results> {
               ),
               color: Colors.white,
               elevation: 30.0,
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 140.0,
-                    ),
-                    Text(
-                      "Check leaderboard",
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ],
+              child: ListTile(
+                title: Text(
+                  "Check leaderboard",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
                 ),
               ),
             ),
@@ -98,33 +89,31 @@ class _ResultsState extends State<Results> {
               color: Color(0xFF18C5D9),
               shadowColor: Colors.black,
               elevation: 30.0,
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 180.0,
-                    ),
-                    Text(
-                      "New quiz",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+              child: ListTile(
+                title: Text(
+                  "New quiz",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-            Row(// for inputing the social media icons
+            SizedBox(
+              height: 15.0,
+            ),
+            Row(
+              // for inputing the social media icons
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Icon(
-                  MyFlutterApp.twitter,
-                  size: 200,
-                ),
-        
+                SvgPicture.asset("images/IG.svg",
+                width: 90.0,),
+                SvgPicture.asset("images/twitter.svg",
+                width: 60.0,),
+                SvgPicture.asset("images/facebook.svg",
+                width: 60.0,),
               ],
             ),
           ],
