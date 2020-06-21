@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-//import 'splashpage/splashpage.dart';
-//import 'data/FetchedQuestions.dart';
+import 'splashpage/splashpage.dart';
+import 'data/FetchedQuestions.dart';
 import 'screens/results deep_blue_theme.dart';
 
 
