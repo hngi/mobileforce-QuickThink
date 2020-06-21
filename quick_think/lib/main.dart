@@ -4,7 +4,7 @@ import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/views/settings_view.dart';
 import 'bottom_navigation_bar.dart';
 import 'splashpage/splashpage.dart';
-import 'screens/results.dart'
+import 'screens/results.dart';
 
 
 void main() {
