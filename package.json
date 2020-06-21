@@ -1,15 +1,14 @@
 {
-  "name": "brainteaser",
+  "name": "quick-think",
   "version": "1.0.0",
-  "description": "",
+  "description": "Quick Think Mobile API",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Simeon979/invitation-service.git"
+    "url": "git+https://github.com/localServer2112/mobileforce-QuickThink.git"
   },
   "author": "Fawale Timmy",
   "license": "ISC",
