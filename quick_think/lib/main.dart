@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'splashpage/splashpage.dart';
+//import 'splashpage/splashpage.dart';
+import 'screens/results deep_blue_theme.dart';
+import 'views/my_flutter_app_icons.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SplashPage(),
+      home: Results(),
     );
   }
 }
