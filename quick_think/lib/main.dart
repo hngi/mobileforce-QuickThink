@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quickthink/screens/first_onboard_screen.dart';
+import 'package:quickthink/screens/onboarding_screens/first_onboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 bool isOnBoard;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class OnBoardScreen3 extends StatelessWidget {
+class ThirdOnBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class OnBoardScreen3 extends StatelessWidget {
       padding: EdgeInsets.all(3.0),
       child: Center(
         child: Image.asset(
-          'images/social_media_icon.png',
+          'assets/images/social_media_icon.png',
           fit: BoxFit.contain,
         ),
       ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:quickthink/screens/third_onboard_screen.dart';
+import 'package:quickthink/screens/onboarding_screens/second_onboard_screen.dart';
 
-class OnBoardScreen2 extends StatelessWidget {
+class OnBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class OnBoardScreen2 extends StatelessWidget {
       padding: EdgeInsets.all(3.0),
       child: Center(
         child: Image.asset(
-          'images/mark_icon.png',
+          'assets/images/phone_icon.png',
           fit: BoxFit.contain,
         ),
       ),
@@ -71,7 +71,7 @@ class OnBoardScreen2 extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(mediaQuery.size.width * 0.066),
           child: Text(
-            'Get points based on the difficulty level you choose',
+            'choose any number of question you want to anwser',
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white,
@@ -104,7 +104,7 @@ class OnBoardScreen2 extends StatelessWidget {
                   color: Colors.white),
             ),
             onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => OnBoardScreen3())),
+                MaterialPageRoute(builder: (context) => SecondOnBoardScreen())),
           ),
         ),
       ),
