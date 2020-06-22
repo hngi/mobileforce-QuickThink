@@ -5,6 +5,8 @@ import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/views/settings_view.dart';
 
+import 'screens/settings.dart';
+
 
 class BottomNavBar extends StatefulWidget {
   static const routeName = 'navigation_bar';
@@ -21,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     with TickerProviderStateMixin {
   int _lastSelected = 0;
 //static String fname=name;
-  final widgetOptions = [Home(), LeaderBoard(), SettingsView()];
+  final widgetOptions = [Home(), LeaderBoard(), Settings()];
 
   void _selectedTab(int index) {
     setState(() {
