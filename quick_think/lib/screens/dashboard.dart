@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:quickthink/views/question_view.dart';
+import 'select_difficulty_utils.dart';
 
-class DashBoard extends StatelessWidget {
+class DashBoard extends StatefulWidget {
+  final String userName;
+  final String avatarUri;
+  DashBoard({Key key, this.userName, this.avatarUri}) : super(key: key);
+  @override
+  _DashBoardState createState() => _DashBoardState();
+}
+
+class _DashBoardState extends State<DashBoard> {
+  String numberOfQuestionsToBeAnswered = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff1c1046),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff18C5D9),
-        onPressed: () {},
+        onPressed: () {
+          showDifficultyBottomSheet(context, numberOfQuestionsToBeAnswered);
+        },
         child: Text(
           "?",
           style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
@@ -34,7 +47,7 @@ class DashBoard extends StatelessWidget {
                               color: Colors.white,
                             )),
                         TextSpan(
-                            text: "Tiana",
+                            text: widget.userName,
                             style: TextStyle(
                                 fontSize: 24.0,
                                 color: Colors.white,
@@ -51,12 +64,12 @@ class DashBoard extends StatelessWidget {
                         ),
                       ]
                           ),),
-
+//"assets/images/owl 1.png"
                       Container(
                         child: CircleAvatar(
                           backgroundColor: Color(0xff38208c),
                           radius: 28.5,
-                          child: Image.asset("assets/images/owl 1.png"),
+                          child: Image.asset(widget.avatarUri),
                         ),
                       )
                     ],
@@ -153,19 +166,29 @@ class DashBoard extends StatelessWidget {
                           fontWeight: FontWeight.w600),
                     ),
                     QuestionSelectionCard(
-                      questionNum: 10,
+                      questionNum: 10, buttonFunction: (){setState(() {
+                        numberOfQuestionsToBeAnswered = 10.toString();
+                      });},
                     ),
                     QuestionSelectionCard(
-                      questionNum: 20,
+                      questionNum: 20,buttonFunction: (){setState(() {
+                        numberOfQuestionsToBeAnswered = 20.toString();
+                      });},
                     ),
                     QuestionSelectionCard(
-                      questionNum: 30,
+                      questionNum: 30,buttonFunction: (){setState(() {
+                        numberOfQuestionsToBeAnswered = 30.toString();
+                      });},
                     ),
                     QuestionSelectionCard(
-                      questionNum: 40,
+                      questionNum: 40,buttonFunction: (){setState(() {
+                        numberOfQuestionsToBeAnswered = 40.toString();
+                      });},
                     ),
                     QuestionSelectionCard(
-                      questionNum: 50,
+                      questionNum: 50,buttonFunction: (){setState(() {
+                        numberOfQuestionsToBeAnswered = 50.toString();
+                      });},
                     )
                   ],
                 ),
@@ -180,8 +203,9 @@ class DashBoard extends StatelessWidget {
 
 class QuestionSelectionCard extends StatelessWidget {
   final questionNum;
+  final buttonFunction;
 
-  QuestionSelectionCard({@required this.questionNum});
+  QuestionSelectionCard({this.buttonFunction, @required this.questionNum});
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +222,7 @@ class QuestionSelectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: Color(0xfffff7e6)),
           )),
-      onPressed: () {},
+      onPressed: buttonFunction,
     );
   }
 }

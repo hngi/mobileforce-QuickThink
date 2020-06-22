@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/views/settings_view.dart';
+
+import 'screens/dashboard.dart';
 
 
 class BottomNavBar extends StatefulWidget {
   static const routeName = 'navigation_bar';
-  BottomNavBar({Key key, this.title}) : super(key: key);
+  BottomNavBar({Key key, this.userName, this.avatarUri}) : super(key: key);
 
-  String title;
+  final String userName;
+  final String avatarUri;
   //String name;
 
   @override
@@ -21,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     with TickerProviderStateMixin {
   int _lastSelected = 0;
 //static String fname=name;
-  final widgetOptions = [Home(), LeaderBoard(), SettingsView()];
+  
 
   void _selectedTab(int index) {
     setState(() {
@@ -31,6 +33,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   @override
   Widget build(BuildContext context) {
+    final widgetOptions = [DashBoard(avatarUri: widget.avatarUri ,userName: widget.userName,), LeaderBoard(), SettingsView()];
     return Scaffold(
       body: Center(
         child: widgetOptions.elementAt(_lastSelected),

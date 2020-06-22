@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quickthink/image.dart';
 
+import 'bottom_navigation_bar.dart';
+
 class Registration extends StatefulWidget {
   Registration({Key key, this.title}) : super(key: key);
   final String title;
@@ -15,6 +17,7 @@ class _RegistrationState extends State<Registration> {
   File _image;
   final picker = ImagePicker();
   String nick = '';
+  String avatar = '';
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
@@ -137,6 +140,9 @@ class _RegistrationState extends State<Registration> {
         height: 56,
         child: RaisedButton(
           onPressed: () async {
+            //to the person implementing the registeration back-end, please replace the userName 'nick' with the filtered username and image string with the picked image
+            //BottomNavBar(userName: nick, avatarUri: "assets/images/owl 1.png" );
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> BottomNavBar(userName: nick, avatarUri: avatar)));
             print(nick);
           },
           textColor: Colors.white,
@@ -179,7 +185,11 @@ class _RegistrationState extends State<Registration> {
       margin: EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
       child: RawMaterialButton(
         elevation: 4.0,
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            avatar = asset;
+          });
+        },
         padding: EdgeInsets.all(0.0),
         child: Image.asset(asset),
       ),
