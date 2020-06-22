@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/screens/leaderboard.dart';
-import 'package:quickthink/screens/settings.dart';
+import 'package:quickthink/screens/settings_view.dart';
 
 void main() => runApp(new BottomNavBar());
 
@@ -68,7 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           new Home(),
           new LeaderBoard(),
-          new Settings(),
+          new SettingsView(),
         ],
         onPageChanged: onPageChanged,
         controller: _pageController,
@@ -98,7 +98,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: TextStyle(
                     color: this._page == 2 ? Color(0xff18C5D9) : Colors.white,
                   ))),
-         
         ],
         backgroundColor: Color(0xff1C1046),
         onTap: navigationTapped,
