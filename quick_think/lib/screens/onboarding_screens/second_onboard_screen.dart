@@ -103,11 +103,33 @@ class SecondOnBoardScreen extends StatelessWidget {
                   fontSize: 15,
                   color: Colors.white),
             ),
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ThirdOnBoardScreen())),
+
+            onPressed: () => /* Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ThirdOnBoardScreen())) */
+
+                Navigator.of(context).push(_createRoute()),
           ),
         ),
       ),
     );
   }
 }
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => ThirdOnBoardScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
