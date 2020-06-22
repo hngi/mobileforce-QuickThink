@@ -106,7 +106,7 @@ class OnBoardScreen extends StatelessWidget {
             onPressed: () => /* Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => SecondOnBoardScreen())) */
                 Navigator.of(context).push(_createRoute()),
-                
+               
           ),
         ),
       ),
@@ -131,3 +131,4 @@ Route _createRoute() {
     },
   );
 }
+

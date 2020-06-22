@@ -103,6 +103,7 @@ class SecondOnBoardScreen extends StatelessWidget {
                   fontSize: 15,
                   color: Colors.white),
             ),
+
             onPressed: () => /* Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => ThirdOnBoardScreen())) */
 
@@ -113,7 +114,6 @@ class SecondOnBoardScreen extends StatelessWidget {
     );
   }
 }
-
 
 Route _createRoute() {
   return PageRouteBuilder(
@@ -132,3 +132,4 @@ Route _createRoute() {
     },
   );
 }
+

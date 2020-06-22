@@ -103,7 +103,9 @@ class ThirdOnBoardScreen extends StatelessWidget {
                   color: Colors.white),
             ),
             onPressed: () => {},
+
             // TODO: Navigate to registration screen
+
           ),
         ),
       ),

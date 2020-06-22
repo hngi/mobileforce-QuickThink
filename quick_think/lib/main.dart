@@ -9,22 +9,20 @@ void main() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   onBoardCount = pref.getInt("first");
   await pref.setInt("first", 1);
-
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: '',
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-
       initialRoute: onBoardCount == 0 || onBoardCount == null
           ? 'showOnBoardScreen'
           : 'showSplashPage',
@@ -32,7 +30,6 @@ class MyApp extends StatelessWidget {
         'showOnBoardScreen': (context) => OnBoardScreen(),
         'showSplashPage': (context) => SplashPage(),
       },
-
     );
   }
 }
