@@ -109,14 +109,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
-=======
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
->>>>>>> Added onboarding
   google_fonts:
     dependency: "direct main"
     description:
@@ -124,8 +121,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-<<<<<<< HEAD
-=======
   hexcolor:
     dependency: "direct main"
     description:
@@ -133,7 +128,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
->>>>>>> Added onboarding
   http:
     dependency: "direct main"
     description:
@@ -288,8 +282,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4+3"
-<<<<<<< HEAD
-=======
   shared_preferences:
     dependency: "direct main"
     description:
@@ -318,7 +310,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2+7"
->>>>>>> Added onboarding
   sky_engine:
     dependency: transitive
     description: flutter
