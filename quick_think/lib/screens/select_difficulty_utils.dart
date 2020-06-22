@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quickthink/views/question_view.dart';
+import 'package:quickthink/screens/views/question_view.dart';
 
 void showDifficultyBottomSheet(BuildContext context, String questionNumber) {
   String difficultyLevel = '';

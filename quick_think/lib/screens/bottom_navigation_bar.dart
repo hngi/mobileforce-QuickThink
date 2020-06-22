@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/screens/dashboard.dart';
 import 'package:quickthink/screens/leaderboard.dart';
-import 'package:quickthink/views/settings_view.dart';
+import 'package:quickthink/screens/views/settings_view.dart';
 
-import 'screens/dashboard.dart';
 
 
 class BottomNavBar extends StatefulWidget {
