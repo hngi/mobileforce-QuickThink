@@ -1,7 +1,10 @@
 const express = require("express");
+const app = express();
 const router = express.Router({ automatic405: true });
-
 const Users = require('../models/model');
+const path = require('path')
+// use the express-static middleware
+app.use(express.static("public"));
 // const route = ()=>{console.log('Hello route');
 
 
@@ -14,7 +17,10 @@ const Users = require('../models/model');
 // api/report - GET (gets the users filtering with scores)
 
 // api/report-limit - GET (gets the users, limiting with "limit" filtering with scores)
-
+router.get('/', async(req,res) =>{
+    res.sendFile(path.join(__dirname, '../public/api-index.html'));
+    
+})
 
 router.get('/report', async(req,res) => {
     try {

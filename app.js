@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 require('dotenv/config');
 const route = require("./routes/route")
-
+const path = require('path')
 // middleware
 
 app.use(cors());
@@ -14,25 +14,19 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
+// use the express-static middleware
+app.use(express.static("public"));
 app.use('/api',route);
 
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+  console.log(path)
+});
 app.use((err, req, res, next) =>
   res.status(500).json({
     message: "an error occured while processing your request",
   })
 );
-
-
-
-// api/verify  - POST ( takes in a username and verifies if it exists in the db)
-
-// api/register - POST (stores users details into the database)
-
-// api/update-score - PUT (updates the user scores)
-
-// api/report - GET (gets the users filtering with scores)
-
-
 
 // Connect to Database, this way you can see any error
 const connectDB = async () => {
@@ -53,4 +47,4 @@ const connectDB = async () => {
 connectDB();
 
 // start the server listening for requests
-app.listen(process.env.PORT || 3000, () => console.log("Server is running..."));
+app.listen(process.env.PORT || 3001, () => console.log("Server is running..."));
