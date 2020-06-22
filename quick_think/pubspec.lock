@@ -75,6 +75,27 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_web_plugins:
+
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  google_fonts:
+    dependency: "direct main"
+    description:
+      name: google_fonts
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.1"
+  http_parser:
+
     dependency: transitive
     description: flutter
     source: sdk
@@ -155,6 +176,36 @@ packages:
       name: shared_preferences_web
       url: "https://pub.dartlang.org"
     source: hosted
+
+    version: "0.6.4+3"
+  shared_preferences:
+    dependency: "direct main"
+    description:
+      name: shared_preferences
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.7+3"
+  shared_preferences_macos:
+    dependency: transitive
+    description:
+      name: shared_preferences_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1+10"
+  shared_preferences_platform_interface:
+    dependency: transitive
+    description:
+      name: shared_preferences_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
+  shared_preferences_web:
+    dependency: transitive
+    description:
+      name: shared_preferences_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+
     version: "0.1.2+7"
   sky_engine:
     dependency: transitive

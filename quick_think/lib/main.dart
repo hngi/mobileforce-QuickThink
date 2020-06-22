@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:quickthink/screens/onboarding_screens/first_onboard_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-bool isOnBoard;
-void main() async{
-  // SharedPreferences pref = await SharedPreferences.getInstance();
-  // isOnBoard = pref.getInt("is_onboard");
-  // await pref.setInt("is_onboard", 1);
+import 'package:quickthink/registration.dart';
+import 'package:quickthink/screens/home.dart';
+import 'package:quickthink/views/settings_view.dart';
+import 'bottom_navigation_bar.dart';
+
+import 'screens/splashpage.dart';
+
+void main() {
   runApp(MyApp());
 }
 
@@ -17,11 +18,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '',
       debugShowCheckedModeBanner: false,
-      initialRoute: isOnBoard == true || isOnBoard == null ? 'showOnBoardScreen' : 'showRegistrationScreen',
-      routes: {
-        'showOnBoardScreen': (context) => OnBoardScreen(),
-        //'showRegistrationScreen': (context) => showRegistrationScreen(),
-      },
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      
+      home: SplashPage(),
+
     );
   }
 }
