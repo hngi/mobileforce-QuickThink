@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:quickthink/registration.dart';
 import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/views/settings_view.dart';
@@ -7,6 +8,18 @@ import 'splashpage/splashpage.dart';
 
 
 void main() {
+=======
+import 'splashpage/splashpage.dart';
+import 'screens/onboarding_screens/first_onboard_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+int onBoardCount;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  onBoardCount = pref.getInt("first");
+  await pref.setInt("first", 1);
+>>>>>>> Added onboarding
   runApp(MyApp());
 }
 
@@ -21,7 +34,17 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+<<<<<<< HEAD
       home: BottomNavBar(),
+=======
+      initialRoute: onBoardCount == 0 || onBoardCount == null
+          ? 'showOnBoardScreen'
+          : 'showSplashPage',
+      routes: {
+        'showOnBoardScreen': (context) => OnBoardScreen(),
+        'showSplashPage': (context) => SplashPage(),
+      },
+>>>>>>> Added onboarding
     );
   }
 }
