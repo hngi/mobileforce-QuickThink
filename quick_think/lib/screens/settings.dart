@@ -49,6 +49,7 @@ class Settings extends StatelessWidget {
             SizedBox(height: 20.0,),
             InkWell(
               child: ListTile(
+                contentPadding: EdgeInsets.all(0),
                 onTap: (){},
                 title: Text(
                   "Dark Theme",
@@ -75,6 +76,7 @@ class Settings extends StatelessWidget {
             ),
             InkWell(
               child: ListTile(
+                contentPadding: EdgeInsets.all(0),
                 onTap: (){},
                 title: Text(
                   "Light Theme",
