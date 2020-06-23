@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/screens/onboarding_screens/third_onboard_screen.dart';
 
 class SecondOnBoardScreen extends StatelessWidget {
