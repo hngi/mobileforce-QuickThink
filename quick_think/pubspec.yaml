@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   http: ^0.12.1
   google_fonts: ^1.1.0
   share: ^0.6.4+3
@@ -32,6 +33,7 @@ dependencies:
   hive_flutter: ^0.3.0+2
   path_provider: ^1.6.5
   path: ^1.7.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -60,11 +62,13 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+
     - assets/images/
     - assets/google_fonts/
     - images/
     - assets/
  
+
 
 
     
