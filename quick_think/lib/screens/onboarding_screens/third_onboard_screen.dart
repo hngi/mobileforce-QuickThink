@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+// import 'package:hexcolor/hexcolor.dart';
 
 class ThirdOnBoardScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -12,7 +11,7 @@ class ThirdOnBoardScreen extends StatelessWidget {
         width: mediaQuery.size.width,
         height: mediaQuery.size.height,
         padding: EdgeInsets.only(top: mediaQuery.size.height * 0.1),
-        color: Hexcolor('#1C1046'),
+        color: Color(0xFF1C1046),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -39,7 +38,7 @@ class ThirdOnBoardScreen extends StatelessWidget {
           Text(
             'Think',
             style: TextStyle(
-                color: Hexcolor('#18C5D9'),
+                color: Color(0xFF18C5D9),
                 fontSize: 18,
                 fontFamily: 'DM Sans',
                 fontWeight: FontWeight.bold),
@@ -52,7 +51,7 @@ class ThirdOnBoardScreen extends StatelessWidget {
   Widget _showPhoneIcon(MediaQueryData mediaQuery) {
     return Container(
       height: mediaQuery.size.height * 0.33,
-      margin: EdgeInsets.only(top:  mediaQuery.size.height * .1),
+      margin: EdgeInsets.only(top: mediaQuery.size.height * .1),
       padding: EdgeInsets.all(3.0),
       child: Center(
         child: Image.asset(
@@ -94,7 +93,7 @@ class ThirdOnBoardScreen extends StatelessWidget {
           child: RaisedButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            color: Hexcolor('#18C5D9'),
+            color: Color(0xFF18C5D9),
             child: Text(
               'Next',
               style: TextStyle(
