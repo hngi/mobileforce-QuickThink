@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:quickthink/registration.dart';
 import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/views/settings_view.dart';
@@ -7,8 +8,9 @@ import 'splashpage/splashpage.dart';
 
 
 import 'package:quickthink/registration.dart';
+
 import 'package:quickthink/screens/home.dart';
-import 'package:quickthink/views/settings_view.dart';
+
 import 'bottom_navigation_bar.dart';
 
 import 'screens/splashpage.dart';
@@ -22,7 +24,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       title: '',
+
 
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

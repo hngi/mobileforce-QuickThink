@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+
 import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
@@ -19,6 +20,7 @@ class BottomNavBar extends StatelessWidget {
         accentColor: const Color(0xFFFFAD32),
       ),
       home: new DashboardScreen(title: 'Bottom Navigation'),
+
     );
   }
 }
@@ -58,11 +60,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void onPageChanged(int page) {
     setState(() {
       this._page = page;
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       body: new PageView(
         children: [
@@ -102,6 +106,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: Color(0xff1C1046),
         onTap: navigationTapped,
         currentIndex: _page,
+
       ),
     );
   }
