@@ -38,7 +38,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       bottomNavigationBar: FABBottomAppBar(
         //centerItemText: 'A',
         color: Colors.white,
-        backgroundColor: Color(0xff1C1046),
+        backgroundColor: Theme.of(context).primaryColor,
         selectedColor: Color(0xff18C5D9),
         notchedShape: CircularNotchedRectangle(),
         onTabSelected: _selectedTab,
