@@ -50,6 +50,8 @@ flutter:
     - assets/images/phone_icon.png
     - assets/images/social_media_icon.png
     - assets/images/mark_icon.png
+    - assets/images/back_arrow.png
+    - assets/images/green_mark.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

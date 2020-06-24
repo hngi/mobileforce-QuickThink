@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/screens/user_difficulty_screen.dart';
 
 class ThirdOnBoardScreen extends StatelessWidget {
 
@@ -13,8 +14,8 @@ class ThirdOnBoardScreen extends StatelessWidget {
         height: mediaQuery.size.height,
         padding: EdgeInsets.only(top: mediaQuery.size.height * 0.1),
         color: Hexcolor('#1C1046'),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          //crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _headerName(),
             _showPhoneIcon(mediaQuery),
@@ -102,7 +103,8 @@ class ThirdOnBoardScreen extends StatelessWidget {
                   fontSize: 15,
                   color: Colors.white),
             ),
-            onPressed: () => {},
+            onPressed: ()  => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => UserDifficulty())),
           ),
         ),
       ),

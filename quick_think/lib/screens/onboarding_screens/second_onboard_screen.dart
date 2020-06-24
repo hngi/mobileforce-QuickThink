@@ -14,8 +14,8 @@ class SecondOnBoardScreen extends StatelessWidget {
         height: mediaQuery.size.height,
         padding: EdgeInsets.only(top: mediaQuery.size.height * 0.1),
         color: Hexcolor('#1C1046'),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          //crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _headerName(),
             _showPhoneIcon(mediaQuery),
