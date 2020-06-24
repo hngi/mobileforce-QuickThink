@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'package:quickthink/registration.dart';
-import 'package:quickthink/screens/home.dart';
-import 'package:quickthink/views/settings_view.dart';
-import 'bottom_navigation_bar.dart';
-import 'splashpage/splashpage.dart';
+import 'screens/splashpage.dart';
+import 'screens/onboarding_screens/first_onboard_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'config.dart';
+import 'theme/theme.dart';
 
 
 import 'package:quickthink/registration.dart';
@@ -19,8 +18,22 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    
+    super.initState();
+    currentTheme.addListener(() {
+      print("sometin");
+      setState((){});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,14 +44,24 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xFF1C1046),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-
-      
-      home: SplashPage(),
-
+      darkTheme: ThemeData.dark(),
+      themeMode: currentTheme.currentTheme(),
+      initialRoute: onBoardCount == 0 || onBoardCount == null
+          ? 'showOnBoardScreen'
+          : 'showSplashPage',
+      routes: {
+        'showOnBoardScreen': (context) => OnBoardScreen(),
+        'showSplashPage': (context) => SplashPage(),
+      },
 
     );
   }
+
+ 
 }
+
+
+ 
