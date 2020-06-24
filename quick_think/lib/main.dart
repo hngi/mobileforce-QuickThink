@@ -8,19 +8,15 @@ import 'bottom_navigation_bar.dart';
 import 'splashpage/splashpage.dart';
 
 
-void main() => runApp(DevicePreview (
-    enabled: !kReleaseMode,
-    builder: (context) => MyApp(),
-  )
-);
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: DevicePreview.of(context).locale,
-      builder: DevicePreview.appBuilder,
+      // locale: devicepreview.of(context).locale,
+      // builder: devicepreview.appbuilder,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(

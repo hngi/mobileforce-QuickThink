@@ -90,16 +90,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-<<<<<<< HEAD
-  flutter_keyboard_visibility:
-    dependency: "direct main"
-    description:
-      name: flutter_keyboard_visibility
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
-=======
->>>>>>> 1271fc79aef758428a42aa2af6705c4e343ba327
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

@@ -15,6 +15,8 @@ class _RegistrationState extends State<Registration> {
   File _image;
   final picker = ImagePicker();
   String nick = '';
+  final String name = 'cat';
+  final _formKey = GlobalKey<FormState>();
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
@@ -36,12 +38,12 @@ class _RegistrationState extends State<Registration> {
                 _logoText(),
                 Container(
                   child: Form(
-                    key: null,
+                    key: _formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          _imageSelection(),
+                          _imageSelection(name),
                           _prompt(),
                           _getItemIcons(),
                           _nickName(),
@@ -55,11 +57,10 @@ class _RegistrationState extends State<Registration> {
           ),
       ),
     );
-   
   }
 
-  Widget _imageSelection() {
-    return _genericAvatar(1, "assets/images/cat.svg", 45.0, 0.0, 60.0, 0.0, 3.0, 17.0);
+  Widget _imageSelection(name) {
+    return _genericAvatar(name, "assets/images/$name.svg", 45.0, 0.0, 60.0, 0.0, 3.0, 17.0);
   }
 
   Widget _getItemIcons() {
@@ -67,10 +68,10 @@ class _RegistrationState extends State<Registration> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        _genericAvatar(1, "assets/images/cat.svg", 35.0, 0.0, 17.0, 6.0, -7.0, 10.0),
-        _genericAvatar(2, "assets/images/cocker-spaniel.svg", 35.0, 6.0, 17.0, 6.0, -7.0, 10.0),
-        _genericAvatar(3, "assets/images/owl.svg", 35.0, 6.0, 17.0, 6.0, -7.0, 10.0),
-        _genericAvatar(4, "assets/images/sheep.svg", 35.0, 6.0, 17.0, 0.0, -7.0, 10.0),
+        _genericAvatar("cat", "assets/images/cat.svg", 35.0, 0.0, 17.0, 6.0, -7.0, 10.0),
+        _genericAvatar("cocker-spaniel", "assets/images/cocker-spaniel.svg", 35.0, 6.0, 17.0, 6.0, -7.0, 10.0),
+        _genericAvatar("owl", "assets/images/owl.svg", 35.0, 6.0, 17.0, 6.0, -7.0, 10.0),
+        _genericAvatar("sheep", "assets/images/sheep.svg", 35.0, 6.0, 17.0, 0.0, -7.0, 10.0),
 
       ],
     );
@@ -102,10 +103,19 @@ class _RegistrationState extends State<Registration> {
             fontSize: 20.0,
             color: Colors.white
         ),
-        obscureText: false,
         onChanged: (val) {
-          setState(() => nick = val);
+          
         },
+        validator: (val) {
+          RegExp valUser = new RegExp(r"^[a-z0-9_-]{3-16}$");
+          Iterable<RegExpMatch> match = valUser.allMatches(val);
+          if(match.length == 0) {
+            return "Username short";
+          } else {
+            return null;
+          }
+        },
+        onSaved: (val) => nick = val,
         decoration: InputDecoration(
           hintText: 'Enter nickname',
           hintStyle: TextStyle(
@@ -133,9 +143,7 @@ class _RegistrationState extends State<Registration> {
         width: 204.0,
         height: 56.0,
         child: RaisedButton(
-          onPressed: () async {
-            print(nick);
-          },
+          onPressed: onPressed,
           textColor: Colors.white,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0)
@@ -154,7 +162,14 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Widget _genericAvatar(id, uri, radius, left, top, right, posL, posB) {
+  void onPressed() {
+    var form = _formKey.currentState;
+
+    if(form.validate()) {
+      form.save();
+    }
+  }
+  Widget _genericAvatar(name, uri, radius, left, top, right, posL, posB) {
     return Container(
       margin: EdgeInsets.fromLTRB(left, top, right, 0.0),
         child: Stack(
@@ -166,20 +181,24 @@ class _RegistrationState extends State<Registration> {
             Positioned(
               left: posL,
               bottom: posB,
-              child: _icon(id, uri),
+              child: _icon(name, uri),
             )
           ],
         ),
     );
   }
 
-  Widget _icon(id, asset) {
+  Widget _icon(name, asset) {
 //    the id can be used
     return Container(
       margin: EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
       child: RawMaterialButton(
         elevation: 4.0,
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _imageSelection(name);
+          });
+        },
         padding: EdgeInsets.all(0.0),
         child: SvgPicture.asset(asset)
       ),
