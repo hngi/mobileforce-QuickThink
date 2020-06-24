@@ -6,24 +6,20 @@ import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
 
-void main() => runApp(new BottomNavBar());
+/* void main() => runApp(new BottomNavBar());
 
+//D.dan why another run app?, why not just have bottomnavbar stateful widget?
 class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Bottom Navigation',
       debugShowCheckedModeBanner: false,
-      theme: new ThemeData(
-        primaryColor: const Color(0xFF02BB9F),
-        primaryColorDark: const Color(0xFF167F67),
-        accentColor: const Color(0xFFFFAD32),
-      ),
       home: new DashboardScreen(title: 'Bottom Navigation'),
 
     );
   }
-}
+} */
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({Key key, this.title}) : super(key: key);
@@ -103,7 +99,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: this._page == 2 ? Color(0xff18C5D9) : Colors.white,
                   ))),
         ],
-        backgroundColor: Color(0xff1C1046),
+        backgroundColor: Theme.of(context).primaryColor,
         onTap: navigationTapped,
         currentIndex: _page,
 

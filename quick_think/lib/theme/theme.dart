@@ -55,11 +55,16 @@ class CustomTheme with ChangeNotifier {
   bool light = true;
 
   ThemeMode currentTheme() {
-    return light ? ThemeMode.dark : ThemeMode.light;
+    return light ? ThemeMode.light : ThemeMode.dark;
   }
 
-  void flipTheme() {
-    light = !light;
+  void darkTheme() {
+    light = false;
+    notifyListeners();
+  }
+
+   void lightTheme() {
+    light = true;
     notifyListeners();
   }
 }

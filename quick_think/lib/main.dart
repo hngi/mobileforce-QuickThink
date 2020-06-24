@@ -12,9 +12,14 @@ import 'package:quickthink/screens/home.dart';
 
 import 'bottom_navigation_bar.dart';
 
-import 'screens/splashpage.dart';
 
-void main() {
+int onBoardCount;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  onBoardCount = pref.getInt("first");
+  await pref.setInt("first", 1);
+
   runApp(MyApp());
 }
 
@@ -37,10 +42,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
-      title: '',
-
-
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(

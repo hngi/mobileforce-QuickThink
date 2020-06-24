@@ -71,7 +71,7 @@ class OnBoardScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(mediaQuery.size.width * 0.066),
           child: Text(
-            'choose any number of question you want to anwser',
+            'Choose any number of question you want to anwser',
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white,
@@ -103,11 +103,31 @@ class OnBoardScreen extends StatelessWidget {
                   fontSize: 15,
                   color: Colors.white),
             ),
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SecondOnBoardScreen())),
+            onPressed: () => /* Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SecondOnBoardScreen())) */
+                Navigator.of(context).push(_createRoute()),
+                
           ),
         ),
       ),
     );
   }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => SecondOnBoardScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var curve = Curves.easeInOutExpo;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

@@ -48,7 +48,7 @@ class _SettingsViewState extends State<SettingsView> {
             ),
             InkWell(
               child: ListTile(
-                onTap: currentTheme.flipTheme,
+                onTap: currentTheme.darkTheme,
                 title: Text(
                   "Dark Theme",
                   style: GoogleFonts.poppins(
@@ -73,7 +73,7 @@ class _SettingsViewState extends State<SettingsView> {
             ),
             InkWell(
               child: ListTile(
-                onTap: () {},
+                onTap: currentTheme.lightTheme,
                 title: Text(
                   "Light Theme",
                   style: GoogleFonts.poppins(
