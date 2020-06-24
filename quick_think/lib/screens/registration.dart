@@ -15,7 +15,8 @@ class _RegistrationState extends State<Registration> {
   File _image;
   final picker = ImagePicker();
   String nick = '';
-  final String name = 'cat';
+  String password = '';
+  String _initUrl = 'cat';
   final _formKey = GlobalKey<FormState>();
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -27,40 +28,60 @@ class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Color.fromRGBO(28, 16, 70, 1),
       body: SafeArea(
-          child: Container(
-            color: Color.fromRGBO(28, 16, 70, 1),
-            child: Column(
+            child: SingleChildScrollView(
+              child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 40.0),
                 _logoText(),
+                SizedBox(height: 20.0),
+                defaultIcon(_initUrl),
+                SizedBox(height: 20.0),
+                _prompt(),
+                SizedBox(height: 20.0),
+                _getItemIcons(),
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
                   child: Form(
                     key: _formKey,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          _imageSelection(name),
-                          _prompt(),
-                          _getItemIcons(),
+                          SizedBox(height: 20.0),
                           _nickName(),
-                          _loginBtn()
+                          SizedBox(height: 20.0),
+                          _password(),
+                          SizedBox(height: 30.0),
+                          _loginBtn(),
                         ],
                       ),
-                ),
+                  ),
                 )
               ],
             ),
-          ),
+            )
       ),
     );
   }
-
-  Widget _imageSelection(name) {
-    return _genericAvatar(name, "assets/images/$name.svg", 45.0, 0.0, 60.0, 0.0, 3.0, 17.0);
+  
+  Widget defaultIcon(_newUrl) {
+    _initUrl = _newUrl;
+    print('selected is $_initUrl or $_newUrl');
+    return Container(
+      margin: EdgeInsets.all(5.0),
+        child: Stack(
+          children: <Widget>[
+            CircleAvatar(
+              backgroundColor: Color.fromRGBO(56, 32, 140, 1),
+              radius: 40.0,
+              child: SvgPicture.asset("assets/images/$_initUrl.svg"),
+            ),
+          ],
+        ),
+    );
   }
 
   Widget _getItemIcons() {
@@ -68,58 +89,53 @@ class _RegistrationState extends State<Registration> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        _genericAvatar("cat", "assets/images/cat.svg", 35.0, 0.0, 17.0, 6.0, -7.0, 10.0),
-        _genericAvatar("cocker-spaniel", "assets/images/cocker-spaniel.svg", 35.0, 6.0, 17.0, 6.0, -7.0, 10.0),
-        _genericAvatar("owl", "assets/images/owl.svg", 35.0, 6.0, 17.0, 6.0, -7.0, 10.0),
-        _genericAvatar("sheep", "assets/images/sheep.svg", 35.0, 6.0, 17.0, 0.0, -7.0, 10.0),
-
+        _genericAvatar("cat", 35.0),
+        _genericAvatar("cocker-spaniel", 35.0),
+        _genericAvatar("owl", 35.0),
+        _genericAvatar("sheep", 35.0),
       ],
     );
   }
 
   Widget _prompt() {
-    return Container(
-      margin: EdgeInsets.only(top: 22.0),
-      child: Text('Selected Preferred avatar',
+    return Text('Selected Preferred avatar',
         style: TextStyle(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w600,
           fontSize: 16.0,
           color: Colors.white
         ),
-      ),
-    );
+      );
   }
 
   Widget _nickName() {
-    return Container(
-      margin: EdgeInsets.only(top: 40.0),
-      width: 305.0,
-      height: 48.0,
-      child: TextFormField(
+    return TextFormField(
         style: TextStyle(
-            fontFamily: 'poppins',
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
             fontSize: 20.0,
             color: Colors.white
         ),
         onChanged: (val) {
-          
+          setState(() => nick = val);
         },
         validator: (val) {
-          RegExp valUser = new RegExp(r"^[a-z0-9_-]{3-16}$");
-          Iterable<RegExpMatch> match = valUser.allMatches(val);
-          if(match.length == 0) {
-            return "Username short";
-          } else {
-            return null;
+          if(val.length == 0) {
+            return 'Username Should Not Be Empty';
+          } 
+          if(val.length <=2) {
+            return 'should be 3 or more characters';
           }
+          if(!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val)) {
+            return "can only include _ or -";
+          } 
+          return null;
         },
         onSaved: (val) => nick = val,
         decoration: InputDecoration(
           hintText: 'Enter nickname',
           hintStyle: TextStyle(
-              fontFamily: 'poppins',
+              fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 20.0,
               color: Colors.white
@@ -134,106 +150,134 @@ class _RegistrationState extends State<Registration> {
               borderRadius: BorderRadius.circular(5.0)
           ),
         ),
-      ),
-    );
+      );
   }
-  Widget _loginBtn() {
-    return Container(
-        margin: EdgeInsets.only(top: 30.0),
-        width: 204.0,
-        height: 56.0,
-        child: RaisedButton(
-          onPressed: onPressed,
-          textColor: Colors.white,
-          shape: RoundedRectangleBorder(
+  
+  Widget _password() {
+    return TextFormField(
+      style: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
+            fontSize: 20.0,
+            color: Colors.white
+        ),
+      obscureText: true,
+      decoration: InputDecoration(
+          hintText: 'Enter password',
+          hintStyle: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              fontSize: 20.0,
+              color: Colors.white
+          ),
+          contentPadding: EdgeInsets.fromLTRB(14.0, 12.0, 0.0, 12.0),
+          fillColor: Color.fromRGBO(87, 78, 118, 1),
+          filled: true,
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Color.fromRGBO(24, 197, 217, 1),
+                  width: 1.0),
               borderRadius: BorderRadius.circular(5.0)
           ),
-          color: Color.fromRGBO(24, 197, 217, 1),
-          highlightColor: Color.fromRGBO(24, 197, 217, 1),
-          child: Text('Get started',
-            style: TextStyle(
-                fontFamily: 'poppins',
-                fontWeight: FontWeight.w700,
-                fontSize: 16.0,
-                color: Colors.white
-            )
-          ),
-        )
-    );
+        ),
+      onChanged: (val) {
+        setState(() => password = val);
+        },
+        validator: (val) {
+          if(val.length == 0) {
+            return 'password cannot Be empty';
+          } 
+          if(val.length <= 4) {
+            return "should be more than 4 characters";
+          }
+            return null;
+        },
+      );
+  }
+
+
+  Widget _loginBtn() {
+    return RaisedButton(
+        padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
+        onPressed: onPressed,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0)
+        ),
+        color: Color.fromRGBO(24, 197, 217, 1),
+        highlightColor: Color.fromRGBO(24, 197, 217, 1),
+        child: Text('Get started',
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 16.0,
+              color: Colors.white
+          )
+        ),
+      );
   }
 
   void onPressed() {
     var form = _formKey.currentState;
-
     if(form.validate()) {
       form.save();
+    
     }
   }
-  Widget _genericAvatar(name, uri, radius, left, top, right, posL, posB) {
+  Widget _genericAvatar(name, radius) {
     return Container(
-      margin: EdgeInsets.fromLTRB(left, top, right, 0.0),
+      margin: EdgeInsets.all(5.0),
         child: Stack(
           children: <Widget>[
             CircleAvatar(
               backgroundColor: Color.fromRGBO(56, 32, 140, 1),
               radius: radius,
+              child: _icon(name),
             ),
-            Positioned(
-              left: posL,
-              bottom: posB,
-              child: _icon(name, uri),
-            )
           ],
         ),
     );
   }
 
-  Widget _icon(name, asset) {
+  Widget _icon(name) {
 //    the id can be used
-    return Container(
-      margin: EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
-      child: RawMaterialButton(
-        elevation: 4.0,
-        onPressed: () {
-          setState(() {
-            _imageSelection(name);
-          });
-        },
-        padding: EdgeInsets.all(0.0),
-        child: SvgPicture.asset(asset)
-      ),
+    return RawMaterialButton(
+      elevation: 4.0,
+      onPressed: () {
+        setState(() {
+          defaultIcon(name);
+        });
+      },
+      padding: EdgeInsets.all(0.0),
+      child: SvgPicture.asset("assets/images/$name.svg")
     );
   }
 
 
 
   Widget _logoText() {
-    return Container(
-      margin: EdgeInsets.only(top: 60.0),
-      alignment: Alignment.center,
-      child: RichText(
-        text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-              text: 'Quick',
-              style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.0,
-                  color: Colors.white
-              )
-            ),
-            TextSpan(
-              text: 'Think',
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.0,
-                color: Color.fromRGBO(24, 197, 217, 1),
-              )
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: 'Quick',
+            style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontWeight: FontWeight.w700,
+                fontSize: 16.0,
+                color: Colors.white
             )
-          ]
-        ),
+          ),
+          TextSpan(
+            text: 'Think',
+              style: TextStyle(
+                fontFamily: 'DM Sans',
+                fontWeight: FontWeight.w700,
+                fontSize: 16.0,
+              color: Color.fromRGBO(24, 197, 217, 1),
+            )
+          )
+        ]
       ),
     );
   }

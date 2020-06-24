@@ -23,11 +23,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   http: ^0.12.1
   google_fonts: ^1.1.0
   share: ^0.6.4+3
   flutter_icons: ^1.1.0
   flutter_svg: ^0.17.4
+  hive: ^1.4.1+1
+  hive_flutter: ^0.3.0+2
+  path_provider: ^1.6.5
+  path: ^1.7.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -35,13 +41,16 @@ dependencies:
   cupertino_icons: ^0.1.3
   image_picker: ^0.6.7+2
   flutter_spinkit: 4.1.2+1
-  device_preview: ^0.4.5
 
+dependency_overrides:
+  path: ^1.6.4
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator: ^0.7.0+2
+  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -53,10 +62,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+
     - assets/images/
     - assets/google_fonts/
-    - assets/
     - images/
+    - assets/
+ 
+
+
 
     
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -82,20 +95,3 @@ flutter:
      fonts:
        - asset: assets/google_fonts/DMSans-Bold.ttf
          weight: 700
-
-
-
-  #fonts:
-  #  - family: Poppins
-  #    fonts:
-  #      - asset: assets/fonts/
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
