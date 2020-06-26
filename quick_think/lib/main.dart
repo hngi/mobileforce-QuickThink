@@ -3,15 +3,8 @@ import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
+import 'registration.dart';
 import 'theme/theme.dart';
-
-
-import 'package:quickthink/registration.dart';
-
-import 'package:quickthink/screens/home.dart';
-
-import 'bottom_navigation_bar.dart';
-
 
 int onBoardCount;
 void main() async {
@@ -31,11 +24,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    
     super.initState();
     currentTheme.addListener(() {
       print("sometin");
-      setState((){});
+      setState(() {});
     });
   }
 
@@ -48,7 +40,7 @@ class _MyAppState extends State<MyApp> {
         primaryColor: Color(0xFF1C1046),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      darkTheme: ThemeData.dark(),
+      darkTheme: themeDark,
       themeMode: currentTheme.currentTheme(),
       initialRoute: onBoardCount == 0 || onBoardCount == null
           ? 'showOnBoardScreen'
@@ -56,13 +48,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         'showOnBoardScreen': (context) => OnBoardScreen(),
         'showSplashPage': (context) => SplashPage(),
+        Registration.id: (context) => Registration(),
       },
-
     );
   }
-
- 
 }
-
-
- 

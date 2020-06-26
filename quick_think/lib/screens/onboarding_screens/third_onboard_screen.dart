@@ -3,7 +3,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/registration.dart';
 
 class ThirdOnBoardScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -53,7 +52,7 @@ class ThirdOnBoardScreen extends StatelessWidget {
   Widget _showPhoneIcon(MediaQueryData mediaQuery) {
     return Container(
       height: mediaQuery.size.height * 0.33,
-      margin: EdgeInsets.only(top:  mediaQuery.size.height * .1),
+      margin: EdgeInsets.only(top: mediaQuery.size.height * .1),
       padding: EdgeInsets.all(3.0),
       child: Center(
         child: Image.asset(
@@ -103,7 +102,10 @@ class ThirdOnBoardScreen extends StatelessWidget {
                   fontSize: 15,
                   color: Colors.white),
             ),
-            onPressed: () => Navigator.of(context).push(_createRoute()),
+            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+              _createRoute(),
+              ModalRoute.withName(Registration.id),
+            ),
           ),
         ),
       ),
@@ -113,8 +115,7 @@ class ThirdOnBoardScreen extends StatelessWidget {
 
 Route _createRoute() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        Registration(),
+    pageBuilder: (context, animation, secondaryAnimation) => Registration(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
       var end = Offset.zero;

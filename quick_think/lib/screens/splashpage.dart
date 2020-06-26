@@ -59,7 +59,7 @@ class _SplashPageState extends State<SplashPage> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       //Background color
-      backgroundColor: Color(0xFF1C1046),
+      backgroundColor: Theme.of(context).primaryColor,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[

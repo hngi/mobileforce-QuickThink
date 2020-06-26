@@ -30,6 +30,7 @@ final themeLight = ThemeData(
     brightness: Brightness.light,
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
+  fontFamily: 'Poppins'
 );
 
 final themeDark = ThemeData(
@@ -48,7 +49,12 @@ final themeDark = ThemeData(
       onError: redColor,
       brightness: Brightness.light),
   selectedRowColor: greenColor,
+  primaryColor: primaryColorDark,
+  backgroundColor: primaryColorDark,
   visualDensity: VisualDensity.adaptivePlatformDensity,
+  brightness: Brightness.dark,
+  fontFamily: 'Poppins'
+
 );
 
 class CustomTheme with ChangeNotifier {

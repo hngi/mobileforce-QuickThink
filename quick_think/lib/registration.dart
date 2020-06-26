@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quickthink/image.dart';
 
 class Registration extends StatefulWidget {
+  static const String id = 'registration screen';
   Registration({Key key, this.title}) : super(key: key);
   final String title;
   @override

@@ -59,6 +59,7 @@ flutter:
     - assets/images/social_media_icon.png
     - assets/images/mark_icon.png
     - assets/
+    - assets/images/
     - images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -70,6 +71,15 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        
+  
+        
+        
   #fonts:
   #  - family: Poppins
   #    fonts:
