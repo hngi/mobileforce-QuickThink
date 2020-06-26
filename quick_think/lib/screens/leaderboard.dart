@@ -5,7 +5,7 @@ class LeaderBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Text(
-      'leaderboard',
+      'Leaderboard',
       style: TextStyle(
         color: Colors.white,
       ),
