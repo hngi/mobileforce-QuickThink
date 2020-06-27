@@ -44,6 +44,7 @@ class SettingsView extends StatelessWidget {
             SizedBox(height: 20.0,),
             InkWell(
               child: ListTile(
+                contentPadding: EdgeInsets.all(0),
                   onTap: (){},
                 title: Text(
                   "Dark Theme",
@@ -56,7 +57,7 @@ class SettingsView extends StatelessWidget {
                       )
                   ),
                 ),
-                leading: Icon(FlutterIcons.wi_night_clear_wea,
+                leading: Icon(FlutterIcons.moon_fea,
                 color: Colors.white,
                 ),
               ),
@@ -70,6 +71,7 @@ class SettingsView extends StatelessWidget {
             ),
             InkWell(
               child: ListTile(
+                contentPadding: EdgeInsets.all(0),
                 onTap: (){},
                 title: Text(
                   "Light Theme",

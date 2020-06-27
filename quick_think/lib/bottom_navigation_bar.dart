@@ -26,7 +26,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   final widgetOptions = [Home(), LeaderBoard(), SettingsView()];
 
   void _selectedTab(int index) {
-    showDifficultyBottomSheet(context);
+    /*showDifficultyBottomSheet(context);*/
 
     setState(() {
       _lastSelected = index;
