@@ -70,6 +70,7 @@ class _InfoHelpState extends State<InfoHelp> {
       child: Text(
         'Help',
         style: style.copyWith(fontSize: 20),
+        textAlign: TextAlign.center,
       ),
     );
   }
