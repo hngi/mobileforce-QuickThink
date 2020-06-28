@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quickthink/data/new.dart';
+import 'package:quickthink/views/question_view.dart';
 
 class DashBoard extends StatefulWidget {
+  DashBoard({Key key, @required this.username, @required this.uri})
+      : super(key: key);
+  final String username;
+  final String uri;
 
   @override
   _DashBoardState createState() => _DashBoardState();
 }
 
 class _DashBoardState extends State<DashBoard> {
-  void showDifficultyBottomSheet(BuildContext context) {
+  int numberOfQuestions;
+  String option = "easy";
+
+   showDifficultyBottomSheet(BuildContext context) {
     var radius = Radius.circular(10);
-    String option = "easy";
-    showModalBottomSheet(
+
+    return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -69,7 +77,14 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (o) => SelectedDiff(title: option)));
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (o) => QuestionView(
+                                  numberOfQuestions: numberOfQuestions,
+                                  difficultyLevel: option,
+                                )));
                   },
                   child: Text(
                     "Start Game",
@@ -110,7 +125,7 @@ class _DashBoardState extends State<DashBoard> {
     return Row(
       children: List.generate(
         optionsName.length,
-            (index) {
+        (index) {
           return Expanded(
             child: GestureDetector(
               onTap: () {
@@ -158,7 +173,9 @@ class _DashBoardState extends State<DashBoard> {
       backgroundColor: Color(0xff1c1046),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff18C5D9),
-        onPressed: () {},
+        onPressed: () {
+          showDifficultyBottomSheet(context);
+        },
         child: Text(
           "?",
           style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
@@ -177,38 +194,36 @@ class _DashBoardState extends State<DashBoard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: "Hello, ",
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              color: Colors.white,
-                            )),
-                        TextSpan(
-                            text: "Tiana",
-                            style: TextStyle(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: "Hello, ",
+                              style: TextStyle(
                                 fontSize: 24.0,
                                 color: Colors.white,
-
-                                fontWeight: FontWeight.bold)),
-                        TextSpan(text: '\n'),
-                        TextSpan(
+                              )),
+                          TextSpan(
+                              text: widget.username,
+                              style: TextStyle(
+                                  fontSize: 24.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                          TextSpan(text: '\n'),
+                          TextSpan(
                             text: "Glad you're back",
                             style: TextStyle(
                               fontSize: 16.0,
                               color: Colors.white,
-
                             ),
-                        ),
-                      ]
-                          ),),
-
+                          ),
+                        ]),
+                      ),
                       Container(
                         child: CircleAvatar(
-                          backgroundColor: Color(0xff38208c),
-                          radius: 28.5,
-                          child: Image.asset("assets/images/owl 1.png"),
-                        ),
+                            backgroundColor: Color(0xff38208c),
+                            radius: 28.5,
+                            child: SvgPicture.asset(
+                                "assets/images/${widget.uri}.svg") //Image.asset("assets/images/owl 1.png"),
+                            ),
                       )
                     ],
                   ),
@@ -220,7 +235,6 @@ class _DashBoardState extends State<DashBoard> {
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -234,7 +248,9 @@ class _DashBoardState extends State<DashBoard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Image.asset("assets/images/Group 23.png"),
-                                  SizedBox(width: 2.0,),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
                                   Text("1000",
                                       style: TextStyle(
                                           fontSize: 16.0,
@@ -268,7 +284,9 @@ class _DashBoardState extends State<DashBoard> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Image.asset("assets/images/medal.png"),
-                                    SizedBox(width: 2.0,),
+                                    SizedBox(
+                                      width: 2.0,
+                                    ),
                                     Text("30th",
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -305,18 +323,33 @@ class _DashBoardState extends State<DashBoard> {
                     ),
                     QuestionSelectionCard(
                       questionNum: 10,
+                      onPressed: () {
+                        setState(() => numberOfQuestions = 10);
+                      },
                     ),
                     QuestionSelectionCard(
                       questionNum: 20,
+                      onPressed: () {
+                        setState(() => numberOfQuestions = 20);
+                      },
                     ),
                     QuestionSelectionCard(
                       questionNum: 30,
+                      onPressed: () {
+                        setState(() => numberOfQuestions = 30);
+                      },
                     ),
                     QuestionSelectionCard(
                       questionNum: 40,
+                      onPressed: () {
+                        setState(() => numberOfQuestions = 40);
+                      },
                     ),
                     QuestionSelectionCard(
                       questionNum: 50,
+                      onPressed: () {
+                        setState(() => numberOfQuestions = 50);
+                      },
                     )
                   ],
                 ),
@@ -331,8 +364,9 @@ class _DashBoardState extends State<DashBoard> {
 
 class QuestionSelectionCard extends StatelessWidget {
   final questionNum;
+  final onPressed;
 
-  QuestionSelectionCard({@required this.questionNum});
+  QuestionSelectionCard({@required this.questionNum, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -349,7 +383,20 @@ class QuestionSelectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: Color(0xfffff7e6)),
           )),
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 }
+
+// class Home extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//         child: Text(
+//       'Home',
+//       style: TextStyle(
+//         color: Colors.white,
+//       ),
+//     ));
+//   }
+// }
