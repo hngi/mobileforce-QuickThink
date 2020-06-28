@@ -17,7 +17,7 @@ class _DashBoardState extends State<DashBoard> {
   int numberOfQuestions;
   String option = "easy";
 
-   showDifficultyBottomSheet(BuildContext context) {
+  showDifficultyBottomSheet(BuildContext context) {
     var radius = Radius.circular(10);
 
     return showModalBottomSheet(
@@ -77,13 +77,14 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
+                    if(numberOfQuestions != null && option != null){
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (o) => QuestionView(
                                   numberOfQuestions: numberOfQuestions,
                                   difficultyLevel: option,
-                                )));
+                                )));}
                   },
                   child: Text(
                     "Start Game",
@@ -124,7 +125,9 @@ class _DashBoardState extends State<DashBoard> {
     return Row(
       children: List.generate(
         optionsName.length,
-        (index) {
+
+            (index) {
+
           return Expanded(
             child: GestureDetector(
               onTap: () {
@@ -167,6 +170,7 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       backgroundColor: Color(0xff1c1046),
       floatingActionButton: FloatingActionButton(
@@ -245,7 +249,7 @@ class _DashBoardState extends State<DashBoard> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset("assets/images/Group 23.png"),
+                                  Image.asset("assets/images/coins.png", height: 12.0, width: 12.0,),
                                   SizedBox(
                                     width: 2.0,
                                   ),
@@ -281,7 +285,7 @@ class _DashBoardState extends State<DashBoard> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Image.asset("assets/images/medal.png"),
+                                    Image.asset("assets/images/ribbon.png", height: 12.0, width: 12.0,),
                                     SizedBox(
                                       width: 2.0,
                                     ),
@@ -319,6 +323,7 @@ class _DashBoardState extends State<DashBoard> {
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600),
                     ),
+                  
                     QuestionSelectionCard(
                       questionNum: 10,
                       onPressed: () {
