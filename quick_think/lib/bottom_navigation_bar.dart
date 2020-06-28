@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
 import 'package:quickthink/screens/dashboard.dart';
-
 /* void main() => runApp(new BottomNavBar());
 
 //D.dan why another run app?, why not just have bottomnavbar stateful widget?

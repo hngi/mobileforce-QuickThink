@@ -6,6 +6,7 @@ import 'config.dart';
 import 'registration.dart';
 import 'theme/theme.dart';
 
+
 int onBoardCount;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
