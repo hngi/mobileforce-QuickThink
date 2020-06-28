@@ -77,6 +77,7 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -167,6 +168,7 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
+    showDifficultyBottomSheet(context);
     return Scaffold(
       backgroundColor: Color(0xff1c1046),
       floatingActionButton: FloatingActionButton(
