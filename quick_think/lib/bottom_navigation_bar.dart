@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-
-import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
+import 'package:quickthink/screens/dashboard.dart';
 
 /* void main() => runApp(new BottomNavBar());
 
@@ -22,9 +20,9 @@ class BottomNavBar extends StatelessWidget {
 } */
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
+  DashboardScreen({Key key, this.username, this.uri}) : super(key: key);
+  final String username;
+  final String uri;
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
@@ -56,19 +54,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void onPageChanged(int page) {
     setState(() {
       this._page = page;
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      
       body: new PageView(
         children: [
-          new Home(),
+          new DashBoard(username:widget.username, uri:widget.uri),
           new LeaderBoard(),
           new SettingsView(),
         ],
@@ -104,7 +99,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         onTap: navigationTapped,
         currentIndex: _page,
-
       ),
     );
   }

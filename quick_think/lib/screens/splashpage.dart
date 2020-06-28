@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quickthink/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bottom_navigation_bar.dart';
-import 'home.dart';
+import '../registration.dart';
+
 
 class SplashPage extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(),
+            builder: (context) => Registration(),
           ),
         );
       } else {
