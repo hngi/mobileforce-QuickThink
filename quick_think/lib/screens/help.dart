@@ -94,7 +94,7 @@ class _InfoHelpState extends State<InfoHelp> {
       left: widthBox * .15,
       right: widthBox * .15,
       child: Text(
-        "Each level as a fixed allocated time that is divided equally among questions",
+        "Each level has a fixed allocated time that is divided equally among questions",
         style: _textStyle,
         textAlign: TextAlign.justify,
       ),
