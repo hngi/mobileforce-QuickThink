@@ -199,12 +199,13 @@ class _DashBoardState extends State<DashBoard> {
         child: FloatingActionButton(
           backgroundColor: Color(0xff18C5D9),
           onPressed: () {
-            showDifficultyBottomSheet(context);
+           
           },
           child: Text(
             "?",
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
           ),
+
         ),
       ),
       body: Container(
@@ -359,6 +360,7 @@ class _DashBoardState extends State<DashBoard> {
                       questionNum: 10,
                       onPressed: () {
                         setState(() => numberOfQuestions = 10);
+                        showDifficultyBottomSheet(context);
                       },
                       light: light,
                     ),
@@ -366,6 +368,7 @@ class _DashBoardState extends State<DashBoard> {
                       questionNum: 20,
                       onPressed: () {
                         setState(() => numberOfQuestions = 20);
+                        showDifficultyBottomSheet(context);
                       },
                       light: light,
                     ),
@@ -373,6 +376,7 @@ class _DashBoardState extends State<DashBoard> {
                       questionNum: 30,
                       onPressed: () {
                         setState(() => numberOfQuestions = 30);
+                        showDifficultyBottomSheet(context);
                       },
                       light: light,
                     ),
@@ -380,6 +384,7 @@ class _DashBoardState extends State<DashBoard> {
                       questionNum: 40,
                       onPressed: () {
                         setState(() => numberOfQuestions = 40);
+                        showDifficultyBottomSheet(context);
                       },
                       light: light,
                     ),
@@ -387,6 +392,7 @@ class _DashBoardState extends State<DashBoard> {
                       questionNum: 50,
                       onPressed: () {
                         setState(() => numberOfQuestions = 50);
+                        showDifficultyBottomSheet(context);
                       },
                       light: light,
                     )
@@ -428,15 +434,3 @@ class QuestionSelectionCard extends StatelessWidget {
   }
 }
 
-// class Home extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//         child: Text(
-//       'Home',
-//       style: TextStyle(
-//         color: Colors.white,
-//       ),
-//     ));
-//   }
-// }
