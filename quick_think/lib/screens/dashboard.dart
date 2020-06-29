@@ -176,7 +176,7 @@ class _DashBoardState extends State<DashBoard> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff18C5D9),
         onPressed: () {
-          showDifficultyBottomSheet(context);
+          
         },
         child: Text(
           "?",
@@ -328,30 +328,35 @@ class _DashBoardState extends State<DashBoard> {
                       questionNum: 10,
                       onPressed: () {
                         setState(() => numberOfQuestions = 10);
+                        showDifficultyBottomSheet(context);
                       },
                     ),
                     QuestionSelectionCard(
                       questionNum: 20,
                       onPressed: () {
                         setState(() => numberOfQuestions = 20);
+                        showDifficultyBottomSheet(context);
                       },
                     ),
                     QuestionSelectionCard(
                       questionNum: 30,
                       onPressed: () {
                         setState(() => numberOfQuestions = 30);
+                        showDifficultyBottomSheet(context);
                       },
                     ),
                     QuestionSelectionCard(
                       questionNum: 40,
                       onPressed: () {
                         setState(() => numberOfQuestions = 40);
+                        showDifficultyBottomSheet(context);
                       },
                     ),
                     QuestionSelectionCard(
                       questionNum: 50,
                       onPressed: () {
                         setState(() => numberOfQuestions = 50);
+                        showDifficultyBottomSheet(context);
                       },
                     )
                   ],
@@ -391,15 +396,3 @@ class QuestionSelectionCard extends StatelessWidget {
   }
 }
 
-// class Home extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//         child: Text(
-//       'Home',
-//       style: TextStyle(
-//         color: Colors.white,
-//       ),
-//     ));
-//   }
-// }
