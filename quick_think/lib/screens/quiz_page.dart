@@ -16,23 +16,36 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  int quizDuration = 10;
+  int _quizMark = 0;
+  int _quizDuration = 0;
+  int _marks = 0;
+  bool _correctAnswer;
   @override
   void initState() {
     if (widget.difficultyLevel == 'Easy') {
       setState(() {
-        quizDuration = 60;
+        _quizDuration = 60;
+        _quizMark = 1;
       });
     } else if (widget.difficultyLevel == 'Average') {
       setState(() {
-        quizDuration = 45;
+        _quizDuration = 45;
+        _quizMark = 2;
       });
     } else if (widget.difficultyLevel == 'Hard') {
       setState(() {
-        quizDuration = 30;
+        _quizDuration = 30;
+        _quizMark = 3;
       });
     }
     super.initState();
+  }
+
+  int getTotalMarks() {
+    for (int i = 0; i <= widget.numberOfQuestions ; i++) {
+      _correctAnswer ? _marks += _quizMark : _marks = _marks;
+    }
+    return _marks;
   }
 
   var style = GoogleFonts.poppins(
@@ -137,7 +150,7 @@ class _QuizPageState extends State<QuizPage> {
         color: Color(0xFF574E76),
         onPressed: () {},
         child: Text(
-          '00 : ' + quizDuration.toString(),
+          '00 : ' + _quizDuration.toString(),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
