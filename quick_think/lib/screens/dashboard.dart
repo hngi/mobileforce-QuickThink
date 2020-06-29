@@ -77,6 +77,7 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
+
                     if(numberOfQuestions != null && option != null){
                     Navigator.push(
                         context,
@@ -170,8 +171,7 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-   
-    return Scaffold(
+     return Scaffold(
       backgroundColor: Color(0xff1c1046),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff18C5D9),
