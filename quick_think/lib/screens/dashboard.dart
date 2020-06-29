@@ -6,6 +6,8 @@ import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/views/question_view.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 
+import 'help.dart';
+
 
 class DashBoard extends StatefulWidget {
   DashBoard({Key key, @required this.username, @required this.uri})
@@ -199,7 +201,8 @@ class _DashBoardState extends State<DashBoard> {
         child: FloatingActionButton(
           backgroundColor: Color(0xff18C5D9),
           onPressed: () {
-           
+            helpAlert(context);
+           //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
           },
           child: Text(
             "?",
