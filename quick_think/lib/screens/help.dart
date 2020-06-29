@@ -32,7 +32,7 @@ class _InfoHelpState extends State<InfoHelp> {
     var heightBox = height * .50;
     var widthBox = width * .872;
     return Scaffold(
-      backgroundColor: Hexcolor('00FFFFFF'),
+      backgroundColor: Colors.transparent,//Hexcolor('00FFFFFF'),
       body: Stack(
         //
         children: <Widget>[
@@ -135,7 +135,9 @@ class _InfoHelpState extends State<InfoHelp> {
               letterSpacing: 0.5,
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
     );
