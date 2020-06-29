@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickthink/screens/help.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +37,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'QuickThink',
       theme: ThemeData(
         primaryColor: Color(0xFF1C1046),
         visualDensity: VisualDensity.adaptivePlatformDensity,
