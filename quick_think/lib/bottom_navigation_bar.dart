@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
 import 'package:quickthink/screens/dashboard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 /* void main() => runApp(new BottomNavBar());
 
 //D.dan why another run app?, why not just have bottomnavbar stateful widget?
@@ -30,10 +31,12 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   PageController _pageController;
   int _page = 0;
+  String userName, uri;
 
   @override
   void initState() {
     super.initState();
+    this._dataFunction();
     _pageController = new PageController();
   }
 
@@ -41,6 +44,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+  }
+
+  _dataFunction() async {
+    if (widget.uri == null || widget.username == null) {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      setState(() {
+        userName = sharedPreferences.getString('Username');
+        uri = sharedPreferences.getString('Uri');
+      });
+    } else {
+      setState(() {
+        userName = widget.username;
+        uri = widget.uri;
+      });
+    }
   }
 
   void navigationTapped(int page) {
@@ -62,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       body: new PageView(
         children: [
-          new DashBoard(username:widget.username, uri:widget.uri),
+          new DashBoard(username: userName, uri: uri),
           new LeaderBoard(),
           new SettingsView(),
         ],

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_navigation_bar.dart';
 
 class Registration extends StatefulWidget {
@@ -205,10 +206,13 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  void onPressed() {
+  void onPressed() async{
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString('Username', nick);
+      pref.setString("Uri", pickedUri);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen(username: nick,uri: pickedUri,)));
     }
