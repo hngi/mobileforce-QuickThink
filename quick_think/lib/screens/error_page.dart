@@ -75,7 +75,7 @@ Widget _secondContainer() {
         ),
         SizedBox(width: 100),
         SvgPicture.asset('images/line.svg'),
-        SizedBox(width: 40),
+        SizedBox(width: 30),
         Column(
           children: <Widget>[
             Row(
@@ -95,7 +95,7 @@ Widget _secondContainer() {
             ),
             Row(
               children: <Widget>[
-                SizedBox(width: 40),
+                SizedBox(width: 20),
                 Text('Ranking',
                     style: GoogleFonts.poppins(
                       color: Colors.white,
