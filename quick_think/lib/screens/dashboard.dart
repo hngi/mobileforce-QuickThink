@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quickthink/views/question_view.dart';
+import 'package:quickthink/screens/quiz_page.dart';
 
 class DashBoard extends StatefulWidget {
   DashBoard({Key key, @required this.username, @required this.uri})
@@ -77,15 +77,15 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-
-                    if(numberOfQuestions != null && option != null){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (o) => QuestionView(
-                                  numberOfQuestions: numberOfQuestions,
-                                  difficultyLevel: option,
-                                )));}
+                    if (numberOfQuestions != null && option != null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (o) => QuizPage(
+                                    numberOfQuestions: numberOfQuestions,
+                                    difficultyLevel: option,
+                                  )));
+                    }
                   },
                   child: Text(
                     "Start Game",
@@ -126,9 +126,7 @@ class _DashBoardState extends State<DashBoard> {
     return Row(
       children: List.generate(
         optionsName.length,
-
-            (index) {
-
+        (index) {
           return Expanded(
             child: GestureDetector(
               onTap: () {
@@ -171,7 +169,7 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       backgroundColor: Color(0xff1c1046),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff18C5D9),
@@ -249,7 +247,11 @@ class _DashBoardState extends State<DashBoard> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset("assets/images/coins.png", height: 12.0, width: 12.0,),
+                                  Image.asset(
+                                    "assets/images/coins.png",
+                                    height: 12.0,
+                                    width: 12.0,
+                                  ),
                                   SizedBox(
                                     width: 2.0,
                                   ),
@@ -285,7 +287,11 @@ class _DashBoardState extends State<DashBoard> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Image.asset("assets/images/ribbon.png", height: 12.0, width: 12.0,),
+                                    Image.asset(
+                                      "assets/images/ribbon.png",
+                                      height: 12.0,
+                                      width: 12.0,
+                                    ),
                                     SizedBox(
                                       width: 2.0,
                                     ),
@@ -323,7 +329,6 @@ class _DashBoardState extends State<DashBoard> {
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600),
                     ),
-                  
                     QuestionSelectionCard(
                       questionNum: 10,
                       onPressed: () {

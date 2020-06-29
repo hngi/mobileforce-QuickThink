@@ -2,11 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuizPage extends StatefulWidget {
+  final String difficultyLevel;
+  final int numberOfQuestions;
+  final int time;
+
+  QuizPage(
+      {Key key,
+      @required this.difficultyLevel,
+      this.numberOfQuestions,
+      this.time});
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
+  int quizDuration = 10;
+  @override
+  void initState() {
+    if (widget.difficultyLevel == 'Easy') {
+      setState(() {
+        quizDuration = 60;
+      });
+    } else if (widget.difficultyLevel == 'Average') {
+      setState(() {
+        quizDuration = 45;
+      });
+    } else if (widget.difficultyLevel == 'Hard') {
+      setState(() {
+        quizDuration = 30;
+      });
+    }
+    super.initState();
+  }
+
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -52,10 +80,15 @@ class _QuizPageState extends State<QuizPage> {
     return Positioned(
       top: height * .064,
       left: width * .06,
-      child: Icon(
-        Icons.arrow_back_ios,
-        color: Color(
-          0xFFFFFFFF,
+      child: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(
+          Icons.arrow_back_ios,
+          color: Color(
+            0xFFFFFFFF,
+          ),
         ),
       ),
     );
@@ -69,7 +102,7 @@ class _QuizPageState extends State<QuizPage> {
         color: Color(0xFF574E76),
         onPressed: () {},
         child: Text(
-          'Easy',
+          widget.difficultyLevel,
           style: GoogleFonts.poppins(
             color: Color(0xFF86EC88),
             fontSize: 16,
@@ -83,10 +116,10 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _textTitle(height, width) {
     return Positioned(
-        top: height * .10,
+        top: height * .12,
         left: width * .075,
         child: Text(
-          '10 Questions',
+          widget.numberOfQuestions.toString() + ' Questions',
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 20,
@@ -104,7 +137,7 @@ class _QuizPageState extends State<QuizPage> {
         color: Color(0xFF574E76),
         onPressed: () {},
         child: Text(
-          '00: 30',
+          '00 : ' + quizDuration.toString(),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
@@ -121,7 +154,7 @@ class _QuizPageState extends State<QuizPage> {
         top: height * .17,
         left: width * .064,
         child: Text(
-          'Question 1 of 10',
+          'Question 1 of ' + widget.numberOfQuestions.toString(),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
@@ -134,7 +167,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget _box(height, width, heightBox, widthBox) {
     return Positioned(
         top: height * .28,
-        bottom: height * .0,
+        bottom: height * .11,
         left: width * .064,
         right: width * .064,
         child: Container(
