@@ -344,7 +344,7 @@ class _DashBoardState extends State<DashBoard> {
               flex: 5,
               child: Container(
                 margin: EdgeInsets.only(top: 20.0),
-                padding: EdgeInsets.only(top: 20.0),
+                padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
