@@ -201,7 +201,8 @@ class _DashBoardState extends State<DashBoard> {
         child: FloatingActionButton(
           backgroundColor: Color(0xff18C5D9),
           onPressed: () {
-           Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
+            helpAlert(context);
+           //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
           },
           child: Text(
             "?",
