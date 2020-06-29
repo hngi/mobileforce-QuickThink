@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/theme/theme.dart';
 
 class InfoHelp extends StatefulWidget {
   @override
@@ -7,6 +9,9 @@ class InfoHelp extends StatefulWidget {
 }
 
 class _InfoHelpState extends State<InfoHelp> {
+
+  bool light = CustomTheme.light;
+
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -27,7 +32,7 @@ class _InfoHelpState extends State<InfoHelp> {
     var heightBox = height * .50;
     var widthBox = width * .872;
     return Scaffold(
-      backgroundColor: Color(0xFF574E76),
+      backgroundColor: Hexcolor('00FFFFFF'),
       body: Stack(
         //
         children: <Widget>[
@@ -47,7 +52,7 @@ class _InfoHelpState extends State<InfoHelp> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
-            color: Color(0xFFFFFFFF),
+            color: light ? Color(0xFFFFFFFF) : Hexcolor('#171717'),
           ),
           child: Stack(
             children: <Widget>[
@@ -69,7 +74,10 @@ class _InfoHelpState extends State<InfoHelp> {
       bottom: heightBox * .82,
       child: Text(
         'Help',
-        style: style.copyWith(fontSize: 20),
+        style: style.copyWith(
+          fontSize: 20,
+          color: light ? Color(0xFF1C1046) : Colors.white
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -82,7 +90,9 @@ class _InfoHelpState extends State<InfoHelp> {
       right: widthBox * .15,
       child: Text(
         "Points are calculated based on the difficulty level selected. ",
-        style: _textStyle,
+        style: _textStyle.copyWith(
+          color: light ? Color(0xFF1C1046) : Colors.white
+        ),
         textAlign: TextAlign.justify,
       ),
     );
@@ -95,7 +105,9 @@ class _InfoHelpState extends State<InfoHelp> {
       right: widthBox * .15,
       child: Text(
         "Each level has a fixed allocated time that is divided equally among questions",
-        style: _textStyle,
+        style: _textStyle.copyWith(
+          color: light ? Color(0xFF1C1046) : Colors.white
+        ),
         textAlign: TextAlign.justify,
       ),
     );
@@ -118,7 +130,7 @@ class _InfoHelpState extends State<InfoHelp> {
             'Done',
             style: style.copyWith(
               fontWeight: FontWeight.bold,
-              color: Color(0xFFFFFFFF),
+              color: light ? Color(0xFFFFFFFF) : Hexcolor('#171717'),
               fontSize: 16,
               letterSpacing: 0.5,
             ),

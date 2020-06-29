@@ -51,6 +51,7 @@ final themeDark = ThemeData(
   selectedRowColor: greenColor,
   primaryColor: primaryColorDark,
   backgroundColor: primaryColorDark,
+  dialogBackgroundColor: Hexcolor('#171717'),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   brightness: Brightness.dark,
   fontFamily: 'Poppins'
@@ -58,7 +59,7 @@ final themeDark = ThemeData(
 );
 
 class CustomTheme with ChangeNotifier {
-  bool light = true;
+  static bool light = true;
 
   ThemeMode currentTheme() {
     return light ? ThemeMode.light : ThemeMode.dark;
