@@ -34,6 +34,9 @@ class LeaderBoard extends StatelessWidget {
                           _roundContainer('3', 'Morty')
                         ],
                       )),
+                  SizedBox(
+                    height: 50.0,
+                  ),
                   _resultContainer()
                 ],
               ),
