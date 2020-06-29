@@ -75,35 +75,37 @@ Widget _secondContainer() {
         ),
         SizedBox(width: 100),
         SvgPicture.asset('images/line.svg'),
-        SizedBox(width: 40),
-        Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                SvgPicture.asset(
-                  'images/medal.svg',
-                ),
-                SizedBox(width: 10),
-                Text(
-                  '30th',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                SizedBox(width: 40),
-                Text('Ranking',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: 12,
-                    )),
-              ],
-            )
-          ],
+        SizedBox(width: 30),
+        Expanded(
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  SvgPicture.asset(
+                    'images/medal.svg',
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    '30th',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  SizedBox(width: 20),
+                  Text('Ranking',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 12,
+                      )),
+                ],
+              )
+            ],
+          ),
         )
       ],
     ),
