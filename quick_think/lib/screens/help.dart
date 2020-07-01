@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:quickthink/theme/theme.dart';
 
 // class InfoHelp extends StatefulWidget {
 //   @override
@@ -9,8 +8,6 @@ import 'package:quickthink/theme/theme.dart';
 // }
 
 // class _InfoHelpState extends State<InfoHelp> {
-
-bool light = CustomTheme.light;
 
 var style = GoogleFonts.poppins(
   color: Color(0xFF1C1046),
@@ -51,15 +48,18 @@ helpAlert(BuildContext context) {
                       child: Text(
                         'Help',
                         style: style.copyWith(
-                            fontSize: 20,
-                            color: light ? Color(0xFF1C1046) : Colors.white),
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     infoRow(
+                      context,
                         "Points are calculated based on the difficulty level selected. ",
                         'assets/images/coins.png'),
                     infoRow(
+                      context,
                         "Each level has a fixed allocated time that is divided equally among questions. ",
                         'assets/images/clock.png'),
                     SizedBox(height: 32.0),
@@ -75,8 +75,7 @@ helpAlert(BuildContext context) {
                           'Done',
                           style: style.copyWith(
                             fontWeight: FontWeight.bold,
-                            color:
-                                light ? Color(0xFFFFFFFF) : Hexcolor('#171717'),
+                            color: Colors.white,
                             fontSize: 16,
                             letterSpacing: 0.5,
                           ),
@@ -92,7 +91,7 @@ helpAlert(BuildContext context) {
       });
 }
 
-Widget infoRow(String text, String imageUrl) {
+Widget infoRow(context, String text, String imageUrl) {
   return Container(
     margin: EdgeInsets.all(16.0),
     child: Row(
@@ -107,7 +106,8 @@ Widget infoRow(String text, String imageUrl) {
             text,
             softWrap: true,
             style: _textStyle.copyWith(
-                color: light ? Color(0xFF1C1046) : Colors.white),
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
             textAlign: TextAlign.start,
           ),
         ),
