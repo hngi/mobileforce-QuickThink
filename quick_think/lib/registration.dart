@@ -1,9 +1,14 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_navigation_bar.dart';
+import 'package:http/http.dart' as http;
+
+const String register_Api =
+    'http://qtapi.theabiolaakinolafoundation.org/api/register';
 
 class Registration extends StatefulWidget {
   static const String id = 'registration screen';
@@ -20,12 +25,43 @@ class _RegistrationState extends State<Registration> {
   String password = '';
   String _initUrl = 'cat';
   String pickedUri = '';
+  String token = '';
   final _formKey = GlobalKey<FormState>();
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
       _image = File(pickedFile.path);
     });
+  }
+
+  void handleRegistration(nick, password) async {
+    //TODO: CircularProgressIndicator
+    http.Response response = await http.post(
+      register_Api,
+      headers: {'Accept': 'application/json'},
+      body: {"name": nick, "password": password},
+    );
+    if (response.statusCode == 200) {
+      String data = response.body;
+      token = jsonDecode(data)['data']['token'];
+
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString('Username', nick);
+      pref.setString('Password', password);
+      pref.setString('Token', token);
+      pref.setString("Uri", pickedUri);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DashboardScreen(
+            username: nick,
+            uri: pickedUri,
+          ),
+        ),
+      );
+    } else {
+      //TODO: Handle error
+    }
   }
 
   @override
@@ -117,9 +153,7 @@ class _RegistrationState extends State<Registration> {
           fontWeight: FontWeight.w400,
           fontSize: 20.0,
           color: Colors.white),
-      onChanged: (val) {
-        setState(() => nick = val);
-      },
+      onChanged: (val) {},
       validator: (val) {
         if (val.length == 0) {
           return 'Username Should Not Be Empty';
@@ -174,9 +208,7 @@ class _RegistrationState extends State<Registration> {
                 BorderSide(color: Color.fromRGBO(24, 197, 217, 1), width: 1.0),
             borderRadius: BorderRadius.circular(5.0)),
       ),
-      onChanged: (val) {
-        setState(() => password = val);
-      },
+      onChanged: (val) {},
       validator: (val) {
         if (val.length == 0) {
           return 'password cannot Be empty';
@@ -186,6 +218,7 @@ class _RegistrationState extends State<Registration> {
         }
         return null;
       },
+      onSaved: (pass) => password = pass,
     );
   }
 
@@ -206,15 +239,11 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  void onPressed() async{
+  void onPressed() async {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      pref.setString('Username', nick);
-      pref.setString("Uri", pickedUri);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => DashboardScreen(username: nick,uri: pickedUri,)));
+      handleRegistration(nick, password);
     }
   }
 
