@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../bottom_navigation_bar.dart';
 import '../registration.dart';
 
-
 class SplashPage extends StatefulWidget {
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -25,7 +24,12 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void startTimer() {
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 5), () async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      setState(() {
+        username = pref.getString('Username');
+      });
+
       if (username == null) {
         //Replace with Registration Route
         Navigator.pushReplacement(
@@ -133,7 +137,7 @@ class SharedPrefs {
   /// Set Username
   Future<void> setUsername(String username) async {
     sharedPreferences = await SharedPreferences.getInstance();
-    final key = "username";
+    final key = "Username";
     final storedValue = username;
     sharedPreferences.setString(key, storedValue);
   }
@@ -141,7 +145,7 @@ class SharedPrefs {
 //Get Username
   Future<String> getUsername() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    final key = "username";
+    final key = "Username";
     final userStored = sharedPreferences.getString(key) ?? '0';
 
     return userStored;
