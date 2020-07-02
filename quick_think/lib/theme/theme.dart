@@ -25,7 +25,7 @@ final themeLight = ThemeData(
     onBackground: primaryColor,
     onSurface: secondaryColor,
     onPrimary: accentColor,
-    onSecondary: Colors.white,
+    onSecondary: primaryColor,
     onError: redColor,
     brightness: Brightness.light,
   ),
