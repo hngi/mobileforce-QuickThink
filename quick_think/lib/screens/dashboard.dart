@@ -1,19 +1,27 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:http/http.dart';
+import 'package:quickthink/data/FetchedQuestions.dart';
+import 'package:quickthink/data/QuestionStorage.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/views/question_view.dart';
 import 'package:quickthink/screens/quiz_page.dart';
+import 'package:quickthink/model/question_model.dart';
 
 import 'help.dart';
 
 
 class DashBoard extends StatefulWidget {
-  DashBoard({Key key, @required this.username, @required this.uri})
+  final QuestionStorage storage;
+  DashBoard({Key key, @required this.username, @required this.uri,this.storage})
       : super(key: key);
   final String username;
   final String uri;
+  final questionModel = QuestionStorage();
 
   @override
   _DashBoardState createState() => _DashBoardState();
@@ -364,6 +372,7 @@ class _DashBoardState extends State<DashBoard> {
                       onPressed: () {
                         setState(() => numberOfQuestions = 10);
                         showDifficultyBottomSheet(context);
+
                       },
                       light: light,
                     ),
@@ -380,6 +389,7 @@ class _DashBoardState extends State<DashBoard> {
                       onPressed: () {
                         setState(() => numberOfQuestions = 30);
                         showDifficultyBottomSheet(context);
+
                       },
                       light: light,
                     ),

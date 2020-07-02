@@ -28,6 +28,8 @@ class QuestionViewModel{
       FetchedQuestions apiResponse = FetchedQuestions.fromJson(decodedData);
 
       questionResponse = apiResponse.results;
+
+
     }else{
       hasError = true;
     }
