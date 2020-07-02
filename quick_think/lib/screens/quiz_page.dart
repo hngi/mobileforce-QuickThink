@@ -344,3 +344,25 @@ class _CardOptionsState extends State<CardOptions> {
     );
   }
 }
+
+class FirstRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Quiz Page'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('Go to Results'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondRoute()),
+            // Navigate to second route when tapped.
+          },
+        ),
+      ),
+    );
+  }
+}

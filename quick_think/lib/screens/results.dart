@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,13 +10,11 @@ class Result extends StatefulWidget {
 class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Color(0xFF1C1046),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          
           children: <Widget>[
             Center(
               child: Text(
@@ -48,8 +45,7 @@ class _ResultState extends State<Result> {
               shadowColor: Colors.black,
               elevation: 30.0,
               child: ListTile(
-                leading: SvgPicture.asset(
-                  "images/coin.svg"),
+                leading: SvgPicture.asset("images/coin.svg"),
                 title: Text(
                   "80 points",
                   textAlign: TextAlign.center,
@@ -109,15 +105,41 @@ class _ResultState extends State<Result> {
               // for inputing the social media icons
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                SvgPicture.asset("images/IG.svg",
-                width: 90.0,),
-                SvgPicture.asset("images/twitter.svg",
-                width: 60.0,),
-                SvgPicture.asset("images/facebook.svg",
-                width: 60.0,),
+                SvgPicture.asset(
+                  "images/IG.svg",
+                  width: 90.0,
+                ),
+                SvgPicture.asset(
+                  "images/twitter.svg",
+                  width: 60.0,
+                ),
+                SvgPicture.asset(
+                  "images/facebook.svg",
+                  width: 60.0,
+                ),
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Results"),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.pop(context);
+            // Navigate back to first route when tapped.
+          },
+          child: Text('Go back!'),
         ),
       ),
     );
