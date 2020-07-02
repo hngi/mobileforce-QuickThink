@@ -4,14 +4,16 @@ import 'package:quickthink/model/question_model.dart';
 import 'dart:convert';
 
 class QuestionStorage{
-  String _difficulty;
 
+  QuestionStorage();
+
+  String difficulty = '';
+
+  bool fileExists;
   bool fileEmpty;
 
-  String get difficulty => _difficulty;
-
-  set difficulty(String value) {
-    _difficulty = value;
+  void setDifficulty(String value){
+    this.difficulty = value;
   }
 
   Future<String> get _localPath async {
@@ -22,11 +24,17 @@ class QuestionStorage{
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/${_difficulty}OfflineQuestions.json');
+    return File('$path/${difficulty}OfflineQuestions.json');
   }
 
   Future writeQuestions(String data) async {
     final file = await _localFile;
+
+    fileExists = file.existsSync();
+
+    if (!fileExists){
+      file.createSync();
+    }
 
     String contents = file.readAsStringSync();
 
@@ -52,7 +60,5 @@ class QuestionStorage{
       return 0;
     }
   }
-
-
 
 }

@@ -5,7 +5,7 @@ import 'package:quickthink/data/QuestionStorage.dart';
 
 class LoadQuestions{
 
-  QuestionStorage storage;
+  QuestionStorage storage = QuestionStorage();
 
   List levels = ['easy','medium','hard'];
 
@@ -19,7 +19,7 @@ class LoadQuestions{
 
       Response data = await get(apiRequest);
 
-      storage.difficulty = level;
+      storage.setDifficulty(level);
 
       if(data.statusCode == 200){
         storage.writeQuestions(data.body);

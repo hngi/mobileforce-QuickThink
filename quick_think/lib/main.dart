@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickthink/data/LoadQuestions.dart';
 import 'package:quickthink/screens/help.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
@@ -27,6 +28,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    LoadQuestions().loadQuestions();
     currentTheme.addListener(() {
       print("sometin");
       setState(() {});
