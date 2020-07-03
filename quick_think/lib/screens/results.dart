@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Result extends StatefulWidget {
+  final String name;
+  final String score;
+  Result({this.name, this.score});
   @override
   _ResultState createState() => _ResultState();
 }
@@ -18,7 +21,7 @@ class _ResultState extends State<Result> {
           children: <Widget>[
             Center(
               child: Text(
-                "Congrats Tiana!!",
+                "Congrats ${widget.name}!!",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -47,7 +50,7 @@ class _ResultState extends State<Result> {
               child: ListTile(
                 leading: SvgPicture.asset("images/coin.svg"),
                 title: Text(
-                  "80 points",
+                  "${widget.score} points",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
