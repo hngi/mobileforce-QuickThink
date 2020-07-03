@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
@@ -23,12 +25,33 @@ class _QuizPageState extends State<QuizPage> {
   int _quizDuration = 0;
   int _marks = 0;
   bool _correctAnswer;
+
   String userResponse;
   String userAnswer;
   String _difficultyLevel;
   String _numberOfQuestion;
 
   QuickThink _quickThink;
+
+  Timer _quizTimer;
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _quizTimer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          if (_quizDuration < 1) {
+            timer.cancel();
+          } else {
+            _quizDuration = _quizDuration - 1;
+            print('the time is $_quizDuration');
+          }
+        },
+      ),
+    );
+  }
+
 
   @override
   void initState() {
@@ -57,15 +80,19 @@ class _QuizPageState extends State<QuizPage> {
         _quizMark = 3;
       });
     }
+    startTimer();
     super.initState();
   }
+  
 
   int getTotalMarks() {
-    for (int i = 0; i <= widget.numberOfQuestions ; i++) {
+    for (int i = 0; i <= widget.numberOfQuestions; i++) {
       _correctAnswer ? _marks += _quizMark : _marks = _marks;
     }
     return _marks;
   }
+
+  
 
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
@@ -73,6 +100,8 @@ class _QuizPageState extends State<QuizPage> {
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w600,
   );
+
+  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -171,7 +200,7 @@ class _QuizPageState extends State<QuizPage> {
         color: Color(0xFF574E76),
         onPressed: () {},
         child: Text(
-          '00 : ' + _quizDuration.toString(),
+          '00 : ' + _quizDuration.toString().padLeft(2, '0'),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
