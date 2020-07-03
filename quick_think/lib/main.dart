@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     currentTheme.addListener(() {
-      print("sometin");
+      print("something");
       setState(() {});
     });
   }
@@ -41,6 +41,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primaryColor: Color(0xFF1C1046),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: themeLight.colorScheme,
       ),
       darkTheme: themeDark,
       themeMode: currentTheme.currentTheme(),
