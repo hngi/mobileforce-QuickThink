@@ -100,6 +100,7 @@ class _DashBoardState extends State<DashBoard> {
                               builder: (o) => QuizPage(
                                     numberOfQuestions: numberOfQuestions,
                                     difficultyLevel: option,
+                                    userName: widget.username,
                                   )));
                     }
                   },
