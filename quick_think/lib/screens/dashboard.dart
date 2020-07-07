@@ -255,8 +255,11 @@ class _DashBoardState extends State<DashBoard> {
                         child: CircleAvatar(
                             backgroundColor: Color(0xff38208c),
                             radius: 28.5,
-                            child: SvgPicture.asset(
-                                "assets/images/${widget.uri}.svg") //Image.asset("assets/images/owl 1.png"),
+                            child: widget.uri != null
+                                ? SvgPicture.asset(
+                                    "assets/images/${widget.uri}.svg")
+                                : SvgPicture.asset("assets/images/owl.svg")
+                            //Image.asset("assets/images/owl 1.png"),
                             ),
                       )
                     ],
