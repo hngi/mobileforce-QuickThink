@@ -1,4 +1,6 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -20,7 +22,7 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   int numberOfQuestions;
-  String option = "easy";
+  String option;
   bool light = CustomTheme.light;
 
   showDifficultyBottomSheet(BuildContext context) {
@@ -97,7 +99,7 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                    if (numberOfQuestions != null && option != null) {
+                    if (option != null) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -106,6 +108,30 @@ class _DashBoardState extends State<DashBoard> {
                                     difficultyLevel: option,
                                     userName: widget.username,
                                   )));
+                    }else{
+                        Flushbar(
+                          titleText:  Text(
+                            "Oops!",
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                            messageText: Text(
+                              "Please select a difficulty to start",
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          icon: Icon(
+                              FlutterIcons.infocirlceo_ant,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                          leftBarIndicatorColor: Color(0xff1C1046),
+                          duration: Duration(milliseconds: 2000),
+                        )..show(context);
                     }
                   },
                   child: Text(
