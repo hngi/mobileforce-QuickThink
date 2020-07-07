@@ -10,7 +10,6 @@ import 'package:quickthink/screens/quiz_page.dart';
 
 import 'help.dart';
 
-
 class DashBoard extends StatefulWidget {
   DashBoard({Key key, @required this.username, @required this.uri})
       : super(key: key);
@@ -56,8 +55,8 @@ class _DashBoardState extends State<DashBoard> {
                   Container(
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: Color(0xffF6F3F3),
-                        shape: BoxShape.circle,
+                      color: Color(0xffF6F3F3),
+                      shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
                           color: Color(0xFF18C5D9).withOpacity(0.5),
@@ -66,12 +65,17 @@ class _DashBoardState extends State<DashBoard> {
                         ),
                       ],
                     ),
-                    child: Text(
-                      "?",
-                      style: GoogleFonts.poppins(
-                        color: Color(0xff1C1046),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                    child: GestureDetector(
+                      onTap: () {
+                        helpAlert(context);
+                      },
+                      child: Text(
+                        "?",
+                        style: GoogleFonts.poppins(
+                          color: Color(0xff1C1046),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -212,7 +216,7 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       backgroundColor: light ? Color(0xff1c1046) : Hexcolor('#000000'),
       floatingActionButton: Container(
         decoration: BoxDecoration(
@@ -229,13 +233,12 @@ class _DashBoardState extends State<DashBoard> {
           backgroundColor: Color(0xff18C5D9),
           onPressed: () {
             helpAlert(context);
-           //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
           },
           child: Text(
             "?",
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
           ),
-
         ),
       ),
       body: Container(
@@ -278,8 +281,11 @@ class _DashBoardState extends State<DashBoard> {
                         child: CircleAvatar(
                             backgroundColor: Color(0xff38208c),
                             radius: 28.5,
-                            child: SvgPicture.asset(
-                                "assets/images/${widget.uri}.svg") //Image.asset("assets/images/owl 1.png"),
+                            child: widget.uri != null
+                                ? SvgPicture.asset(
+                                    "assets/images/${widget.uri}.svg")
+                                : SvgPicture.asset("assets/images/owl.svg")
+                            //Image.asset("assets/images/owl 1.png"),
                             ),
                       )
                     ],
@@ -442,7 +448,8 @@ class QuestionSelectionCard extends StatelessWidget {
   final onPressed;
   final light;
 
-  QuestionSelectionCard({@required this.questionNum, this.onPressed,this.light});
+  QuestionSelectionCard(
+      {@required this.questionNum, this.onPressed, this.light});
 
   @override
   Widget build(BuildContext context) {
@@ -463,4 +470,3 @@ class QuestionSelectionCard extends StatelessWidget {
     );
   }
 }
-
