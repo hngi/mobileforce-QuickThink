@@ -3,7 +3,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/screens/onboarding_screens/second_onboard_screen.dart';
 
 class OnBoardScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -14,14 +13,16 @@ class OnBoardScreen extends StatelessWidget {
         height: mediaQuery.size.height,
         padding: EdgeInsets.only(top: mediaQuery.size.height * 0.1),
         color: Hexcolor('#1C1046'),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _headerName(),
-            _showPhoneIcon(mediaQuery),
-            _showText(mediaQuery),
-            _showButton(mediaQuery, context)
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _headerName(),
+              _showPhoneIcon(mediaQuery),
+              _showText(mediaQuery),
+              _showButton(mediaQuery, context)
+            ],
+          ),
         ),
       ),
     );
@@ -53,7 +54,7 @@ class OnBoardScreen extends StatelessWidget {
   Widget _showPhoneIcon(MediaQueryData mediaQuery) {
     return Container(
       height: mediaQuery.size.height * 0.33,
-      margin: EdgeInsets.only(top:  mediaQuery.size.height * .1),
+      margin: EdgeInsets.only(top: mediaQuery.size.height * .1),
       padding: EdgeInsets.all(3.0),
       child: Center(
         child: Image.asset(
@@ -103,10 +104,10 @@ class OnBoardScreen extends StatelessWidget {
                   fontSize: 15,
                   color: Colors.white),
             ),
-            onPressed: () => /* Navigator.of(context).push(
+            onPressed: () =>
+                /* Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => SecondOnBoardScreen())) */
                 Navigator.of(context).push(_createRoute()),
-                
           ),
         ),
       ),
@@ -116,7 +117,8 @@ class OnBoardScreen extends StatelessWidget {
 
 Route _createRoute() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => SecondOnBoardScreen(),
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        SecondOnBoardScreen(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
       var end = Offset.zero;
