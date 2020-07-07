@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bottom_navigation_bar.dart';
@@ -59,11 +60,12 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool light = CustomTheme.light;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       //Background color
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: light ? Theme.of(context).primaryColor : Theme.of(context).primaryColorDark,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
