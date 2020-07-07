@@ -62,7 +62,6 @@ class _QuizPageState extends State<QuizPage> {
     startTimer();
     super.initState();
   }
-  
 
   int getTotalMarks() {
     for (int i = 0; i <= widget.numberOfQuestions; i++) {
@@ -71,8 +70,6 @@ class _QuizPageState extends State<QuizPage> {
     return _marks;
   }
 
-  
-
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -80,7 +77,6 @@ class _QuizPageState extends State<QuizPage> {
     fontWeight: FontWeight.w600,
   );
 
-  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -137,7 +133,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget _category(height, width) {
     return Positioned(
       top: height * .10,
-      left: width * .496,
+      left: width * .4,
       child: FlatButton(
         color: Color(0xFF574E76),
         onPressed: () {},
@@ -171,13 +167,13 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _timer(height, width) {
     return Positioned(
-      top: height * .10,
-      left: width * .75,
+      top: height * 0.1,
+      left: width * .63,
       child: FlatButton(
         color: Color(0xFF574E76),
         onPressed: () {},
         child: Text(
-          '00 : ' + _quizDuration.toString().padLeft(2, '0'),
+          '00 : ' + _quizDuration.toString().padLeft(3, '0'),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
@@ -206,8 +202,8 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _box(height, width, heightBox, widthBox) {
     return Positioned(
-        top: height * .28,
-        bottom: height * .11,
+        top: height * .22,
+        bottom: height * 0,
         left: width * .064,
         right: width * .064,
         child: Container(
@@ -274,8 +270,8 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _nextButton(height, width, heightBox, widthBox) {
     return Positioned(
-      top: heightBox * .89,
-      left: widthBox * .58,
+      top: heightBox * .90,
+      left: widthBox * .4,
       right: widthBox * .0,
       bottom: heightBox * .0,
       child: Container(
@@ -283,7 +279,7 @@ class _QuizPageState extends State<QuizPage> {
           borderRadius: BorderRadius.circular(5.0),
           color: Color(0xFF18C5D9),
         ),
-        height: height * .069,
+        //height: height * .069,
         width: width * .368,
         child: FlatButton(
           child: Text(
