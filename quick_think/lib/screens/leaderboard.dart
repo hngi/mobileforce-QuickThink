@@ -5,43 +5,47 @@ import 'package:google_fonts/google_fonts.dart';
 class LeaderBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Color(0xff1C1046),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _arrow(),
-                _text(),
-              ],
-            )),
-            Container(
-              child: Column(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          _roundContainer('2', 'Rick'),
-                          _roundContainer1('Homer Simpson'),
-                          _roundContainer('3', 'Morty')
-                        ],
-                      )),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  _resultContainer()
+                  _arrow(),
+                  _text(),
                 ],
+              )),
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        width: width,
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            _roundContainer('2', 'Rick'),
+                            _roundContainer1('Homer Simpson'),
+                            _roundContainer('3', 'Morty')
+                          ],
+                        )),
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    _resultContainer()
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
