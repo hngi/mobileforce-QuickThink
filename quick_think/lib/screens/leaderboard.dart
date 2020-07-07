@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/theme/theme.dart';
 
 class LeaderBoard extends StatelessWidget {
+  bool light = CustomTheme.light;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff1C1046),
+      backgroundColor: light ? Color(0xff1C1046) : Hexcolor('#000000'),
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
@@ -20,27 +23,33 @@ class LeaderBoard extends StatelessWidget {
                 _text(),
               ],
             )),
-            Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          _roundContainer('2', 'Rick'),
-                          _roundContainer1('Homer Simpson'),
-                          _roundContainer('3', 'Morty')
-                        ],
-                      )),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  _resultContainer()
-                ],
-              ),
+            SizedBox(
+              height: 10.0,
             ),
+            Container(
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 children: <Widget>[
+                   Container(
+                       margin:
+                           EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           _roundContainer('2', 'Rick', light),
+                           _roundContainer1('Homer Simpson',light),
+                           _roundContainer('3', 'Morty', light)
+                         ],
+                       )),
+                   SizedBox(
+                     height: 10.0,
+                   ),
+                   SingleChildScrollView(
+                     child: _resultContainer(light,context),
+                   )
+                 ],
+               ),
+             )
           ],
         ),
       ),
@@ -68,13 +77,13 @@ Widget _text() {
       ));
 }
 
-Widget _roundContainer(String text1, String text2) {
+Widget _roundContainer(String text1, String text2, bool light) {
   return Container(
       padding: EdgeInsets.only(left: 20),
       child: Column(
         children: <Widget>[
           CircleAvatar(
-              backgroundColor: Color(0xff574E76),
+              backgroundColor: light ? Color(0xff574E76) : Hexcolor('#2B2B2B'),
               radius: 30,
               child: Text(text1,
                   style:
@@ -86,13 +95,13 @@ Widget _roundContainer(String text1, String text2) {
       ));
 }
 
-Widget _roundContainer1(String text1) {
+Widget _roundContainer1(String text1, light) {
   return Container(
       padding: EdgeInsets.only(left: 20),
       child: Column(
         children: <Widget>[
           CircleAvatar(
-              backgroundColor: Color(0xff574E76),
+              backgroundColor: light ? Color(0xff574E76) : Hexcolor('#2B2B2B'),
               radius: 50,
               child: SvgPicture.asset('images/trophy.svg')),
           Text(text1,
@@ -101,31 +110,33 @@ Widget _roundContainer1(String text1) {
       ));
 }
 
-Widget _resultContainer() {
+Widget _resultContainer(bool light,BuildContext context) {
   return Container(
-      margin: EdgeInsets.only(top: 30),
-      padding: EdgeInsets.all(30),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-      ),
-      child: Column(
-        children: <Widget>[
-          _row('images/cup.svg', 'images/face1.png', 'images/coin2.svg',
-              'Homer simpson', '2000'),
-          _row1('2', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
-              '1500'),
-          _row1('3', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
-              '700'),
-          _row1('4', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
-              '200')
-        ],
-      ));
+          margin: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.fromLTRB(30,10,30,0),
+          decoration: BoxDecoration(
+            color: light ? Colors.white : Hexcolor('#4C4C4C'),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                _row('images/cup.svg', 'images/face1.png', 'images/coin2.svg',
+                    'Homer simpson', '2000',light),
+                _row1('2', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
+                    '1500',light),
+                _row1('3', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
+                    '700',light),
+                _row1('4', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
+                    '200',light)
+              ],
+            ),
+          ));
 }
 
 Widget _row(
-    String image1, String image2, String image3, String text1, String text2) {
+    String image1, String image2, String image3, String text1, String text2,bool light) {
   return Container(
     padding: EdgeInsets.only(top: 40),
     child: Row(
@@ -134,18 +145,25 @@ Widget _row(
         SizedBox(width: 10),
         Image.asset(image2, width: 20, height: 20),
         SizedBox(width: 10),
-        Text(text1, style: GoogleFonts.poppins(fontSize: 14)),
+        Text(text1, style: GoogleFonts.poppins(
+            fontSize: 14,
+          color: light ? Color(0xff1C1046) : Colors.white
+        )
+        ),
         Spacer(),
         SvgPicture.asset(image3, width: 20, height: 20),
         SizedBox(width: 10),
-        Text(text2, style: GoogleFonts.poppins(fontSize: 14)),
+        Text(text2, style: GoogleFonts.poppins(
+            fontSize: 14,
+          color: light ? Color(0xff1C1046) : Colors.white,
+        )),
       ],
     ),
   );
 }
 
 Widget _row1(
-    String text, String image2, String image3, String text1, String text2) {
+    String text, String image2, String image3, String text1, String text2,bool light) {
   return Container(
     padding: EdgeInsets.only(top: 40),
     child: Row(
