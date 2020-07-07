@@ -52,7 +52,12 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-
+@override
+  void dispose() {
+    // TODO:Destroy timer
+    super.dispose();
+  }
+  
   @override
   void initState() {
     //_quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
