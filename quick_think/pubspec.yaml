@@ -30,8 +30,7 @@ dependencies:
   share: ^0.6.4+3
   flutter_icons: ^1.1.0
   flutter_svg: ^0.17.4
-
-
+  progress_dialog: ^1.2.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -52,8 +51,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  
-    
 
   assets:
     - assets/images/phone_icon.png
@@ -77,10 +74,6 @@ flutter:
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins-Regular.ttf
-        
-  
-        
-        
   #fonts:
   #  - family: Poppins
   #    fonts:
