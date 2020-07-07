@@ -1,21 +1,25 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:quickthink/screens/help.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
+import 'registration.dart';
 import 'theme/theme.dart';
 
+int onBoardCount;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  onBoardCount = pref.getInt("first");
+  await pref.setInt("first", 1);
 
-import 'package:quickthink/registration.dart';
-
-import 'package:quickthink/screens/home.dart';
-
-import 'bottom_navigation_bar.dart';
-
-import 'screens/splashpage.dart';
-
-void main() {
-  runApp(MyApp());
+  runApp(DevicePreview(
+    builder: (context) => MyApp(),
+    enabled: !kReleaseMode,
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -26,28 +30,24 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    
     super.initState();
     currentTheme.addListener(() {
-      print("sometin");
-      setState((){});
+      print("something");
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
-      title: '',
-
-
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'QuickThink',
       theme: ThemeData(
         primaryColor: Color(0xFF1C1046),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: themeLight.colorScheme,
       ),
-      darkTheme: ThemeData.dark(),
+      darkTheme: themeDark,
       themeMode: currentTheme.currentTheme(),
       initialRoute: onBoardCount == 0 || onBoardCount == null
           ? 'showOnBoardScreen'
@@ -55,13 +55,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         'showOnBoardScreen': (context) => OnBoardScreen(),
         'showSplashPage': (context) => SplashPage(),
+        Registration.id: (context) => Registration(),
       },
-
     );
   }
-
- 
 }
-
-
- 

@@ -25,11 +25,12 @@ final themeLight = ThemeData(
     onBackground: primaryColor,
     onSurface: secondaryColor,
     onPrimary: accentColor,
-    onSecondary: Colors.white,
+    onSecondary: primaryColor,
     onError: redColor,
     brightness: Brightness.light,
   ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
+  fontFamily: 'Poppins'
 );
 
 final themeDark = ThemeData(
@@ -48,18 +49,29 @@ final themeDark = ThemeData(
       onError: redColor,
       brightness: Brightness.light),
   selectedRowColor: greenColor,
+  primaryColor: primaryColorDark,
+  backgroundColor: primaryColorDark,
+  dialogBackgroundColor: Hexcolor('#171717'),
   visualDensity: VisualDensity.adaptivePlatformDensity,
+  brightness: Brightness.dark,
+  fontFamily: 'Poppins'
+
 );
 
 class CustomTheme with ChangeNotifier {
-  bool light = true;
+  static bool light = true;
 
   ThemeMode currentTheme() {
-    return light ? ThemeMode.dark : ThemeMode.light;
+    return light ? ThemeMode.light : ThemeMode.dark;
   }
 
-  void flipTheme() {
-    light = !light;
+  void darkTheme() {
+    light = false;
+    notifyListeners();
+  }
+
+   void lightTheme() {
+    light = true;
     notifyListeners();
   }
 }

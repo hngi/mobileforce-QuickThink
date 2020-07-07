@@ -48,7 +48,8 @@ class _SettingsViewState extends State<SettingsView> {
             ),
             InkWell(
               child: ListTile(
-                onTap: currentTheme.flipTheme,
+                contentPadding: EdgeInsets.all(0),
+                onTap: currentTheme.darkTheme,
                 title: Text(
                   "Dark Theme",
                   style: GoogleFonts.poppins(
@@ -59,7 +60,7 @@ class _SettingsViewState extends State<SettingsView> {
                           letterSpacing: 2.0)),
                 ),
                 leading: Icon(
-                  FlutterIcons.wi_night_clear_wea,
+                  FlutterIcons.moon_fea,
                   color: Colors.white,
                 ),
               ),
@@ -73,7 +74,8 @@ class _SettingsViewState extends State<SettingsView> {
             ),
             InkWell(
               child: ListTile(
-                onTap: () {},
+                contentPadding: EdgeInsets.all(0),
+                onTap: currentTheme.lightTheme,
                 title: Text(
                   "Light Theme",
                   style: GoogleFonts.poppins(

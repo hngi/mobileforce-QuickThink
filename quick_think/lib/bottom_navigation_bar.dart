@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-
-import 'package:quickthink/screens/home.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
+import 'package:quickthink/screens/dashboard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+/* void main() => runApp(new BottomNavBar());
 
-void main() => runApp(new BottomNavBar());
-
+//D.dan why another run app?, why not just have bottomnavbar stateful widget?
 class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Bottom Navigation',
       debugShowCheckedModeBanner: false,
-      theme: new ThemeData(
-        primaryColor: const Color(0xFF02BB9F),
-        primaryColorDark: const Color(0xFF167F67),
-        accentColor: const Color(0xFFFFAD32),
-      ),
       home: new DashboardScreen(title: 'Bottom Navigation'),
 
     );
   }
-}
+} */
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
+  DashboardScreen({Key key, this.username, this.uri}) : super(key: key);
+  final String username;
+  final String uri;
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
@@ -37,10 +31,12 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   PageController _pageController;
   int _page = 0;
+  String userName, uri;
 
   @override
   void initState() {
     super.initState();
+    this._dataFunction();
     _pageController = new PageController();
   }
 
@@ -48,6 +44,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+  }
+
+  _dataFunction() async {
+    if (widget.uri == null || widget.username == null) {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      setState(() {
+        userName = sharedPreferences.getString('Username');
+        uri = sharedPreferences.getString('Uri');
+      });
+    } else {
+      setState(() {
+        userName = widget.username;
+        uri = widget.uri;
+      });
+    }
   }
 
   void navigationTapped(int page) {
@@ -60,17 +72,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void onPageChanged(int page) {
     setState(() {
       this._page = page;
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: new PageView(
         children: [
-          new Home(),
+          new DashBoard(username: userName, uri: uri),
           new LeaderBoard(),
           new SettingsView(),
         ],
@@ -103,10 +114,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: this._page == 2 ? Color(0xff18C5D9) : Colors.white,
                   ))),
         ],
-        backgroundColor: Color(0xff1C1046),
+        backgroundColor: Theme.of(context).primaryColor,
         onTap: navigationTapped,
         currentIndex: _page,
-
       ),
     );
   }

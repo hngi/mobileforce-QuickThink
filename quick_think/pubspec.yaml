@@ -30,7 +30,9 @@ dependencies:
   share: ^0.6.4+3
   flutter_icons: ^1.1.0
   flutter_svg: ^0.17.4
-
+  progress_dialog: ^1.2.4
+  device_preview: ^0.4.5
+ 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -59,6 +61,7 @@ flutter:
     - assets/images/social_media_icon.png
     - assets/images/mark_icon.png
     - assets/
+    - assets/images/
     - images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -70,6 +73,15 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        
+  
+        
+        
   #fonts:
   #  - family: Poppins
   #    fonts:
