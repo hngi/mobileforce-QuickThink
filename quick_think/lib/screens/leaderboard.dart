@@ -12,7 +12,7 @@ class LeaderBoard extends StatelessWidget {
       backgroundColor: light ? Color(0xff1C1046) : Hexcolor('#000000'),
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
@@ -50,6 +50,7 @@ class LeaderBoard extends StatelessWidget {
                  ],
                ),
              )
+
           ],
         ),
       ),
