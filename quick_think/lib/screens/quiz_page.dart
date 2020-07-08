@@ -2,17 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/model/question_sorting_model.dart';
 
 class QuizPage extends StatefulWidget {
   final String difficultyLevel;
   final int numberOfQuestions;
   final int time;
+  final String userName;
 
   QuizPage(
       {Key key,
       @required this.difficultyLevel,
       this.numberOfQuestions,
-      this.time});
+      this.time,
+      @required this.userName});
   @override
   _QuizPageState createState() => _QuizPageState();
 }
@@ -22,6 +25,14 @@ class _QuizPageState extends State<QuizPage> {
   int _quizDuration = 0;
   int _marks = 0;
   bool _correctAnswer;
+
+  String userResponse;
+  String userAnswer;
+  String _difficultyLevel;
+  String _numberOfQuestion;
+
+  QuickThink _quickThink;
+
   Timer _quizTimer;
 
   void startTimer() {
@@ -41,20 +52,35 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+@override
+  void dispose() {
+    // TODO:Destroy timer
+    super.dispose();
+  }
+  
   @override
   void initState() {
+    //_quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
+   _numberOfQuestion = widget.numberOfQuestions.toString();
+
     if (widget.difficultyLevel == 'Easy') {
+      _quickThink = QuickThink(difficultyLevel: 'easy');
       setState(() {
+        _difficultyLevel = 'easy';
         _quizDuration = 60;
         _quizMark = 1;
       });
     } else if (widget.difficultyLevel == 'Average') {
+      _quickThink = QuickThink(difficultyLevel: 'medium');
       setState(() {
+        _difficultyLevel = 'medium';
         _quizDuration = 45;
         _quizMark = 2;
       });
     } else if (widget.difficultyLevel == 'Hard') {
+      _quickThink = QuickThink(difficultyLevel: 'hard');
       setState(() {
+         _difficultyLevel = 'hard';
         _quizDuration = 30;
         _quizMark = 3;
       });
@@ -96,10 +122,12 @@ class _QuizPageState extends State<QuizPage> {
             _textTitle(height, width),
             _timer(height, width),
             _progress(height, width),
-            _box(height, width, heightBox, widthBox),
+            _quickThink.questionList(_difficultyLevel, _numberOfQuestion)
+            //_box(height, width, heightBox, widthBox),
           ],
         ));
   }
+
 
   Widget _container(double height, double width) {
     return Positioned(
@@ -203,7 +231,9 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ));
   }
-
+  
+ }
+/*
   Widget _box(height, width, heightBox, widthBox) {
     return Positioned(
         top: height * .28,
@@ -371,3 +401,4 @@ class _CardOptionsState extends State<CardOptions> {
     );
   }
 }
+*/
