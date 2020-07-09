@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
 import 'package:quickthink/model/question_ends.dart';
@@ -29,10 +30,12 @@ class QuickThink {
 
   Widget questionList(
       String difficultyLevel, String numberOfQuestions /*, String time*/) {
-    var data = _fetchedQuestions.questionUpdate(difficultyLevel, numberOfQuestions);
+    var data =
+        _fetchedQuestions.questionUpdate(difficultyLevel, numberOfQuestions);
     print(data);
     return FutureBuilder<List<QuestionModel>>(
-        future: _fetchedQuestions.questionUpdate(difficultyLevel, numberOfQuestions),
+        future: _fetchedQuestions.questionUpdate(
+            difficultyLevel, numberOfQuestions),
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           print('SnapShot: ${snapshot.data}');
           if (snapshot.hasData &&
@@ -47,8 +50,10 @@ class QuickThink {
           return new Container(
               alignment: Alignment.topCenter,
               padding: const EdgeInsets.only(top: 16.0),
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
+              child: Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                ),
               ));
         });
   }
@@ -122,12 +127,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           ),
           child: Stack(
             children: <Widget>[
-              _nextButton(height, width, heightBox, widthBox),
               _question(heightBox, widthBox),
               _optionOne(heightBox, widthBox),
               _optionTwo(heightBox, widthBox),
               _optionThree(heightBox, widthBox),
-              _optionFour(heightBox, widthBox)
+              _optionFour(heightBox, widthBox),
+              _nextButton(height, width, heightBox, widthBox),
             ],
           ),
         ));
