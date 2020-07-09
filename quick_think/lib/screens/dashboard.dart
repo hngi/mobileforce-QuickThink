@@ -5,11 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/theme/theme.dart';
+import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/views/question_view.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 
 import 'help.dart';
-
 
 class DashBoard extends StatefulWidget {
   DashBoard({Key key, @required this.username, @required this.uri})
@@ -56,8 +56,8 @@ class _DashBoardState extends State<DashBoard> {
                   Container(
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: Color(0xffF6F3F3),
-                        shape: BoxShape.circle,
+                      color: Color(0xffF6F3F3),
+                      shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
                           color: Color(0xFF18C5D9).withOpacity(0.5),
@@ -109,30 +109,30 @@ class _DashBoardState extends State<DashBoard> {
                                     difficultyLevel: option,
                                     userName: widget.username,
                                   )));
-                    }else{
-                        Flushbar(
-                          titleText:  Text(
-                            "Oops!",
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                            messageText: Text(
-                              "Please select a difficulty to start",
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          icon: Icon(
-                              FlutterIcons.infocirlceo_ant,
-                            size: 20,
+                    } else {
+                      Flushbar(
+                        titleText: Text(
+                          "Oops!",
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
+                            fontSize: 14,
                           ),
-                          leftBarIndicatorColor: Color(0xff1C1046),
-                          duration: Duration(milliseconds: 2000),
-                        )..show(context);
+                        ),
+                        messageText: Text(
+                          "Please select a difficulty to start",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                        icon: Icon(
+                          FlutterIcons.infocirlceo_ant,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        leftBarIndicatorColor: Color(0xff1C1046),
+                        duration: Duration(milliseconds: 2000),
+                      )..show(context);
                     }
                   },
                   child: Text(
@@ -217,7 +217,7 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       backgroundColor: light ? Color(0xff1c1046) : Hexcolor('#000000'),
       floatingActionButton: Container(
         decoration: BoxDecoration(
@@ -234,13 +234,12 @@ class _DashBoardState extends State<DashBoard> {
           backgroundColor: Color(0xff18C5D9),
           onPressed: () {
             helpAlert(context);
-           //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
           },
           child: Text(
             "?",
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
           ),
-
         ),
       ),
       body: Container(
@@ -380,61 +379,78 @@ class _DashBoardState extends State<DashBoard> {
                 )),
             Expanded(
               flex: 5,
-              child: Container(
-                margin: EdgeInsets.only(top: 20.0),
-                padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      "Choose number of questions",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 10,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 10);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 20,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 20);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 30,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 30);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 40,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 40);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 50,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 50);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    )
-                  ],
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        "Choose number of questions",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 10,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 10);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 20,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 20);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 30,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 30);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 40,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 40);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 50,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 50);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      )
+                    ],
+                  ),
                 ),
               ),
             )
@@ -450,7 +466,8 @@ class QuestionSelectionCard extends StatelessWidget {
   final onPressed;
   final light;
 
-  QuestionSelectionCard({@required this.questionNum, this.onPressed,this.light});
+  QuestionSelectionCard(
+      {@required this.questionNum, this.onPressed, this.light});
 
   @override
   Widget build(BuildContext context) {
@@ -471,4 +488,3 @@ class QuestionSelectionCard extends StatelessWidget {
     );
   }
 }
-
