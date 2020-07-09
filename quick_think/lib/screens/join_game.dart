@@ -47,7 +47,7 @@ class _JoinGameState extends State<JoinGame> {
                 height: SizeConfig().yMargin(context, 10),
               ),
               _prompt(),
-               SizedBox(
+              SizedBox(
                 height: SizeConfig().yMargin(context, 3.0),
               ),
               _quizCode(),
@@ -137,7 +137,7 @@ class _JoinGameState extends State<JoinGame> {
           hintStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
-              fontSize: 20.0,
+              fontSize: SizeConfig().textSize(context, 2),
               color: Colors.white),
           contentPadding: EdgeInsets.fromLTRB(14.0, 12.0, 0.0, 12.0),
           fillColor: Color.fromRGBO(87, 78, 118, 1),
@@ -176,13 +176,13 @@ class _JoinGameState extends State<JoinGame> {
           }
           return null;
         },
-        onSaved: (val) => nick = val,
+        onSaved: (val) => gameCode = val,
         decoration: InputDecoration(
           hintText: 'Enter Game Code',
           hintStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
-              fontSize: 20.0,
+              fontSize: SizeConfig().textSize(context, 2),
               color: Colors.white),
           contentPadding: EdgeInsets.fromLTRB(14.0, 12.0, 0.0, 12.0),
           fillColor: Color.fromRGBO(87, 78, 118, 1),
@@ -206,7 +206,7 @@ class _JoinGameState extends State<JoinGame> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
       color: Color.fromRGBO(24, 197, 217, 1),
       highlightColor: Color.fromRGBO(24, 197, 217, 1),
-      child: Text('Get started',
+      child: Text('Join Game',
           style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
