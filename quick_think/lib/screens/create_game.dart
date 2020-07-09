@@ -140,11 +140,11 @@ class _CreateGameState extends State<CreateGame> {
   Widget _allCategories({Function(String option) onSelect}) {
     final List<String> categoryNames = [
       "Math",
+      "English",
       "HNG",
       "Science",
-      "Math",
-      "HNG",
-      "Science"
+      "Art",
+      "Technology"
     ];
     return Wrap(
         spacing: 16.0,
@@ -154,16 +154,18 @@ class _CreateGameState extends State<CreateGame> {
               print('Tapped');
               onSelect(categoryNames[index]);
             },
-            child: Chip(
-              backgroundColor: Color(0xFF38208C),
-              label: Text(
-                categoryNames[index],
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: SizeConfig().textSize(context, 2.2),
+            child: Expanded(
+              child: Chip(
+                backgroundColor: Color(0xFF38208C),
+                label: Text(
+                  categoryNames[index],
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: SizeConfig().textSize(context, 2.2),
+                  ),
                 ),
               ),
             ),
@@ -276,7 +278,8 @@ class _CreateGameState extends State<CreateGame> {
     return RaisedButton(
       padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
       onPressed: () {
-        onPressed();
+        // onPressed();
+        showQuizCodeBottomSheet(context);
       },
       textColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
@@ -297,7 +300,7 @@ class _CreateGameState extends State<CreateGame> {
       form.save();
       //TODO Add Validation to ensure quizname and category is chosen
       //TODO Start Loader while waiting for response from API then display modal sheet
-      //   showQuizCodeBottomSheet(context);
+
     }
   }
 
@@ -323,7 +326,7 @@ class _CreateGameState extends State<CreateGame> {
                     "Game Code",
                     style: GoogleFonts.poppins(
                       color: light ? Color(0xff1C1046) : Colors.white,
-                      fontSize: 15,
+                      fontSize: SizeConfig().textSize(context, 2),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
