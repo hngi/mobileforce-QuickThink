@@ -52,16 +52,16 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-@override
+  @override
   void dispose() {
-    // TODO:Destroy timer
+    _quizTimer.cancel();
     super.dispose();
   }
-  
+
   @override
   void initState() {
     //_quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
-   _numberOfQuestion = widget.numberOfQuestions.toString();
+    _numberOfQuestion = widget.numberOfQuestions.toString();
 
     if (widget.difficultyLevel == 'Easy') {
       _quickThink = QuickThink(difficultyLevel: 'easy');
@@ -80,7 +80,7 @@ class _QuizPageState extends State<QuizPage> {
     } else if (widget.difficultyLevel == 'Hard') {
       _quickThink = QuickThink(difficultyLevel: 'hard');
       setState(() {
-         _difficultyLevel = 'hard';
+        _difficultyLevel = 'hard';
         _quizDuration = 30;
         _quizMark = 3;
       });
@@ -88,7 +88,6 @@ class _QuizPageState extends State<QuizPage> {
     startTimer();
     super.initState();
   }
-  
 
   int getTotalMarks() {
     for (int i = 0; i <= widget.numberOfQuestions; i++) {
@@ -97,8 +96,6 @@ class _QuizPageState extends State<QuizPage> {
     return _marks;
   }
 
-  
-
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -106,7 +103,6 @@ class _QuizPageState extends State<QuizPage> {
     fontWeight: FontWeight.w600,
   );
 
-  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -127,7 +123,6 @@ class _QuizPageState extends State<QuizPage> {
           ],
         ));
   }
-
 
   Widget _container(double height, double width) {
     return Positioned(
@@ -231,8 +226,7 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ));
   }
-  
- }
+}
 /*
   Widget _box(height, width, heightBox, widthBox) {
     return Positioned(
