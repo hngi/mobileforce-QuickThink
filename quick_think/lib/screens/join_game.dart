@@ -11,8 +11,8 @@ class JoinGame extends StatefulWidget {
 class _JoinGameState extends State<JoinGame> {
   SizeConfig _sizeConfig;
 
-  String nick = '';
-  String password = '';
+  String username = '';
+  String gameCode = '';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -131,7 +131,7 @@ class _JoinGameState extends State<JoinGame> {
           }
           return null;
         },
-        onSaved: (val) => nick = val,
+        onSaved: (val) => username = val,
         decoration: InputDecoration(
           hintText: 'Enter Username',
           hintStyle: TextStyle(
