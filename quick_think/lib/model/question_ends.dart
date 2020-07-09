@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/screens/results.dart';
 
 class IQEnds {
@@ -26,7 +27,7 @@ class IQEnds {
             FlatButton(
               child: Text(
                 'Proceed',
-                style: Theme.of(context).textTheme.bodyText2,
+                style: GoogleFonts.poppins(color: Colors.white,fontSize: 18.0,  ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

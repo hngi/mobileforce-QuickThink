@@ -13,6 +13,7 @@ class _JoinGameState extends State<JoinGame> {
 
   String username = '';
   String gameCode = '';
+  String nick = '';
 
   final _formKey = GlobalKey<FormState>();
 
