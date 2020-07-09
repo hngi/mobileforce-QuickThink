@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
 import 'package:quickthink/model/question_ends.dart';
 import 'package:quickthink/model/question_model.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class QuickThink {
   String response = "";
@@ -14,7 +16,7 @@ class QuickThink {
   FetchedQuestions _fetchedQuestions = new FetchedQuestions();
 
   QuestionModel questions = QuestionModel();
-  
+
 
   QuickThink({this.questionNumber, @required this.difficultyLevel}) {
     //apiQuestion();
@@ -27,27 +29,22 @@ class QuickThink {
 
     //   //_questionBank[i].correctAnswer;
     // }
-    datum();
-  }
 
-  datum() async {
-    var data = _fetchedQuestions.questionUpdate(
-        difficultyLevel, questionNumber.toString());
-    print('Data: $data');
-    List<QuestionModel> questionData = await data;
-    print('questionData: $questionData');
-    return questionData;
   }
 
   Widget questionList(
       String difficultyLevel, String numberOfQuestions /*, String time*/) {
+
     return FutureBuilder<List<QuestionModel>>(
         future: _fetchedQuestions.questionUpdate(
             difficultyLevel, numberOfQuestions),
+
+    
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           print('SnapShot: ${snapshot.data}');
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
+
             List<QuestionModel> questionData = snapshot.data;
             List<QuestionModel> filteredQuestions = List();
 
@@ -61,6 +58,8 @@ class QuickThink {
             return new CustomQuestionView(
                 questionData: filteredQuestions,
                 difficultyLevel: difficultyLevel);
+
+            
           }
 
           return new Container(
@@ -91,6 +90,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   QuickThink quickThink;
 
   String userAnswer;
+
   int _correctResponse = 0;
   int _wrongResponse = 0;
   int _questionNumber = 0;
@@ -103,6 +103,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
   String _userName;
 
+
   //final int questionNumber;
   //final String difficultyLevel;
 
@@ -113,6 +114,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     fontWeight: FontWeight.w600,
   );
 
+
   getUserName()async{
   SharedPreferences pref = await SharedPreferences.getInstance();
      _userName =  pref.getString('Username');}
@@ -122,6 +124,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     _questionBank = widget.questionData;
     print('_questionBank: $_questionBank');
     this.getUserName();
+
     //quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
     super.initState();
   }
@@ -151,6 +154,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             children: <Widget>[
               _nextButton(height, width, heightBox, widthBox),
               _question(heightBox, widthBox),
+
               Positioned(
                   top: heightBox * .26,
                   left: widthBox * .055,
@@ -162,10 +166,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               // _optionTwo(heightBox, widthBox),
               // _optionThree(heightBox, widthBox),
               // _optionFour(heightBox, widthBox)
+
             ],
           ),
         ));
   }
+
 
   _options() {
     List<Widget> option = List();
@@ -272,6 +278,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   //   );
   // }
 
+
   Widget _nextButton(height, width, heightBox, widthBox) {
     return Positioned(
       top: heightBox * .89,
@@ -296,7 +303,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             ),
           ),
           onPressed: () {
+
             print('getUserPickedAnswer:$userAnswer');
+
             if (userAnswer.isNotEmpty && userAnswer != null) {
               checkAnswer(userAnswer);
             }
@@ -319,7 +328,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
             totalScore: totalScore,
+
             username: _userName,
+
           ).showEndMsg(context);
 
           reset();
@@ -369,12 +380,11 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   String getQuestionText() {
+
     return _questionBank[_questionNumber].question;
   }
 
   List<String> getOptions() {
-    print(_questionBank[_questionNumber].options);
-    print((_questionBank[_questionNumber].incorrectAnswers));
     return _questionBank[_questionNumber].incorrectAnswers;
   }
 
@@ -384,7 +394,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   bool isFinished() {
+
     print(_questionBank.length);
+
     if (_questionNumber >= _questionBank.length - 1) {
       return true;
     } else {
@@ -423,6 +435,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   get totalScore {
+
     int total = correctResponse;
     return _totalScore = total;
   }
@@ -433,6 +446,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
   get getUserPickedAnswer {
     return userPickedAnswer;
+
   }
 }
 
@@ -440,14 +454,17 @@ class CardOptions extends StatefulWidget {
   final String title;
   final bool selected;
   final onTap;
+
   final Color color;
   CardOptions({@required this.title, this.selected, this.color, this.onTap});
+
   @override
   _CardOptionsState createState() => _CardOptionsState();
 }
 
 class _CardOptionsState extends State<CardOptions> {
   bool _selected = false;
+
   @override
   void initState() {
     _selected = widget.selected;
@@ -455,6 +472,7 @@ class _CardOptionsState extends State<CardOptions> {
   }
 
   _CustomQuestionViewState view = _CustomQuestionViewState();
+
 
   @override
   Widget build(BuildContext context) {
@@ -465,6 +483,7 @@ class _CardOptionsState extends State<CardOptions> {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
+
         // InkWell(
         //   //onTap: //widget.onTap,
         //   onTap: (){
@@ -485,6 +504,7 @@ class _CardOptionsState extends State<CardOptions> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: widget.color,//_selected ? Colors.green : Colors.white,
+
                 border: Border.all(color: Colors.black26)),
             height: heightBox * .128,
             width: widthBox * .77,
@@ -501,7 +521,9 @@ class _CardOptionsState extends State<CardOptions> {
               ),
             ),
           ),
+
         //),
+
       ],
     );
   }

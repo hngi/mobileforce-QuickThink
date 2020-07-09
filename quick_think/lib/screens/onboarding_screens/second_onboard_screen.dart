@@ -13,16 +13,14 @@ class SecondOnBoardScreen extends StatelessWidget {
         height: mediaQuery.size.height,
         padding: EdgeInsets.only(top: mediaQuery.size.height * 0.1),
         color: Hexcolor('#1C1046'),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _headerName(),
-              _showPhoneIcon(mediaQuery),
-              _showText(mediaQuery),
-              _showButton(mediaQuery, context)
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _headerName(),
+            _showPhoneIcon(mediaQuery),
+            _showText(mediaQuery),
+            _showButton(mediaQuery, context)
+          ],
         ),
       ),
     );

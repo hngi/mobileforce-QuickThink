@@ -83,6 +83,7 @@ class _QuizPageState extends State<QuizPage> {
    // startTimer();
     super.initState();
   }
+  
 
   int getTotalMarks() {
     for (int i = 0; i <= widget.numberOfQuestions; i++) {
@@ -91,6 +92,8 @@ class _QuizPageState extends State<QuizPage> {
     return _marks;
   }
 
+  
+
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -98,6 +101,7 @@ class _QuizPageState extends State<QuizPage> {
     fontWeight: FontWeight.w600,
   );
 
+  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -156,7 +160,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget _category(height, width) {
     return Positioned(
       top: height * .10,
-      left: width * .4,
+      left: width * .496,
       child: FlatButton(
         color: Color(0xFF574E76),
         onPressed: () {},
@@ -190,13 +194,13 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _timer(height, width) {
     return Positioned(
-      top: height * 0.1,
-      left: width * .63,
+      top: height * .10,
+      left: width * .75,
       child: FlatButton(
         color: Color(0xFF574E76),
         onPressed: () {},
         child: Text(
-          '00 : ' + _quizDuration.toString().padLeft(3, '0'),
+          '00 : ' + _quizDuration.toString().padLeft(2, '0'),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
@@ -223,5 +227,4 @@ class _QuizPageState extends State<QuizPage> {
         ));
   }
 
-  
  }

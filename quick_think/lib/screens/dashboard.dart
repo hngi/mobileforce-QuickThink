@@ -1,8 +1,11 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/theme/theme.dart';
+import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/views/question_view.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 
@@ -20,7 +23,7 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   int numberOfQuestions;
-  String option = "easy";
+  String option;
   bool light = CustomTheme.light;
 
   showDifficultyBottomSheet(BuildContext context) {
@@ -63,12 +66,17 @@ class _DashBoardState extends State<DashBoard> {
                         ),
                       ],
                     ),
-                    child: Text(
-                      "?",
-                      style: GoogleFonts.poppins(
-                        color: Color(0xff1C1046),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                    child: GestureDetector(
+                      onTap: () {
+                        helpAlert(context);
+                      },
+                      child: Text(
+                        "?",
+                        style: GoogleFonts.poppins(
+                          color: Color(0xff1C1046),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -92,7 +100,7 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                    if (numberOfQuestions != null && option != null) {
+                    if (option != null) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -101,6 +109,30 @@ class _DashBoardState extends State<DashBoard> {
                                     difficultyLevel: option,
                                     userName: widget.username,
                                   )));
+                    } else {
+                      Flushbar(
+                        titleText: Text(
+                          "Oops!",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        messageText: Text(
+                          "Please select a difficulty to start",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                        icon: Icon(
+                          FlutterIcons.infocirlceo_ant,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        leftBarIndicatorColor: Color(0xff1C1046),
+                        duration: Duration(milliseconds: 2000),
+                      )..show(context);
                     }
                   },
                   child: Text(
@@ -185,8 +217,6 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: light ? Color(0xff1c1046) : Hexcolor('#000000'),
       floatingActionButton: Container(
@@ -252,8 +282,11 @@ class _DashBoardState extends State<DashBoard> {
                         child: CircleAvatar(
                             backgroundColor: Color(0xff38208c),
                             radius: 28.5,
-                            child: SvgPicture.asset(
-                                "assets/images/${widget.uri}.svg") //Image.asset("assets/images/owl 1.png"),
+                            child: widget.uri != null
+                                ? SvgPicture.asset(
+                                    "assets/images/${widget.uri}.svg")
+                                : SvgPicture.asset("assets/images/owl.svg")
+                            //Image.asset("assets/images/owl 1.png"),
                             ),
                       )
                     ],
@@ -346,10 +379,10 @@ class _DashBoardState extends State<DashBoard> {
                 )),
             Expanded(
               flex: 5,
-              child: Container(
-                margin: EdgeInsets.only(top: 20.0),
-                padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -361,6 +394,9 @@ class _DashBoardState extends State<DashBoard> {
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600),
                       ),
+                      SizedBox(
+                        height: 30,
+                      ),
                       QuestionSelectionCard(
                         questionNum: 10,
                         onPressed: () {
@@ -369,7 +405,9 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(height: height * 0.01),
+                      SizedBox(
+                        height: 30,
+                      ),
                       QuestionSelectionCard(
                         questionNum: 20,
                         onPressed: () {
@@ -378,7 +416,9 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(height: height * 0.01),
+                      SizedBox(
+                        height: 30,
+                      ),
                       QuestionSelectionCard(
                         questionNum: 30,
                         onPressed: () {
@@ -387,7 +427,9 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(height: height * 0.01),
+                      SizedBox(
+                        height: 30,
+                      ),
                       QuestionSelectionCard(
                         questionNum: 40,
                         onPressed: () {
@@ -396,7 +438,9 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(height: height * 0.01),
+                      SizedBox(
+                        height: 30,
+                      ),
                       QuestionSelectionCard(
                         questionNum: 50,
                         onPressed: () {
