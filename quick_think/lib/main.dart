@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:quickthink/screens/help.dart';
 import 'screens/splashpage.dart';
@@ -7,7 +9,6 @@ import 'config.dart';
 import 'registration.dart';
 import 'theme/theme.dart';
 
-
 int onBoardCount;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,10 @@ void main() async {
   onBoardCount = pref.getInt("first");
   await pref.setInt("first", 1);
 
-  runApp(MyApp());
+  runApp(DevicePreview(
+    builder: (context) => MyApp(),
+    enabled: !kReleaseMode,
+  ));
 }
 
 class MyApp extends StatefulWidget {

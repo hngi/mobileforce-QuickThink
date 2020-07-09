@@ -3,7 +3,7 @@ import 'package:quickthink/screens/results.dart';
 
 class IQEnds {
   final username;
-  final double totalScore;
+  final int totalScore;
 
   IQEnds({this.username, this.totalScore});
 

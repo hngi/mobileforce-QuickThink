@@ -8,7 +8,6 @@ import 'package:quickthink/screens/quiz_page.dart';
 
 import 'help.dart';
 
-
 class DashBoard extends StatefulWidget {
   DashBoard({Key key, @required this.username, @required this.uri})
       : super(key: key);
@@ -54,8 +53,8 @@ class _DashBoardState extends State<DashBoard> {
                   Container(
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: Color(0xffF6F3F3),
-                        shape: BoxShape.circle,
+                      color: Color(0xffF6F3F3),
+                      shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
                           color: Color(0xFF18C5D9).withOpacity(0.5),
@@ -186,7 +185,9 @@ class _DashBoardState extends State<DashBoard> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
       backgroundColor: light ? Color(0xff1c1046) : Hexcolor('#000000'),
       floatingActionButton: Container(
         decoration: BoxDecoration(
@@ -203,13 +204,12 @@ class _DashBoardState extends State<DashBoard> {
           backgroundColor: Color(0xff18C5D9),
           onPressed: () {
             helpAlert(context);
-           //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
           },
           child: Text(
             "?",
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
           ),
-
         ),
       ),
       body: Container(
@@ -349,58 +349,64 @@ class _DashBoardState extends State<DashBoard> {
               child: Container(
                 margin: EdgeInsets.only(top: 20.0),
                 padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      "Choose number of questions",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 10,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 10);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 20,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 20);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 30,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 30);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 40,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 40);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 50,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 50);
-                        showDifficultyBottomSheet(context);
-                      },
-                      light: light,
-                    )
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        "Choose number of questions",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 10,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 10);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(height: height * 0.01),
+                      QuestionSelectionCard(
+                        questionNum: 20,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 20);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(height: height * 0.01),
+                      QuestionSelectionCard(
+                        questionNum: 30,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 30);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(height: height * 0.01),
+                      QuestionSelectionCard(
+                        questionNum: 40,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 40);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(height: height * 0.01),
+                      QuestionSelectionCard(
+                        questionNum: 50,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 50);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      )
+                    ],
+                  ),
                 ),
               ),
             )
@@ -416,7 +422,8 @@ class QuestionSelectionCard extends StatelessWidget {
   final onPressed;
   final light;
 
-  QuestionSelectionCard({@required this.questionNum, this.onPressed,this.light});
+  QuestionSelectionCard(
+      {@required this.questionNum, this.onPressed, this.light});
 
   @override
   Widget build(BuildContext context) {
@@ -437,4 +444,3 @@ class QuestionSelectionCard extends StatelessWidget {
     );
   }
 }
-
