@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/theme/theme.dart';
+import 'package:quickthink/utils/responsiveness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bottom_navigation_bar.dart';
 import '../registration.dart';
-
 
 class SplashPage extends StatefulWidget {
   @override
@@ -61,13 +61,15 @@ class _SplashPageState extends State<SplashPage> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       //Background color
-      backgroundColor: light ? Theme.of(context).primaryColor : Theme.of(context).primaryColorDark,
+      backgroundColor: light
+          ? Theme.of(context).primaryColor
+          : Theme.of(context).primaryColorDark,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
           _buildVector(height, width),
           _buildAppName(height, width),
-          _buildLoader(height, width),
+          //      _buildLoader(height, width),
         ],
       ),
     );
@@ -104,25 +106,36 @@ class _SplashPageState extends State<SplashPage> {
   Widget _buildAppName(height, width) {
     return Center(
       child: Container(
-        child: RichText(
-          text: TextSpan(
-            text: 'Quick',
-            style: GoogleFonts.dmSans(
-              fontSize: 32,
-              color: Color(0xFFFFFFFF),
-              fontWeight: FontWeight.bold,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: 'Think',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
+                text: 'Quick',
                 style: GoogleFonts.dmSans(
                   fontSize: 32,
-                  color: Color(0xFF18C5D9),
+                  color: Color(0xFFFFFFFF),
                   fontWeight: FontWeight.bold,
                 ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Think',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 32,
+                      color: Color(0xFF18C5D9),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: SizeConfig().yMargin(context, 2)),
+            SpinKitThreeBounce(
+              color: Color(0xFF18C5D9),
+              size: 25,
+            )
+          ],
         ),
       ),
     );
