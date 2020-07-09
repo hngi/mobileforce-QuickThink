@@ -52,11 +52,16 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  @override
+  void dispose() {
+    _quizTimer.cancel();
+    super.dispose();
+  }
 
   @override
   void initState() {
     //_quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
-   _numberOfQuestion = widget.numberOfQuestions.toString();
+    _numberOfQuestion = widget.numberOfQuestions.toString();
 
     if (widget.difficultyLevel == 'Easy') {
       _quickThink = QuickThink(difficultyLevel: 'easy');
@@ -75,7 +80,7 @@ class _QuizPageState extends State<QuizPage> {
     } else if (widget.difficultyLevel == 'Hard') {
       _quickThink = QuickThink(difficultyLevel: 'hard');
       setState(() {
-         _difficultyLevel = 'hard';
+        _difficultyLevel = 'hard';
         _quizDuration = 30;
         _quizMark = 3;
       });
@@ -83,7 +88,6 @@ class _QuizPageState extends State<QuizPage> {
    // startTimer();
     super.initState();
   }
-  
 
   int getTotalMarks() {
     for (int i = 0; i <= widget.numberOfQuestions; i++) {
@@ -92,8 +96,6 @@ class _QuizPageState extends State<QuizPage> {
     return _marks;
   }
 
-  
-
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -101,7 +103,6 @@ class _QuizPageState extends State<QuizPage> {
     fontWeight: FontWeight.w600,
   );
 
-  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -122,7 +123,6 @@ class _QuizPageState extends State<QuizPage> {
           ],
         ));
   }
-
 
   Widget _container(double height, double width) {
     return Positioned(
@@ -226,5 +226,75 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ));
   }
+}
+/*
+  Widget _box(height, width, heightBox, widthBox) {
+    return Positioned(
+        top: height * .28,
+        bottom: height * .11,
+        left: width * .064,
+        right: width * .064,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: Color(0xFFFFFFFF),
+          ),
+          child: Stack(
+            children: <Widget>[
+              _nextButton(height, width, heightBox, widthBox),
+              _question(heightBox, widthBox),
+              _optionOne(heightBox, widthBox),
+              _optionTwo(heightBox, widthBox),
+              _optionThree(heightBox, widthBox),
+              _optionFour(heightBox, widthBox)
+            ],
+          ),
+        ));
+  }
+
+  Widget _optionOne(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .26,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1993',
+      ),
+    );
+  }
+
+  Widget _optionTwo(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .408,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1452',
+      ),
+    );
+  }
+
+  Widget _optionThree(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .55,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1870',
+      ),
+    );
+  }
+
+  Widget _optionFour(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .70,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1457',
+      ),
+    );
+  }
+
 
  }
