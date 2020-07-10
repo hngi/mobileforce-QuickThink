@@ -41,7 +41,7 @@ class QuickThink {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
             print('SnapShot1: ${snapshot.data}');
-            List<QuestionModel> questionData = snapshot.data;
+            List<QuestionModel> questionData = snapshot.dat
 
             return new CustomQuestionView(
                 questionData: questionData, difficultyLevel: difficultyLevel);
