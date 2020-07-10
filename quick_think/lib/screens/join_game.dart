@@ -277,7 +277,7 @@ class _JoinGameState extends State<JoinGame> {
       setState(() {
         progressDialog.hide();
       });
-      _showInSnackBar('Game Comming Soon', Colors.green);
+      _showInSnackBar('Game Coming Soon', Colors.green);
     } else {
       String data = response.body;
       setState(() {
