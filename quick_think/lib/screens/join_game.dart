@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/utils/responsiveness.dart';
+import 'package:http/http.dart' as http;
+
+const String url = 'http://mohammedadel.pythonanywhere.com/game/play';
 
 class JoinGame extends StatefulWidget {
   @override
@@ -9,15 +14,30 @@ class JoinGame extends StatefulWidget {
 }
 
 class _JoinGameState extends State<JoinGame> {
-  SizeConfig _sizeConfig;
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String username = '';
   String gameCode = '';
-  String nick = '';
 
   final _formKey = GlobalKey<FormState>();
 
   ProgressDialog progressDialog;
+
+  void _showInSnackBar(String value, color) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(value),
+      backgroundColor: color,
+      duration: new Duration(seconds: 3),
+    ));
+  }
+
+  void _showToast(String value, color) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(value),
+      backgroundColor: color,
+      duration: new Duration(seconds: 3),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +45,7 @@ class _JoinGameState extends State<JoinGame> {
         isDismissible: false, type: ProgressDialogType.Normal);
 
     progressDialog.style(
+      message: 'Joining Game',
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       progressWidget: SpinKitThreeBounce(color: Color(0xFF18C5D9), size: 25),
@@ -37,6 +58,7 @@ class _JoinGameState extends State<JoinGame> {
     );
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -48,21 +70,32 @@ class _JoinGameState extends State<JoinGame> {
                 height: SizeConfig().yMargin(context, 10),
               ),
               _prompt(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 3.0),
-              ),
-              _quizCode(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 4),
-              ),
-              _username(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 7),
-              ),
+              _form(),
               _loginBtn(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _form() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: SizeConfig().yMargin(context, 3.0),
+          ),
+          _quizCode(),
+          SizedBox(
+            height: SizeConfig().yMargin(context, 4),
+          ),
+          _username(),
+          SizedBox(
+            height: SizeConfig().yMargin(context, 7),
+          ),
+        ],
       ),
     );
   }
@@ -159,6 +192,7 @@ class _JoinGameState extends State<JoinGame> {
         right: SizeConfig().xMargin(context, 3.0),
       ),
       child: TextFormField(
+        keyboardType: TextInputType.number,
         style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
@@ -167,13 +201,10 @@ class _JoinGameState extends State<JoinGame> {
         onChanged: (val) {},
         validator: (val) {
           if (val.length == 0) {
-            return 'Username Should Not Be Empty';
+            return 'Quiz Code Should Not Be Empty';
           }
           if (val.length <= 2) {
             return 'should be 3 or more characters';
-          }
-          if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val)) {
-            return "can only include _ or -";
           }
           return null;
         },
@@ -201,6 +232,7 @@ class _JoinGameState extends State<JoinGame> {
     return RaisedButton(
       padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
       onPressed: () {
+        print('URL: $url');
         onPressed();
       },
       textColor: Colors.white,
@@ -220,7 +252,38 @@ class _JoinGameState extends State<JoinGame> {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
+      _joinGame(gameCode, username);
       //    handleRegistration(nick, password);
+    }
+  }
+
+  void _joinGame(code, user) async {
+    setState(() {
+      progressDialog.show();
+    });
+    // url = Constants().urlJoinGame;
+    http.Response response = await http.post(
+      url,
+      headers: {'Accept': 'application/json'},
+      body: {"game_code": code, "user_name": user},
+    );
+    if (response.statusCode == 200) {
+      String data = response.body;
+
+      //TODO Retrieve the questions
+      var decodedData = jsonDecode(data)['data'];
+      //TODO Navigate to game screen
+
+      setState(() {
+        progressDialog.hide();
+      });
+      _showInSnackBar('Game Comming Soon', Colors.green);
+    } else {
+      String data = response.body;
+      setState(() {
+        progressDialog.hide();
+      });
+      _showInSnackBar(jsonDecode(data)['error'], Colors.red);
     }
   }
 }

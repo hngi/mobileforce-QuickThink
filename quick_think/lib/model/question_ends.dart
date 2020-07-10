@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/screens/results.dart';
 
 class IQEnds {
   final username;
-
-  final int totalScore;
-
+  final double totalScore;
 
   IQEnds({this.username, this.totalScore});
 
@@ -27,7 +24,7 @@ class IQEnds {
             FlatButton(
               child: Text(
                 'Proceed',
-                style: GoogleFonts.poppins(color: Colors.white,fontSize: 18.0,  ),
+                style: Theme.of(context).textTheme.bodyText2,
               ),
               onPressed: () {
                 Navigator.of(context).pop();
