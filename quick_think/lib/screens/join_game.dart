@@ -273,8 +273,7 @@ class _JoinGameState extends State<JoinGame> {
       //TODO Retrieve the questions
       var decodedData = jsonDecode(data)['data'];
       //TODO Navigate to game screen
-      print(response.body);
-      print(response.statusCode);
+
       setState(() {
         progressDialog.hide();
       });
@@ -285,8 +284,6 @@ class _JoinGameState extends State<JoinGame> {
         progressDialog.hide();
       });
       _showInSnackBar(jsonDecode(data)['error'], Colors.red);
-      print(response.statusCode);
-      print(response.body);
     }
   }
 }
