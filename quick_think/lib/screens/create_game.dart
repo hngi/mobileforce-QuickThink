@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -7,6 +9,18 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
+import 'package:http/http.dart' as http;
+import 'package:clipboard_manager/clipboard_manager.dart';
+
+// TODO: Visual feedback for when a selected
+// TODO: Tell user when category isn't selected... category validation
+// TODO: Change colours of modal fonts and line from black
+// TODO: Center progress loading text
+// TODO: Change progress loading colour from black
+// TODO: Visual feedback for copy code
+
+
+const String fetchGameCode_Api = 'http://mohammedadel.pythonanywhere.com/game';
 
 class CreateGame extends StatefulWidget {
   @override
@@ -16,16 +30,45 @@ class CreateGame extends StatefulWidget {
 class _CreateGameState extends State<CreateGame> {
   SizeConfig _sizeConfig;
 
-  String quizName = '';
+  String userName = '';
   String category;
+  String hintText;
+  String gameCode;
+  TextEditingController userNameController = TextEditingController();
 
-  TextEditingController quizCodeController, quizNameController;
+  @override
+  void initState() {
+    userNameController.addListener(() {});
+    super.initState();
+  }
+
+  Future<String> getCode(context, username) async {
+    http.Response response = await http.post(
+      fetchGameCode_Api,
+      headers: {'Accept': 'application/json'},
+      body: {"user_name": userName, "category": category},
+    );
+
+    if (response.statusCode == 200) {
+      String data = response.body;
+      gameCode = jsonDecode(data)['game_code'].toString();
+      return gameCode;
+    } else {
+      throw Exception('Failed to retrieve code');
+    }
+  }
 
   bool light = CustomTheme.light;
 
   final _formKey = GlobalKey<FormState>();
 
   ProgressDialog progressDialog;
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,41 +91,44 @@ class _CreateGameState extends State<CreateGame> {
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              _logoText(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 10),
-              ),
-              _prompt(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 4),
-              ),
-              _quizName(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 7),
-              ),
-              _promptCategory(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 1),
-              ),
-              _allCategories(
-                onSelect: (String categoryChosen) {
-                  setState(() {
-                    category = categoryChosen;
-                    print(category);
-                  });
-                },
-              ),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 4),
-              ),
-              _loginBtn(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 1),
-              ),
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                _logoText(),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 10),
+                ),
+                _prompt(),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 4),
+                ),
+                _userName(),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 7),
+                ),
+                _promptCategory(),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 1),
+                ),
+                _allCategories(
+                  onSelect: (String categoryChosen) {
+                    setState(() {
+                      category = categoryChosen;
+                      print(category);
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 4),
+                ),
+                _loginBtn(),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 1),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -144,28 +190,26 @@ class _CreateGameState extends State<CreateGame> {
       "HNG",
       "Science",
       "Art",
-      "Technology"
+      "games"
     ];
     return Wrap(
+        direction: Axis.horizontal,
         spacing: 16.0,
         children: List.generate(categoryNames.length, (index) {
           return GestureDetector(
             onTap: () {
-              print('Tapped');
               onSelect(categoryNames[index]);
             },
-            child: Expanded(
-              child: Chip(
-                backgroundColor: Color(0xFF38208C),
-                label: Text(
-                  categoryNames[index],
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: SizeConfig().textSize(context, 2.2),
-                  ),
+            child: Chip(
+              backgroundColor: Color(0xFF38208C),
+              label: Text(
+                categoryNames[index],
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: SizeConfig().textSize(context, 2.2),
                 ),
               ),
             ),
@@ -195,20 +239,19 @@ class _CreateGameState extends State<CreateGame> {
     );
   }
 
-  Widget _quizName() {
+  Widget _userName() {
     return Padding(
       padding: EdgeInsets.only(
         left: SizeConfig().xMargin(context, 5.0),
         right: SizeConfig().xMargin(context, 3.0),
       ),
       child: TextFormField(
-        controller: quizNameController,
+        controller: userNameController,
         style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
             fontSize: SizeConfig().textSize(context, 3),
             color: Colors.white),
-        onChanged: (val) {},
         validator: (val) {
           if (val.length == 0) {
             return 'Quiz Name Should Not Be Empty';
@@ -219,11 +262,12 @@ class _CreateGameState extends State<CreateGame> {
           if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val)) {
             return "can only include _ or -";
           }
+
           return null;
         },
-        onSaved: (val) => quizName = val,
+        onSaved: (val) => userName = val,
         decoration: InputDecoration(
-          hintText: 'Quiz Name',
+          hintText: 'Enter your username',
           hintStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
@@ -248,7 +292,6 @@ class _CreateGameState extends State<CreateGame> {
         right: SizeConfig().xMargin(context, 2.0),
       ),
       child: TextFormField(
-        controller: quizCodeController,
         enabled: false,
         style: TextStyle(
             fontFamily: 'Poppins',
@@ -256,7 +299,7 @@ class _CreateGameState extends State<CreateGame> {
             fontSize: SizeConfig().textSize(context, 3),
             color: Colors.white),
         decoration: InputDecoration(
-          hintText: 'New-created-quiz link.com',
+          hintText: hintText,
           hintStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
@@ -277,10 +320,7 @@ class _CreateGameState extends State<CreateGame> {
   Widget _loginBtn() {
     return RaisedButton(
       padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
-      onPressed: () {
-        // onPressed();
-        showQuizCodeBottomSheet(context);
-      },
+      onPressed: onPressed,
       textColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
       color: Color.fromRGBO(24, 197, 217, 1),
@@ -296,12 +336,21 @@ class _CreateGameState extends State<CreateGame> {
 
   void onPressed() async {
     var form = _formKey.currentState;
-    if (form.validate()) {
+    if (form.validate() && category != null) {
       form.save();
-      //TODO Add Validation to ensure quizname and category is chosen
-      //TODO Start Loader while waiting for response from API then display modal sheet
+      setState(() {
+        progressDialog.show();
+      });
 
+      hintText = await getCode(userName, category);
+
+      setState(() {
+        progressDialog.hide();
+      });
+      showQuizCodeBottomSheet(context);
     }
+    userNameController.clear();
+    category = null;
   }
 
   showQuizCodeBottomSheet(BuildContext context) {
@@ -334,7 +383,8 @@ class _CreateGameState extends State<CreateGame> {
               ),
               SizedBox(height: 21),
               _quizCode(),
-              SizedBox(height: 48),
+              // why not use screen util
+              SizedBox(height: 30),
               SizedBox(
                 width: double.maxFinite,
                 height: 45,
@@ -343,7 +393,7 @@ class _CreateGameState extends State<CreateGame> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                    //TODO Code to Copy the Quizcode
+                     ClipboardManager.copyToClipBoard(hintText);
                   },
                   child: Text(
                     "Copy",

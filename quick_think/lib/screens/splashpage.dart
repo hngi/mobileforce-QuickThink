@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bottom_navigation_bar.dart';
 import '../registration.dart';
+import 'join_game.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -40,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => DashboardScreen(),
+            builder: (context) => JoinGame(),
           ),
         );
       }
