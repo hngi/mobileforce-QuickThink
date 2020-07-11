@@ -105,8 +105,7 @@ class _DashBoardState extends State<DashBoard> {
                           context,
                           MaterialPageRoute(
                               builder: (o) => QuizPage(
-                                    numberOfQuestions: numberOfQuestions,
-                                    difficultyLevel: option,
+                                    gameCode: option,
                                     userName: widget.username,
                                   )));
                     } else {

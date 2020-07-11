@@ -39,9 +39,9 @@ class FetchedQuestions {
   //   return data;
   // }
 
-   Future<List<QuestionModel>> questionUpdate(String difficultyLevel, String numberOfQuestions) async {
+   Future<List<QuestionModel>> questionUpdate(push) async {
     final jsonEndpoint =
-        "https://opentdb.com/api.php?amount=$numberOfQuestions&difficulty=$difficultyLevel";
+        "http://mohammedadel.pythonanywhere.com/game/play?game_code=$gameCode&user_name=$userName";
     return await http.post(jsonEndpoint, body: {}).then((http.Response res) {
       dynamic response = res.body;
       final int statusCode = res.statusCode;
@@ -49,7 +49,7 @@ class FetchedQuestions {
 
       if (statusCode == 200) {
         
-         List question = json.decode(response)['results'];
+         List question = json.decode(response)['data'];
         //QuestionModel result = QuestionModel.fromJson(question);
         print(question);
         return question

@@ -5,17 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
 
 class QuizPage extends StatefulWidget {
-  final String difficultyLevel;
-  final int numberOfQuestions;
+  final String gameCode;final String userName;
   final int time;
-  final String userName;
 
   QuizPage(
       {Key key,
-      @required this.difficultyLevel,
-      this.numberOfQuestions,
+      @required this.gameCode,
+      @required this.userName,
       this.time,
-      @required this.userName});
+     });
   @override
   _QuizPageState createState() => _QuizPageState();
 }
@@ -61,40 +59,40 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     //_quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
-    _numberOfQuestion = widget.numberOfQuestions.toString();
+   // _numberOfQuestion = widget.numberOfQuestions.toString();
 
-    if (widget.difficultyLevel == 'Easy') {
-      _quickThink = QuickThink(difficultyLevel: 'easy');
-      setState(() {
-        _difficultyLevel = 'easy';
-        _quizDuration = 60;
-        _quizMark = 1;
-      });
-    } else if (widget.difficultyLevel == 'Average') {
-      _quickThink = QuickThink(difficultyLevel: 'medium');
-      setState(() {
-        _difficultyLevel = 'medium';
-        _quizDuration = 45;
-        _quizMark = 2;
-      });
-    } else if (widget.difficultyLevel == 'Hard') {
-      _quickThink = QuickThink(difficultyLevel: 'hard');
-      setState(() {
-        _difficultyLevel = 'hard';
-        _quizDuration = 30;
-        _quizMark = 3;
-      });
-    }
-    startTimer();
+    // if (widget.difficultyLevel == 'Easy') {
+    //   _quickThink = QuickThink(difficultyLevel: 'easy');
+    //   setState(() {
+    //     _difficultyLevel = 'easy';
+    //     _quizDuration = 60;
+    //     _quizMark = 1;
+    //   });
+    // } else if (widget.difficultyLevel == 'Average') {
+    //   _quickThink = QuickThink(difficultyLevel: 'medium');
+    //   setState(() {
+    //     _difficultyLevel = 'medium';
+    //     _quizDuration = 45;
+    //     _quizMark = 2;
+    //   });
+    // } else if (widget.difficultyLevel == 'Hard') {
+    //   _quickThink = QuickThink(difficultyLevel: 'hard');
+    //   setState(() {
+    //     _difficultyLevel = 'hard';
+    //     _quizDuration = 30;
+    //     _quizMark = 3;
+    //   });
+    // }
+    // startTimer();
     super.initState();
   }
 
-  int getTotalMarks() {
-    for (int i = 0; i <= widget.numberOfQuestions; i++) {
-      _correctAnswer ? _marks += _quizMark : _marks = _marks;
-    }
-    return _marks;
-  }
+  // int getTotalMarks() {
+  //   for (int i = 0; i <= widget.numberOfQuestions; i++) {
+  //     _correctAnswer ? _marks += _quizMark : _marks = _marks;
+  //   }
+  //   return _marks;
+  // }
 
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
@@ -114,11 +112,11 @@ class _QuizPageState extends State<QuizPage> {
         body: Stack(
           children: <Widget>[
             _backIcon(height, width),
-            _category(height, width),
-            _textTitle(height, width),
+            // _category(height, width),
+            // _textTitle(height, width),
             _timer(height, width),
-            _progress(height, width),
-            _quickThink.questionList(_difficultyLevel, _numberOfQuestion)
+            //_progress(height, width),
+            _quickThink.questionList(widget.userName, widget.gameCode)
             //_box(height, width, heightBox, widthBox),
           ],
         ));
@@ -157,40 +155,40 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  Widget _category(height, width) {
-    return Positioned(
-      top: height * .10,
-      left: width * .496,
-      child: FlatButton(
-        color: Color(0xFF574E76),
-        onPressed: () {},
-        child: Text(
-          widget.difficultyLevel,
-          style: GoogleFonts.poppins(
-            color: Color(0xFF86EC88),
-            fontSize: 16,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _category(height, width) {
+  //   return Positioned(
+  //     top: height * .10,
+  //     left: width * .496,
+  //     child: FlatButton(
+  //       color: Color(0xFF574E76),
+  //       onPressed: () {},
+  //       child: Text(
+  //         widget.difficultyLevel,
+  //         style: GoogleFonts.poppins(
+  //           color: Color(0xFF86EC88),
+  //           fontSize: 16,
+  //           fontStyle: FontStyle.normal,
+  //           fontWeight: FontWeight.w500,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _textTitle(height, width) {
-    return Positioned(
-        top: height * .12,
-        left: width * .075,
-        child: Text(
-          widget.numberOfQuestions.toString() + ' Questions',
-          style: GoogleFonts.poppins(
-            color: Color(0xFFFFFFFF),
-            fontSize: 20,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.bold,
-          ),
-        ));
-  }
+  // Widget _textTitle(height, width) {
+  //   return Positioned(
+  //       top: height * .12,
+  //       left: width * .075,
+  //       child: Text(
+  //         widget.numberOfQuestions.toString() + ' Questions',
+  //         style: GoogleFonts.poppins(
+  //           color: Color(0xFFFFFFFF),
+  //           fontSize: 20,
+  //           fontStyle: FontStyle.normal,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ));
+  // }
 
   Widget _timer(height, width) {
     return Positioned(
@@ -212,20 +210,20 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  Widget _progress(height, width) {
-    return Positioned(
-        top: height * .17,
-        left: width * .064,
-        child: Text(
-          'Question 1 of ' + widget.numberOfQuestions.toString(),
-          style: GoogleFonts.poppins(
-            color: Color(0xFFFFFFFF),
-            fontSize: 16,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w500,
-          ),
-        ));
-  }
+  // Widget _progress(height, width) {
+  //   return Positioned(
+  //       top: height * .17,
+  //       left: width * .064,
+  //       child: Text(
+  //         'Question 1 of ' + widget.numberOfQuestions.toString(),
+  //         style: GoogleFonts.poppins(
+  //           color: Color(0xFFFFFFFF),
+  //           fontSize: 16,
+  //           fontStyle: FontStyle.normal,
+  //           fontWeight: FontWeight.w500,
+  //         ),
+  //       ));
+  // }
 }
 /*
   Widget _box(height, width, heightBox, widthBox) {

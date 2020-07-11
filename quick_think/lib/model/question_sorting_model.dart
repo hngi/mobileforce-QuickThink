@@ -10,34 +10,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 class QuickThink {
   String response = "";
   int totalQuestions = 0;
-
-  final int questionNumber;
-  final String difficultyLevel;
+final String gameCode;final String userName;
+  
   FetchedQuestions _fetchedQuestions = new FetchedQuestions();
 
   QuestionModel questions = QuestionModel();
 
 
-  QuickThink({this.questionNumber, @required this.difficultyLevel}) {
-    //apiQuestion();
-    // _questionBank = questionList(
-    //   difficultyLevel,
-    // ); //iqQuestionBank.iqQuestions(10);
-    // //totalQuestions = _questionBank.length;
-    // print(_questionBank);
-    // for (int i = 0; i < questionNumber; i++) {
-
-    //   //_questionBank[i].correctAnswer;
-    // }
-
-  }
+  QuickThink({this.gameCode, this.userName});
 
   Widget questionList(
-      String difficultyLevel, String numberOfQuestions /*, String time*/) {
+      String gameCode, String userName /*, String time*/) {
 
     return FutureBuilder<List<QuestionModel>>(
         future: _fetchedQuestions.questionUpdate(
-            difficultyLevel, numberOfQuestions),
+            gameCode, userName),
 
     
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
@@ -58,10 +45,7 @@ class QuickThink {
 
 
             return new CustomQuestionView(
-                questionData: filteredQuestions,
-                difficultyLevel: difficultyLevel);
-
-            
+                questionData: filteredQuestions);
           }
 
           return new Container(
@@ -80,9 +64,9 @@ class QuickThink {
 
 class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
-  final String difficultyLevel;
+ 
 
-  CustomQuestionView({this.questionData, this.difficultyLevel});
+  CustomQuestionView({this.questionData});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();

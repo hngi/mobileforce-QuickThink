@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,8 +17,8 @@ class JoinGame extends StatefulWidget {
 class _JoinGameState extends State<JoinGame> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  String username = '';
-  String gameCode = '';
+  TextEditingController username = TextEditingController();
+  TextEditingController gameCode = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -147,6 +148,7 @@ class _JoinGameState extends State<JoinGame> {
         right: SizeConfig().xMargin(context, 3.0),
       ),
       child: TextFormField(
+        controller: username,
         style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
@@ -165,7 +167,7 @@ class _JoinGameState extends State<JoinGame> {
           }
           return null;
         },
-        onSaved: (val) => username = val,
+        onSaved: (val) => username.text = val,
         decoration: InputDecoration(
           hintText: 'Enter Username',
           hintStyle: TextStyle(
@@ -199,6 +201,7 @@ class _JoinGameState extends State<JoinGame> {
             fontSize: SizeConfig().textSize(context, 3),
             color: Colors.white),
         onChanged: (val) {},
+        controller: gameCode,
         validator: (val) {
           if (val.length == 0) {
             return 'Quiz Code Should Not Be Empty';
@@ -208,7 +211,7 @@ class _JoinGameState extends State<JoinGame> {
           }
           return null;
         },
-        onSaved: (val) => gameCode = val,
+        onSaved: (val) => gameCode.text = val,
         decoration: InputDecoration(
           hintText: 'Enter Game Code',
           hintStyle: TextStyle(
@@ -252,7 +255,15 @@ class _JoinGameState extends State<JoinGame> {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      _joinGame(gameCode, username);
+      print(gameCode.text + username.text);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (o) => QuizPage(
+                    gameCode: gameCode.text,
+                    userName: username.text,
+                  )));
+      //_joinGame(gameCode, username);
       //    handleRegistration(nick, password);
     }
   }
