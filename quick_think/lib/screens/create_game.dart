@@ -19,7 +19,6 @@ import 'package:clipboard_manager/clipboard_manager.dart';
 // TODO: Change progress loading colour from black
 // TODO: Visual feedback for copy code
 
-
 const String fetchGameCode_Api = 'http://mohammedadel.pythonanywhere.com/game';
 
 class CreateGame extends StatefulWidget {
@@ -93,41 +92,46 @@ class _CreateGameState extends State<CreateGame> {
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _logoText(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 10),
-                ),
-                _prompt(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _userName(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 7),
-                ),
-                _promptCategory(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
-                ),
-                _allCategories(
-                  onSelect: (String categoryChosen) {
-                    setState(() {
-                      category = categoryChosen;
-                      print(category);
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _loginBtn(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
-                ),
-              ],
+            child: Container(
+              padding: EdgeInsets.only(
+                  left: SizeConfig().xMargin(context, 5),
+                  right: SizeConfig().xMargin(context, 5)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  _logoText(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 10),
+                  ),
+                  _prompt(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 4),
+                  ),
+                  _userName(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 7),
+                  ),
+                  _promptCategory(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 1),
+                  ),
+                  _allCategories(
+                    onSelect: (String categoryChosen) {
+                      setState(() {
+                        category = categoryChosen;
+                        print(category);
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 5),
+                  ),
+                  _loginBtn(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 1),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -136,50 +140,38 @@ class _CreateGameState extends State<CreateGame> {
   }
 
   Widget _prompt() {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: SizeConfig().xMargin(context, 5.0),
-        right: SizeConfig().xMargin(context, 3.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Create a game',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: SizeConfig().textSize(context, 3.7),
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Create a game',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: SizeConfig().textSize(context, 3.7),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _promptCategory() {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: SizeConfig().xMargin(context, 5.0),
-        right: SizeConfig().xMargin(context, 3.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Choose Category',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: SizeConfig().textSize(context, 2.2),
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Choose Category',
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: SizeConfig().textSize(context, 2.2),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -194,17 +186,25 @@ class _CreateGameState extends State<CreateGame> {
     ];
     return Wrap(
         direction: Axis.horizontal,
-        spacing: 16.0,
+        //spacing: 16.0,
         children: List.generate(categoryNames.length, (index) {
           return GestureDetector(
             onTap: () {
               onSelect(categoryNames[index]);
             },
-            child: Chip(
-              backgroundColor: Color(0xFF38208C),
-              label: Text(
+            child: Container(
+              width: SizeConfig().xMargin(context, 20),
+              padding: EdgeInsets.all(SizeConfig().xMargin(context, 2)),
+              margin: EdgeInsets.only(
+                  top: SizeConfig().xMargin(context, 3),
+                  right: SizeConfig().xMargin(context, 3)),
+              decoration: BoxDecoration(
+                color: Color(0xFF38208C),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Text(
                 categoryNames[index],
-                textAlign: TextAlign.start,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: Colors.white,
@@ -219,6 +219,7 @@ class _CreateGameState extends State<CreateGame> {
 
   Widget _logoText() {
     return RichText(
+      textAlign: TextAlign.center,
       text: TextSpan(children: <TextSpan>[
         TextSpan(
             text: 'Quick',
@@ -240,47 +241,41 @@ class _CreateGameState extends State<CreateGame> {
   }
 
   Widget _userName() {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: SizeConfig().xMargin(context, 5.0),
-        right: SizeConfig().xMargin(context, 3.0),
-      ),
-      child: TextFormField(
-        controller: userNameController,
-        style: TextStyle(
+    return TextFormField(
+      controller: userNameController,
+      style: TextStyle(
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400,
+          fontSize: SizeConfig().textSize(context, 3),
+          color: Colors.white),
+      validator: (val) {
+        if (val.length == 0) {
+          return 'Quiz Name Should Not Be Empty';
+        }
+        if (val.length <= 2) {
+          return 'should be 3 or more characters';
+        }
+        if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val)) {
+          return "can only include _ or -";
+        }
+
+        return null;
+      },
+      onSaved: (val) => userName = val,
+      decoration: InputDecoration(
+        hintText: 'Enter your username',
+        hintStyle: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
-            fontSize: SizeConfig().textSize(context, 3),
+            fontSize: SizeConfig().textSize(context, 2),
             color: Colors.white),
-        validator: (val) {
-          if (val.length == 0) {
-            return 'Quiz Name Should Not Be Empty';
-          }
-          if (val.length <= 2) {
-            return 'should be 3 or more characters';
-          }
-          if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val)) {
-            return "can only include _ or -";
-          }
-
-          return null;
-        },
-        onSaved: (val) => userName = val,
-        decoration: InputDecoration(
-          hintText: 'Enter your username',
-          hintStyle: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              fontSize: SizeConfig().textSize(context, 2),
-              color: Colors.white),
-          contentPadding: EdgeInsets.fromLTRB(14.0, 12.0, 0.0, 12.0),
-          fillColor: Color.fromRGBO(87, 78, 118, 1),
-          filled: true,
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Color.fromRGBO(24, 197, 217, 1), width: 1.0),
-              borderRadius: BorderRadius.circular(5.0)),
-        ),
+        contentPadding: EdgeInsets.fromLTRB(14.0, 12.0, 0.0, 12.0),
+        fillColor: Color.fromRGBO(87, 78, 118, 1),
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: Color.fromRGBO(24, 197, 217, 1), width: 1.0),
+            borderRadius: BorderRadius.circular(5.0)),
       ),
     );
   }
@@ -393,7 +388,7 @@ class _CreateGameState extends State<CreateGame> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                     ClipboardManager.copyToClipBoard(hintText);
+                    ClipboardManager.copyToClipBoard(hintText);
                   },
                   child: Text(
                     "Copy",

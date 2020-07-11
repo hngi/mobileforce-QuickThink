@@ -67,14 +67,14 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
 
   Widget _vector(height, width) {
     return Container(
-      height: SizeConfig().yMargin(context, 70),
-      width: SizeConfig().xMargin(context, 200),
+      height: SizeConfig().yMargin(context, 40),
+      width: SizeConfig().xMargin(context, 60),
       decoration: BoxDecoration(
           image: DecorationImage(
         image: AssetImage(
           'assets/images/social_media_icon.png',
         ),
-        fit: BoxFit.fitHeight,
+        fit: BoxFit.contain,
       )),
     );
   }

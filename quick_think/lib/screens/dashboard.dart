@@ -379,10 +379,10 @@ class _DashBoardState extends State<DashBoard> {
                 )),
             Expanded(
               flex: 5,
-              child: SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.only(top: 20.0),
-                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+              child: Container(
+                margin: EdgeInsets.only(top: 20.0),
+                padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -395,7 +395,7 @@ class _DashBoardState extends State<DashBoard> {
                             fontWeight: FontWeight.w600),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: SizeConfig().yMargin(context, 5),
                       ),
                       QuestionSelectionCard(
                         questionNum: 10,
@@ -405,9 +405,7 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SizedBox(height: SizeConfig().yMargin(context, 3)),
                       QuestionSelectionCard(
                         questionNum: 20,
                         onPressed: () {
@@ -416,9 +414,7 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SizedBox(height: SizeConfig().yMargin(context, 3)),
                       QuestionSelectionCard(
                         questionNum: 30,
                         onPressed: () {
@@ -427,9 +423,7 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SizedBox(height: SizeConfig().yMargin(context, 3)),
                       QuestionSelectionCard(
                         questionNum: 40,
                         onPressed: () {
@@ -438,9 +432,7 @@ class _DashBoardState extends State<DashBoard> {
                         },
                         light: light,
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SizedBox(height: SizeConfig().yMargin(context, 3)),
                       QuestionSelectionCard(
                         questionNum: 50,
                         onPressed: () {
