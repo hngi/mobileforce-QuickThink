@@ -1,13 +1,37 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/model/leaderboard_model.dart';
 import 'package:quickthink/theme/theme.dart';
 
-class LeaderBoard extends StatelessWidget {
+class LeaderBoard extends StatefulWidget {
+  @override
+  _LeaderBoardState createState() => _LeaderBoardState();
+}
+
+class _LeaderBoardState extends State<LeaderBoard> {
   bool light = CustomTheme.light;
+
+  final model = LeaderboardModel();
+
+  List topUsers;
+
+  @override
+  void initState() {
+    model.getLeaderboard("1002");
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    Timer.periodic(
+      Duration(minutes: 5),
+      refreshBoard
+    );
     return Scaffold(
       backgroundColor: light ? Color(0xff1C1046) : Hexcolor('#000000'),
       body: SafeArea(
@@ -31,29 +55,82 @@ class LeaderBoard extends StatelessWidget {
                  mainAxisAlignment: MainAxisAlignment.start,
                  children: <Widget>[
                    Container(
-                       margin:
-                           EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                        child: Row(
-                         mainAxisAlignment: MainAxisAlignment.center,
+                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                          children: <Widget>[
-                           _roundContainer('2', 'Rick', light),
-                           _roundContainer1('Homer Simpson',light),
-                           _roundContainer('3', 'Morty', light)
+                           StreamBuilder(
+                             stream: model.leaderboardState,
+                               builder: (buildContext, snapshot){
+                                  if(snapshot.data == fetchState.Busy){
+                                    return SpinKitFoldingCube(
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    );
+                                  }
+                                  if(snapshot.hasError || snapshot.data == fetchState.NoData){
+                                    return Error(snapshot.error);
+                                  }
+                                  return ListView.builder(
+                                    itemCount: 3,
+                                      itemBuilder: (buildContext,index){
+                                        if(index == 0){
+                                          topUsers[1] = model.listUsers[index];
+                                          return SpinKitFoldingCube(
+                                            color: Colors.white,
+                                            size: 20.0,
+                                          );
+                                        }
+                                        if(index == 1){
+                                          topUsers[0] = model.listUsers[index];
+                                          return SpinKitFoldingCube(
+                                            color: Colors.white,
+                                            size: 20.0,
+                                          );
+                                        }
+                                        if(index == 2){
+                                          topUsers[2] = model.listUsers[index];
+                                        }
+                                        return ListView.builder(
+                                          itemCount: 3,
+                                            itemBuilder: (buildContext,index){
+                                              if(index == 1){
+                                                return _roundContainer1(topUsers[index].name,light);
+                                              }else {
+                                                return _roundContainer(
+                                                    index.toString(),
+                                                    topUsers[index].name,
+                                                    light);
+                                              }
+                                            }
+                                        );
+                                      }
+                                  );
+                               }
+                           ),
                          ],
                        )),
                    SizedBox(
-                     height: 10.0,
+                     height: 30.0,
                    ),
                    SingleChildScrollView(
-                     child: _resultContainer(light,context),
+                     child: _resultContainer(light,context,model),
                    )
                  ],
                ),
              )
           ],
         ),
+
       ),
     );
+
+  }
+
+  void refreshBoard(Timer timer) {
+    setState(() {
+      model.getLeaderboard("1002");
+    });
   }
 }
 
@@ -110,28 +187,46 @@ Widget _roundContainer1(String text1, light) {
       ));
 }
 
-Widget _resultContainer(bool light,BuildContext context) {
+Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model) {
+  final vModel = model;
   return Container(
-          margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.fromLTRB(30,10,30,0),
+    alignment: Alignment.center,
+          margin: EdgeInsets.only(top: 5),
+          padding: EdgeInsets.fromLTRB(30,5,30,20),
           decoration: BoxDecoration(
-            color: light ? Colors.white : Hexcolor('#4C4C4C'),
+            color: light ? Colors.white : Hexcolor('#171717'),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30), topRight: Radius.circular(30)),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                _row('images/cup.svg', 'images/face1.png', 'images/coin2.svg',
-                    'Homer simpson', '2000',light),
-                _row1('2', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
-                    '1500',light),
-                _row1('3', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
-                    '700',light),
-                _row1('4', 'images/face2.png', 'images/coin2.svg', 'Rick thompson',
-                    '200',light)
-              ],
-            ),
+          child: Column(
+            children: <Widget>[
+              StreamBuilder(
+                  stream: vModel.leaderboardState,
+                  builder: (buildContext, snapshot){
+                    if(snapshot.data == fetchState.Busy){
+                      return SpinKitFoldingCube(
+                        color: Colors.white,
+                        size: 20.0,
+                      );
+                    }
+                    if(snapshot.hasError || snapshot.data == fetchState.NoData){
+                      return Error(snapshot.error);
+                    }
+                    return ListView.builder(
+                        itemCount: vModel.listUsers.length,
+                        itemBuilder: (buildContext,index){
+                          if(index == 1){
+                            return _row('images/cup.svg', 'images/face1.png', 'images/coin2.svg',
+                                vModel.listUsers[index].name, vModel.listUsers[index].score.toString(),light);
+                          }else{
+                            return _row1(index.toString(), 'images/face2.png', 'images/coin2.svg', vModel.listUsers[index].name,
+                                vModel.listUsers[index].score.toString(),light);
+                          }
+                        }
+                    );
+                  }
+              )
+            ],
           ));
 }
 
@@ -179,5 +274,11 @@ Widget _row1(
         Text(text2, style: GoogleFonts.poppins(fontSize: 14)),
       ],
     ),
+  );
+}
+
+Widget Error(String error){
+  return Center(
+    child: Text(error, style: GoogleFonts.poppins(fontSize: 14))
   );
 }
