@@ -1,12 +1,9 @@
 import 'dart:convert';
-
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:quickthink/screens/quiz_page.dart';
+import 'package:quickthink/model/categories.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
@@ -16,9 +13,8 @@ import 'package:clipboard_manager/clipboard_manager.dart';
 // TODO: Tell user when category isn't selected... category validation
 // TODO: Change colours of modal fonts and line from black
 // TODO: Center progress loading text
-// TODO: Change progress loading colour from black
+// TODO: Change progress loading colour from black //Done
 // TODO: Visual feedback for copy code
-
 
 const String fetchGameCode_Api = 'http://mohammedadel.pythonanywhere.com/game';
 
@@ -28,21 +24,48 @@ class CreateGame extends StatefulWidget {
 }
 
 class _CreateGameState extends State<CreateGame> {
-  SizeConfig _sizeConfig;
+  //GetCategories getCategories = new GetCategories();
 
+  List<Categories> listCategories;
+  var getCat;
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  SizeConfig _sizeConfig;
+  bool isLoading;
   String userName = '';
   String category;
   String hintText;
   String gameCode;
   TextEditingController userNameController = TextEditingController();
 
+  Future _fetchCategory() async {
+    setState(() {
+      isLoading = true;
+    });
+    listCategories = await getCategories();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     userNameController.addListener(() {});
+    _fetchCategory();
     super.initState();
   }
 
+  void _showInSnackBar(String value, color) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(value),
+      backgroundColor: color,
+      duration: new Duration(seconds: 3),
+    ));
+  }
+
   Future<String> getCode(context, username) async {
+    setState(() {
+      progressDialog.show();
+    });
     http.Response response = await http.post(
       fetchGameCode_Api,
       headers: {'Accept': 'application/json'},
@@ -52,8 +75,17 @@ class _CreateGameState extends State<CreateGame> {
     if (response.statusCode == 200) {
       String data = response.body;
       gameCode = jsonDecode(data)['game_code'].toString();
+      setState(() {
+        progressDialog.hide();
+      });
+      _showInSnackBar(gameCode, Colors.green);
+      showQuizCodeBottomSheet(context);
       return gameCode;
     } else {
+      setState(() {
+        progressDialog.hide();
+      });
+      _showInSnackBar(response.body, Colors.red);
       throw Exception('Failed to retrieve code');
     }
   }
@@ -88,6 +120,7 @@ class _CreateGameState extends State<CreateGame> {
     );
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -338,16 +371,8 @@ class _CreateGameState extends State<CreateGame> {
     var form = _formKey.currentState;
     if (form.validate() && category != null) {
       form.save();
-      setState(() {
-        progressDialog.show();
-      });
 
       hintText = await getCode(userName, category);
-
-      setState(() {
-        progressDialog.hide();
-      });
-      showQuizCodeBottomSheet(context);
     }
     userNameController.clear();
     category = null;
@@ -393,7 +418,7 @@ class _CreateGameState extends State<CreateGame> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                     ClipboardManager.copyToClipBoard(hintText);
+                    ClipboardManager.copyToClipBoard(hintText);
                   },
                   child: Text(
                     "Copy",
