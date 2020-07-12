@@ -50,15 +50,15 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  @override
-  void dispose() {
-    _quizTimer.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _quizTimer.cancel();
+  //   super.dispose();
+  // }
 
   @override
   void initState() {
-    //_quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
+    _quickThink = QuickThink(gameCode: widget.gameCode,userName: widget.userName);
    // _numberOfQuestion = widget.numberOfQuestions.toString();
 
     // if (widget.difficultyLevel == 'Easy') {
@@ -116,7 +116,7 @@ class _QuizPageState extends State<QuizPage> {
             // _textTitle(height, width),
             _timer(height, width),
             //_progress(height, width),
-            _quickThink.questionList(widget.userName, widget.gameCode)
+            _quickThink.questionList(widget.gameCode,widget.userName)
             //_box(height, width, heightBox, widthBox),
           ],
         ));
@@ -210,20 +210,7 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  // Widget _progress(height, width) {
-  //   return Positioned(
-  //       top: height * .17,
-  //       left: width * .064,
-  //       child: Text(
-  //         'Question 1 of ' + widget.numberOfQuestions.toString(),
-  //         style: GoogleFonts.poppins(
-  //           color: Color(0xFFFFFFFF),
-  //           fontSize: 16,
-  //           fontStyle: FontStyle.normal,
-  //           fontWeight: FontWeight.w500,
-  //         ),
-  //       ));
-  // }
+  
 }
 /*
   Widget _box(height, width, heightBox, widthBox) {

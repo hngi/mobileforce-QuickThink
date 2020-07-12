@@ -39,23 +39,25 @@ class FetchedQuestions {
   //   return data;
   // }
 
-   Future<List<QuestionModel>> questionUpdate(push) async {
-    final jsonEndpoint =
-        "http://mohammedadel.pythonanywhere.com/game/play?game_code=$gameCode&user_name=$userName";
-    return await http.post(jsonEndpoint, body: {}).then((http.Response res) {
+  Future<List<QuestionModel>> questionUpdate(
+      String gameCode, String userName) async {
+    final jsonEndpoint = "http://mohammedadel.pythonanywhere.com/game/play";
+    return await http.post(jsonEndpoint, body: {
+      "game_code": gameCode,
+      "user_name": userName
+    }).then((http.Response res) {
       dynamic response = res.body;
       final int statusCode = res.statusCode;
-  
 
       if (statusCode == 200) {
-        
-         List question = json.decode(response)['data'];
+        List question = json.decode(response)['data']['questions'];
+
         //QuestionModel result = QuestionModel.fromJson(question);
         print(question);
         return question
             .map((questions) => new QuestionModel.fromJson(questions))
-            .toList();
-            //.shuffle();
+            .toList()
+              ..shuffle();
       } else
         throw Exception(
             'We were not able to successfully download the json data.');
