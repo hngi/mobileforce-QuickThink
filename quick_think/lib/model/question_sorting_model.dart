@@ -6,45 +6,26 @@ import 'package:quickthink/model/question_model.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class QuickThink {
   String response = "";
   int totalQuestions = 0;
+  final String gameCode;
+  final String userName;
 
-  final int questionNumber;
-  final String difficultyLevel;
   FetchedQuestions _fetchedQuestions = new FetchedQuestions();
 
   QuestionModel questions = QuestionModel();
 
+  QuickThink({this.gameCode, this.userName});
 
-  QuickThink({this.questionNumber, @required this.difficultyLevel}) {
-    //apiQuestion();
-    // _questionBank = questionList(
-    //   difficultyLevel,
-    // ); //iqQuestionBank.iqQuestions(10);
-    // //totalQuestions = _questionBank.length;
-    // print(_questionBank);
-    // for (int i = 0; i < questionNumber; i++) {
-
-    //   //_questionBank[i].correctAnswer;
-    // }
-
-  }
-
-  Widget questionList(
-      String difficultyLevel, String numberOfQuestions /*, String time*/) {
-
+  Widget questionList(String gameCode, String userName) {
+    print(gameCode + userName);
     return FutureBuilder<List<QuestionModel>>(
-        future: _fetchedQuestions.questionUpdate(
-            difficultyLevel, numberOfQuestions),
-
-    
+        future: _fetchedQuestions.questionUpdate(gameCode, userName),
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           print('SnapShot: ${snapshot.data}');
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-
             List<QuestionModel> questionData = snapshot.data;
             List<QuestionModel> filteredQuestions = List();
 
@@ -56,18 +37,13 @@ class QuickThink {
             }
 
             return new CustomQuestionView(
-                questionData: filteredQuestions,
-                difficultyLevel: difficultyLevel);
-
-            
+                questionData: filteredQuestions, userName: userName);
           }
 
-          return new Container(
-              alignment: Alignment.topCenter,
-              padding: const EdgeInsets.only(top: 16.0),
+          return new Center(
               child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-              ));
+            strokeWidth: 2.0,
+          ));
         });
   }
 
@@ -78,9 +54,9 @@ class QuickThink {
 
 class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
-  final String difficultyLevel;
+  final String userName;
 
-  CustomQuestionView({this.questionData, this.difficultyLevel});
+  CustomQuestionView({this.questionData, this.userName});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
@@ -103,9 +79,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
   String _userName;
 
-
-  //final int questionNumber;
-  //final String difficultyLevel;
+  List<bool> isPicked = [false, false, false, false];
 
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
@@ -114,10 +88,13 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     fontWeight: FontWeight.w600,
   );
 
-
-  getUserName()async{
-  SharedPreferences pref = await SharedPreferences.getInstance();
-     _userName =  pref.getString('Username');}
+  getUserName() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _userName = pref.getString('Username');
+    if (_userName == null) {
+      _userName = widget.userName;
+    }
+  }
 
   @override
   void initState() {
@@ -154,6 +131,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             children: <Widget>[
               _nextButton(height, width, heightBox, widthBox),
               _question(heightBox, widthBox),
+              _progress(height, width),
 
               Positioned(
                   top: heightBox * .26,
@@ -166,50 +144,63 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               // _optionTwo(heightBox, widthBox),
               // _optionThree(heightBox, widthBox),
               // _optionFour(heightBox, widthBox)
-
             ],
           ),
         ));
   }
 
-
   _options() {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    var heightBox = height * .618;
+    var widthBox = width * .872;
     List<Widget> option = List();
-    List<bool> isPicked = List();
     bool _isSelected = false;
-    // Column options= Column(children: <Widget>[],);
-    for (var i = 0; i < getOptions().length; i++) {
-      isPicked.add(false);
-      option.add(
-            InkWell(
-                //onTap: //widget.onTap,
-                onTap: () {
-                  setState(() {
-                    _isSelected = !_isSelected;
-                    print(_isSelected);
-                    isPicked[i] = _isSelected;
-                    print(isPicked);
-                    //view.userPickedAnswers(widget.title);
-                    userAnswer = getOptions()[i];
-                  });
-                },
-                child:
-          CardOptions(
-        title: getOptions()[i],
-        //selected: true,
 
-        // onTap: () {
-        //   setState(() {
-        //     _isSelected = !_isSelected;
-        //     print(_isSelected);
-        //     isPicked[i] = _isSelected;
-        //     userAnswer = getOptions()[i];
-        //   });
-        //   return isPicked[i];
-        // },
-        color: isPicked[i] ? Colors.green : Colors.white,)
-      ));
+    for (var i = 0; i < getOptions().length; i++) {
+      //isPicked.add(false);
+      option.add(
+        InkWell(
+          onTap: () {
+            isPicked = [false, false, false, false];
+            setState(() {
+              _isSelected = !_isSelected;
+              isPicked[i] = _isSelected;
+              userAnswer = getOptions()[i];
+              print(isPicked);
+            });
+          },
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: colorPickedAnswer()[i] ? Colors.green : Colors.white,
+                    border: Border.all(color: Colors.black26)),
+                height: heightBox * .128,
+                width: widthBox * .77,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: Text(
+                      getOptions()[i],
+                      style: GoogleFonts.poppins(
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
+
     return option;
   }
 
@@ -278,6 +269,23 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   //   );
   // }
 
+  Widget _progress(height, width) {
+    return Positioned(
+        top: height * .17,
+        left: width * .064,
+        child: Text(
+          'Question ' +
+              currentQuestion().toString() +
+              ' of ' +
+              numberOfQuestions().toString(),
+          style: GoogleFonts.poppins(
+            color: Color(0xFFFFFFFF),
+            fontSize: 16,
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w500,
+          ),
+        ));
+  }
 
   Widget _nextButton(height, width, heightBox, widthBox) {
     return Positioned(
@@ -303,11 +311,11 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             ),
           ),
           onPressed: () {
-
             print('getUserPickedAnswer:$userAnswer');
 
             if (userAnswer.isNotEmpty && userAnswer != null) {
               checkAnswer(userAnswer);
+              isPicked = [false, false, false, false];
             }
           },
         ),
@@ -328,9 +336,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
             totalScore: totalScore,
-
             username: _userName,
-
           ).showEndMsg(context);
 
           reset();
@@ -344,7 +350,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
             totalScore: totalScore,
-            username: 'widget.userName',
+            username: _userName,
           ).showEndMsg(context);
 
           reset();
@@ -380,12 +386,14 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   String getQuestionText() {
-
     return _questionBank[_questionNumber].question;
   }
 
   List<String> getOptions() {
-    return _questionBank[_questionNumber].incorrectAnswers;
+    //print((_questionBank[_questionNumber].incorrectAnswers));
+    List options = _questionBank[_questionNumber].incorrectAnswers;
+    print(options);
+    return options;
   }
 
   String getCorrectAnswer() {
@@ -394,7 +402,6 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   bool isFinished() {
-
     print(_questionBank.length);
 
     if (_questionNumber >= _questionBank.length - 1) {
@@ -435,18 +442,16 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   get totalScore {
-
     int total = correctResponse;
     return _totalScore = total;
   }
 
-  void userPickedAnswers(String answer) {
-    userPickedAnswer = answer;
+  List<bool> colorPickedAnswer() {
+    return isPicked;
   }
 
-  get getUserPickedAnswer {
-    return userPickedAnswer;
-
+  get getColorPickedAnswer {
+    return isPicked;
   }
 }
 
@@ -473,7 +478,6 @@ class _CardOptionsState extends State<CardOptions> {
 
   _CustomQuestionViewState view = _CustomQuestionViewState();
 
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -484,46 +488,29 @@ class _CardOptionsState extends State<CardOptions> {
       children: <Widget>[
         SizedBox(height: 10),
 
-        // InkWell(
-        //   //onTap: //widget.onTap,
-        //   onTap: (){
-        //     _selected = widget.onTap;
-        //     print('_selected: $_selected');},
-          //  () {
-          //   // setState(() {
-          //   //   _selected = !_selected;
-          //   //   print(_selected);
-          //   //   isPicked[i] = _selected;
-          //   //   print(_selected);
-          //   //   //view.userPickedAnswers(widget.title);
-          //   //   userAnswer = getOptions()[i];
-          //   },
-          //},
-          //child: 
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: widget.color,//_selected ? Colors.green : Colors.white,
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: widget.color, //_selected ? Colors.green : Colors.white,
 
-                border: Border.all(color: Colors.black26)),
-            height: heightBox * .128,
-            width: widthBox * .77,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Text(widget.title,
-                    style: GoogleFonts.poppins(
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                    )),
-              ),
+              border: Border.all(color: Colors.black26)),
+          height: heightBox * .128,
+          width: widthBox * .77,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: Text(widget.title,
+                  style: GoogleFonts.poppins(
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                  )),
             ),
           ),
+        ),
 
         //),
-
       ],
     );
   }

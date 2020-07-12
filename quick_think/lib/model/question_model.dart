@@ -27,11 +27,11 @@ class QuestionModel {
         type: json['type'],
         difficulty: json['difficulty'],
         question: json['question'],
-        correctAnswer: json['correct_answer'],
-        incorrectAnswers: json['incorrect_answers'].cast<String>()..shuffle(),
-        options: (json['incorrect_answers']
+        correctAnswer: json['answer'],
+        incorrectAnswers: json['options'] = json['options'].cast<String>()..shuffle(),
+        options: (json['options']
             .cast<String>())
-            .add(json['correct_answer']));
+            .add(json['answer']));
   }
 
   // Map<String, dynamic> toJson() {
