@@ -6,7 +6,7 @@ import 'package:quickthink/data/leaderbord_list.dart';
 enum fetchState {Busy, DataRetrieved,NoData}
 class LeaderboardModel{
 
-  final StreamController<fetchState> _stateController = StreamController<fetchState>();
+  final StreamController<fetchState> _stateController = StreamController<fetchState>.broadcast();
 
   List<User> listUsers;
 

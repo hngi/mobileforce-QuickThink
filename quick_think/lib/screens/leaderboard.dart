@@ -28,10 +28,10 @@ class _LeaderBoardState extends State<LeaderBoard> {
 
   @override
   Widget build(BuildContext context) {
-    Timer.periodic(
+/*    Timer.periodic(
       Duration(minutes: 5),
       refreshBoard
-    );
+    );*/
     return Scaffold(
       backgroundColor: light ? Color(0xff1C1046) : Hexcolor('#000000'),
       body: SafeArea(
@@ -39,8 +39,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-                child: Column(
+            Container(child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 _arrow(),
@@ -61,11 +60,13 @@ class _LeaderBoardState extends State<LeaderBoard> {
                          children: <Widget>[
                            StreamBuilder(
                              stream: model.leaderboardState,
-                               builder: (buildContext, snapshot){
-                                  if(snapshot.data == fetchState.Busy){
-                                    return SpinKitFoldingCube(
-                                      color: Colors.white,
-                                      size: 20.0,
+                               builder: (context, snapshot){
+                                  if(!snapshot.hasData || snapshot.data == fetchState.Busy){
+                                    return Expanded(
+                                      child: SpinKitFoldingCube(
+                                        color: Colors.white,
+                                        size: 20.0,
+                                      ),
                                     );
                                   }
                                   if(snapshot.hasError || snapshot.data == fetchState.NoData){
@@ -203,9 +204,9 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
               StreamBuilder(
                   stream: vModel.leaderboardState,
                   builder: (buildContext, snapshot){
-                    if(snapshot.data == fetchState.Busy){
+                    if(!snapshot.hasData || snapshot.data == fetchState.Busy){
                       return SpinKitFoldingCube(
-                        color: Colors.white,
+                        color: light ? Color(0xff1C1046) : Colors.white,
                         size: 20.0,
                       );
                     }
