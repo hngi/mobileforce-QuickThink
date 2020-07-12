@@ -2,7 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:quickthink/model/new_questions_model.dart';
+import 'package:quickthink/screens/create_game.dart';
+import 'package:quickthink/screens/dashboard.dart';
+import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
 
@@ -72,9 +77,51 @@ class _JoinGameState extends State<JoinGame> {
               _prompt(),
               _form(),
               _loginBtn(),
+              _or(),
+              _createGameLink(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _or() {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: SizeConfig().xMargin(context, 10.0),
+        //right: SizeConfig().xMargin(context, 3.0),
+      ),
+      child: Text(
+        'or',
+        style: GoogleFonts.poppins(
+          color: Colors.white,
+          fontStyle: FontStyle.normal,
+          fontWeight: FontWeight.w500,
+          fontSize: SizeConfig().textSize(context, 3),
+        ),
+      ),
+    );
+  }
+
+  Widget _createGameLink() {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: SizeConfig().xMargin(context, 6.0),
+        //right: SizeConfig().xMargin(context, 3.0),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => CreateGame()));
+        },
+        child: Text('Create a game',
+            style: GoogleFonts.poppins(
+              fontSize: SizeConfig().textSize(context, 3),
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.normal,
+            )),
       ),
     );
   }
@@ -107,7 +154,7 @@ class _JoinGameState extends State<JoinGame> {
         right: SizeConfig().xMargin(context, 3.0),
       ),
       child: Text(
-        'Emeka invited you to join the game',
+        'Enter invite code to join the game',
         style: TextStyle(
           fontFamily: 'Poppins',
           color: Colors.white,
@@ -257,7 +304,7 @@ class _JoinGameState extends State<JoinGame> {
     }
   }
 
-  Future<String> _joinGame(code, user) async {
+  Future<List<Question>> _joinGame(code, user) async {
     setState(() {
       progressDialog.show();
     });
@@ -269,17 +316,16 @@ class _JoinGameState extends State<JoinGame> {
     );
     if (response.statusCode == 200) {
       String data = response.body;
+      List decodedQuestions = jsonDecode(data)['data']['questions'];
 
-      //TODO Retrieve the questions
-      var decodedData = jsonDecode(data)['data'];
-      //TODO Navigate to game screen
-
+      print(decodedQuestions);
       setState(() {
         progressDialog.hide();
       });
       _showInSnackBar('Game Coming Soon', Colors.green);
-
-      return response.body;
+      return decodedQuestions
+          .map((questions) => Question.fromJson(questions))
+          .toList();
     } else {
       String data = response.body;
       setState(() {

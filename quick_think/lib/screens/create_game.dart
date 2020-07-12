@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/categories.dart';
+import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
@@ -464,10 +465,13 @@ class _CreateGameState extends State<CreateGame> {
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
                     ClipboardManager.copyToClipBoard(hintText);
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => JoinGame(),));
                     //Flutter Toast
                   },
                   child: Text(
-                    "Copy",
+                    "Join game",
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 16,

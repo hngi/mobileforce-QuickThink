@@ -33,7 +33,7 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Registration(),
+            builder: (context) => JoinGame(),
           ),
         );
       } else {
@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => DashboardScreen(),
+            builder: (context) => JoinGame(),
           ),
         );
       }

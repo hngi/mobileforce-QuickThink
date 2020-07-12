@@ -8,7 +8,6 @@ import 'config.dart';
 import 'registration.dart';
 import 'theme/theme.dart';
 
-
 int onBoardCount;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +50,7 @@ class _MyAppState extends State<MyApp> {
           : 'showSplashPage',
       routes: {
         'showOnBoardScreen': (context) => OnBoardScreen(),
-        'showSplashPage': (context) => CreateGame(),
+        'showSplashPage': (context) => SplashPage(),
         Registration.id: (context) => Registration(),
       },
     );
