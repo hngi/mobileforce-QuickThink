@@ -36,7 +36,8 @@ class QuickThink {
               }
             }
 
-            return new CustomQuestionView(questionData: filteredQuestions, userName: userName);
+            return new CustomQuestionView(
+                questionData: filteredQuestions, userName: userName);
           }
 
           return new Center(
@@ -78,8 +79,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
   String _userName;
 
-  //final int questionNumber;
-  //final String difficultyLevel;
+  List<bool> isPicked = [false, false, false, false];
 
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
@@ -91,7 +91,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   getUserName() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     _userName = pref.getString('Username');
-    if(_userName == null){
+    if (_userName == null) {
       _userName = widget.userName;
     }
   }
@@ -129,10 +129,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           ),
           child: Stack(
             children: <Widget>[
-             
               _nextButton(height, width, heightBox, widthBox),
               _question(heightBox, widthBox),
-               _progress(height, width),
+              _progress(height, width),
 
               Positioned(
                   top: heightBox * .26,
@@ -151,40 +150,57 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   _options() {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    var heightBox = height * .618;
+    var widthBox = width * .872;
     List<Widget> option = List();
-    List<bool> isPicked = List();
     bool _isSelected = false;
-    // Column options= Column(children: <Widget>[],);
+
     for (var i = 0; i < getOptions().length; i++) {
-      isPicked.add(false);
-      option.add(InkWell(
-          //onTap: //widget.onTap,
+      //isPicked.add(false);
+      option.add(
+        InkWell(
           onTap: () {
+            isPicked = [false, false, false, false];
             setState(() {
               _isSelected = !_isSelected;
-              print(_isSelected);
               isPicked[i] = _isSelected;
-              print(isPicked);
-              //view.userPickedAnswers(widget.title);
               userAnswer = getOptions()[i];
+              print(isPicked);
             });
           },
-          child: CardOptions(
-            title: getOptions()[i],
-            //selected: true,
-
-            // onTap: () {
-            //   setState(() {
-            //     _isSelected = !_isSelected;
-            //     print(_isSelected);
-            //     isPicked[i] = _isSelected;
-            //     userAnswer = getOptions()[i];
-            //   });
-            //   return isPicked[i];
-            // },
-            color: isPicked[i] ? Colors.green : Colors.white,
-          )));
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: colorPickedAnswer()[i] ? Colors.green : Colors.white,
+                    border: Border.all(color: Colors.black26)),
+                height: heightBox * .128,
+                width: widthBox * .77,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: Text(
+                      getOptions()[i],
+                      style: GoogleFonts.poppins(
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
+
     return option;
   }
 
@@ -258,7 +274,10 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         top: height * .17,
         left: width * .064,
         child: Text(
-          'Question ' + currentQuestion().toString() +  ' of ' + numberOfQuestions().toString(),
+          'Question ' +
+              currentQuestion().toString() +
+              ' of ' +
+              numberOfQuestions().toString(),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
@@ -296,6 +315,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
             if (userAnswer.isNotEmpty && userAnswer != null) {
               checkAnswer(userAnswer);
+              isPicked = [false, false, false, false];
             }
           },
         ),
@@ -426,12 +446,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     return _totalScore = total;
   }
 
-  void userPickedAnswers(String answer) {
-    userPickedAnswer = answer;
+  List<bool> colorPickedAnswer() {
+    return isPicked;
   }
 
-  get getUserPickedAnswer {
-    return userPickedAnswer;
+  get getColorPickedAnswer {
+    return isPicked;
   }
 }
 
@@ -468,22 +488,6 @@ class _CardOptionsState extends State<CardOptions> {
       children: <Widget>[
         SizedBox(height: 10),
 
-        // InkWell(
-        //   //onTap: //widget.onTap,
-        //   onTap: (){
-        //     _selected = widget.onTap;
-        //     print('_selected: $_selected');},
-        //  () {
-        //   // setState(() {
-        //   //   _selected = !_selected;
-        //   //   print(_selected);
-        //   //   isPicked[i] = _selected;
-        //   //   print(_selected);
-        //   //   //view.userPickedAnswers(widget.title);
-        //   //   userAnswer = getOptions()[i];
-        //   },
-        //},
-        //child:
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
