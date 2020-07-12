@@ -191,7 +191,7 @@ Widget _row(
     String image1, String image2, String image3, String text1, String text2,bool light) {
   return Container(
     margin: EdgeInsets.only(top: 30),
-    padding: EdgeInsets.all(10.0),
+    padding: EdgeInsets.all(20.0),
     child: Row(
       children: <Widget>[
         SvgPicture.asset(image1),
@@ -219,7 +219,7 @@ Widget _row1(
     String text, String image2, String image3, String text1, String text2,bool light) {
   return Container(
     margin: EdgeInsets.only(top: 30),
-    padding: EdgeInsets.all(10.0),
+    padding: EdgeInsets.all(20.0),
     child: Row(
       children: <Widget>[
         Text(text, style: GoogleFonts.poppins(fontSize: 14)),
