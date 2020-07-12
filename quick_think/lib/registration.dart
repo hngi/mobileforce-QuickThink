@@ -81,6 +81,7 @@ class _RegistrationState extends State<Registration> {
         ),
       );
     } else {
+      progressDialog.hide();
       _showInSnackBar(response.body);
       print(response.body);
       //TODO: Handle error

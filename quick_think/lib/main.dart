@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/help.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
           : 'showSplashPage',
       routes: {
         'showOnBoardScreen': (context) => OnBoardScreen(),
-        'showSplashPage': (context) => SplashPage(),
+        'showSplashPage': (context) => CreateGame(),
         Registration.id: (context) => Registration(),
       },
     );

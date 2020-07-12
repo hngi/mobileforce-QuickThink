@@ -52,16 +52,16 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-@override
+  @override
   void dispose() {
-    // TODO:Destroy timer
+    _quizTimer.cancel();
     super.dispose();
   }
-  
+
   @override
   void initState() {
     //_quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
-   _numberOfQuestion = widget.numberOfQuestions.toString();
+    _numberOfQuestion = widget.numberOfQuestions.toString();
 
     if (widget.difficultyLevel == 'Easy') {
       _quickThink = QuickThink(difficultyLevel: 'easy');
@@ -80,7 +80,7 @@ class _QuizPageState extends State<QuizPage> {
     } else if (widget.difficultyLevel == 'Hard') {
       _quickThink = QuickThink(difficultyLevel: 'hard');
       setState(() {
-         _difficultyLevel = 'hard';
+        _difficultyLevel = 'hard';
         _quizDuration = 30;
         _quizMark = 3;
       });
@@ -88,7 +88,6 @@ class _QuizPageState extends State<QuizPage> {
     startTimer();
     super.initState();
   }
-  
 
   int getTotalMarks() {
     for (int i = 0; i <= widget.numberOfQuestions; i++) {
@@ -97,8 +96,6 @@ class _QuizPageState extends State<QuizPage> {
     return _marks;
   }
 
-  
-
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -106,7 +103,6 @@ class _QuizPageState extends State<QuizPage> {
     fontWeight: FontWeight.w600,
   );
 
-  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -127,7 +123,6 @@ class _QuizPageState extends State<QuizPage> {
           ],
         ));
   }
-
 
   Widget _container(double height, double width) {
     return Positioned(
@@ -231,6 +226,173 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ));
   }
+}
+/*
+  Widget _box(height, width, heightBox, widthBox) {
+    return Positioned(
+        top: height * .28,
+        bottom: height * .11,
+        left: width * .064,
+        right: width * .064,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: Color(0xFFFFFFFF),
+          ),
+          child: Stack(
+            children: <Widget>[
+              _nextButton(height, width, heightBox, widthBox),
+              _question(heightBox, widthBox),
+              _optionOne(heightBox, widthBox),
+              _optionTwo(heightBox, widthBox),
+              _optionThree(heightBox, widthBox),
+              _optionFour(heightBox, widthBox)
+            ],
+          ),
+        ));
+  }
 
-  
- }
+  Widget _optionOne(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .26,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1993',
+      ),
+    );
+  }
+
+  Widget _optionTwo(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .408,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1452',
+      ),
+    );
+  }
+
+  Widget _optionThree(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .55,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1870',
+      ),
+    );
+  }
+
+  Widget _optionFour(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .70,
+      left: widthBox * .055,
+      right: widthBox * .055,
+      child: CardOptions(
+        title: '1457',
+      ),
+    );
+  }
+
+  Widget _nextButton(height, width, heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .89,
+      left: widthBox * .58,
+      right: widthBox * .0,
+      bottom: heightBox * .0,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: Color(0xFF18C5D9),
+        ),
+        height: height * .069,
+        width: width * .368,
+        child: FlatButton(
+          child: Text(
+            'Next',
+            style: style.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFFFFFFF),
+              fontSize: 16,
+              letterSpacing: 0.5,
+            ),
+          ),
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+
+  Widget _question(heightBox, widthBox) {
+    return Positioned(
+      top: heightBox * .076,
+      left: widthBox * .11,
+      right: widthBox * .13,
+      child: Text(
+        'When was leonardo da \nvinci born?',
+        style: GoogleFonts.poppins(
+          color: Color(0xFF38208C),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.normal,
+          // fontWeight: FontWeight.w500,
+        ),
+        textAlign: TextAlign.justify,
+      ),
+    );
+  }
+}
+
+class CardOptions extends StatefulWidget {
+  String title;
+  CardOptions({@required this.title});
+  @override
+  _CardOptionsState createState() => _CardOptionsState();
+}
+
+class _CardOptionsState extends State<CardOptions> {
+  bool _selected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    var heightBox = height * .618;
+    var widthBox = width * .872;
+    return Column(
+      children: <Widget>[
+        SizedBox(height: 10),
+        InkWell(
+          onTap: () {
+            setState(() {
+              _selected = !_selected;
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: _selected ? Colors.green : Colors.white,
+                border: Border.all(color: Colors.black26)),
+            height: heightBox * .128,
+            width: widthBox * .77,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Text(widget.title,
+                    style: GoogleFonts.poppins(
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                    )),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+*/
