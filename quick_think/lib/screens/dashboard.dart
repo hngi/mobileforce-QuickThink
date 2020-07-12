@@ -1,7 +1,15 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/theme/theme.dart';
+import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/views/question_view.dart';
+import 'package:quickthink/screens/quiz_page.dart';
+
+import 'help.dart';
 
 class DashBoard extends StatefulWidget {
   DashBoard({Key key, @required this.username, @required this.uri})
@@ -15,9 +23,10 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   int numberOfQuestions;
-  String option = "easy";
+  String option;
+  bool light = CustomTheme.light;
 
-   showDifficultyBottomSheet(BuildContext context) {
+  showDifficultyBottomSheet(BuildContext context) {
     var radius = Radius.circular(10);
 
     return showModalBottomSheet(
@@ -38,7 +47,7 @@ class _DashBoardState extends State<DashBoard> {
                   Text(
                     "Select Difficulty",
                     style: GoogleFonts.poppins(
-                      color: Color(0xff1C1046),
+                      color: light ? Color(0xff1C1046) : Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
@@ -47,13 +56,27 @@ class _DashBoardState extends State<DashBoard> {
                   Container(
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: Color(0xffF6F3F3), shape: BoxShape.circle),
-                    child: Text(
-                      "?",
-                      style: GoogleFonts.poppins(
-                        color: Color(0xff1C1046),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                      color: Color(0xffF6F3F3),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF18C5D9).withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        helpAlert(context);
+                      },
+                      child: Text(
+                        "?",
+                        style: GoogleFonts.poppins(
+                          color: Color(0xff1C1046),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -77,13 +100,39 @@ class _DashBoardState extends State<DashBoard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (o) => QuestionView(
-                                  numberOfQuestions: numberOfQuestions,
-                                  difficultyLevel: option,
-                                )));
+                    if (option != null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (o) => QuizPage(
+                                    gameCode: option,
+                                    userName: widget.username,
+                                  )));
+                    } else {
+                      Flushbar(
+                        titleText: Text(
+                          "Oops!",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        messageText: Text(
+                          "Please select a difficulty to start",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                        icon: Icon(
+                          FlutterIcons.infocirlceo_ant,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        leftBarIndicatorColor: Color(0xff1C1046),
+                        duration: Duration(milliseconds: 2000),
+                      )..show(context);
+                    }
                   },
                   child: Text(
                     "Start Game",
@@ -108,7 +157,7 @@ class _DashBoardState extends State<DashBoard> {
       width: 35,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(60),
-        color: Color(0xff1C1046),
+        color: light ? Color(0xff1C1046) : Colors.white,
       ),
     );
   }
@@ -168,15 +217,28 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff1c1046),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff18C5D9),
-        onPressed: () {
-          showDifficultyBottomSheet(context);
-        },
-        child: Text(
-          "?",
-          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+      backgroundColor: light ? Color(0xff1c1046) : Hexcolor('#000000'),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF18C5D9).withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 3,
+            ),
+          ],
+        ),
+        child: FloatingActionButton(
+          backgroundColor: Color(0xff18C5D9),
+          onPressed: () {
+            helpAlert(context);
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => InfoHelp()));
+          },
+          child: Text(
+            "?",
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
       body: Container(
@@ -219,8 +281,11 @@ class _DashBoardState extends State<DashBoard> {
                         child: CircleAvatar(
                             backgroundColor: Color(0xff38208c),
                             radius: 28.5,
-                            child: SvgPicture.asset(
-                                "assets/images/${widget.uri}.svg") //Image.asset("assets/images/owl 1.png"),
+                            child: widget.uri != null
+                                ? SvgPicture.asset(
+                                    "assets/images/${widget.uri}.svg")
+                                : SvgPicture.asset("assets/images/owl.svg")
+                            //Image.asset("assets/images/owl 1.png"),
                             ),
                       )
                     ],
@@ -230,7 +295,7 @@ class _DashBoardState extends State<DashBoard> {
                 flex: 1,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: light ? Hexcolor('#574E76') : Hexcolor('#2B2B2B'),
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   child: Row(
@@ -245,7 +310,11 @@ class _DashBoardState extends State<DashBoard> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset("assets/images/Group 23.png"),
+                                  Image.asset(
+                                    "assets/images/coins.png",
+                                    height: 12.0,
+                                    width: 12.0,
+                                  ),
                                   SizedBox(
                                     width: 2.0,
                                   ),
@@ -281,7 +350,11 @@ class _DashBoardState extends State<DashBoard> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Image.asset("assets/images/medal.png"),
+                                    Image.asset(
+                                      "assets/images/ribbon.png",
+                                      height: 12.0,
+                                      width: 12.0,
+                                    ),
                                     SizedBox(
                                       width: 2.0,
                                     ),
@@ -305,51 +378,78 @@ class _DashBoardState extends State<DashBoard> {
                 )),
             Expanded(
               flex: 5,
-              child: Container(
-                margin: EdgeInsets.only(top: 20.0),
-                padding: EdgeInsets.only(top: 20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      "Choose number of questions",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 10,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 10);
-                      },
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 20,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 20);
-                      },
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 30,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 30);
-                      },
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 40,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 40);
-                      },
-                    ),
-                    QuestionSelectionCard(
-                      questionNum: 50,
-                      onPressed: () {
-                        setState(() => numberOfQuestions = 50);
-                      },
-                    )
-                  ],
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        "Choose number of questions",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 10,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 10);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 20,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 20);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 30,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 30);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 40,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 40);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      QuestionSelectionCard(
+                        questionNum: 50,
+                        onPressed: () {
+                          setState(() => numberOfQuestions = 50);
+                          showDifficultyBottomSheet(context);
+                        },
+                        light: light,
+                      )
+                    ],
+                  ),
                 ),
               ),
             )
@@ -363,14 +463,16 @@ class _DashBoardState extends State<DashBoard> {
 class QuestionSelectionCard extends StatelessWidget {
   final questionNum;
   final onPressed;
+  final light;
 
-  QuestionSelectionCard({@required this.questionNum, this.onPressed});
+  QuestionSelectionCard(
+      {@required this.questionNum, this.onPressed, this.light});
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-      color: Color(0xff38208c),
+      color: light ? Color(0xff38208c) : Hexcolor('#4C4C4C'),
       padding: EdgeInsets.fromLTRB(32, 20, 0, 17),
       child: Align(
           alignment: Alignment.centerLeft,
@@ -385,16 +487,3 @@ class QuestionSelectionCard extends StatelessWidget {
     );
   }
 }
-
-// class Home extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//         child: Text(
-//       'Home',
-//       style: TextStyle(
-//         color: Colors.white,
-//       ),
-//     ));
-//   }
-// }
