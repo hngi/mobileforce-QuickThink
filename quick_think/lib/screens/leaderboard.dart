@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/model/leaderboard_model.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 
@@ -12,9 +15,21 @@ class LeaderBoard extends StatefulWidget {
 
 class _LeaderBoardState extends State<LeaderBoard> {
   bool light = CustomTheme.light;
+  final model = LeaderboardModel();
+
+  List topUsers;
 
   @override
+  void initState() {
+    model.getLeaderboard("1002");
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
+/*    Timer.periodic(
+      Duration(minutes: 5),
+      refreshBoard
+    );*/
     return Scaffold(
       backgroundColor: light ? Color(0xff1C1046) : Hexcolor('#000000'),
       body: SafeArea(
@@ -36,8 +51,16 @@ class _LeaderBoardState extends State<LeaderBoard> {
             ),
           ],
         ),
+
       ),
     );
+
+  }
+
+  void refreshBoard(Timer timer) {
+    setState(() {
+      model.getLeaderboard("1002");
+    });
   }
 }
 
@@ -122,6 +145,7 @@ Widget _roundContainer1(String text1, light, context) {
         ],
       ));
 }
+
 
 Widget _resultContainer(bool light, BuildContext context) {
   return Container(
@@ -225,5 +249,11 @@ Widget _row1(String text, String image2, String image3, String text1,
             )),
       ],
     ),
+  );
+}
+
+Widget Error(String error){
+  return Center(
+    child: Text(error, style: GoogleFonts.poppins(fontSize: 14))
   );
 }
