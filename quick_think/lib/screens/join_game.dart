@@ -257,7 +257,7 @@ class _JoinGameState extends State<JoinGame> {
     }
   }
 
-  void _joinGame(code, user) async {
+  Future<String> _joinGame(code, user) async {
     setState(() {
       progressDialog.show();
     });
@@ -278,6 +278,8 @@ class _JoinGameState extends State<JoinGame> {
         progressDialog.hide();
       });
       _showInSnackBar('Game Coming Soon', Colors.green);
+
+      return response.body;
     } else {
       String data = response.body;
       setState(() {
@@ -285,5 +287,6 @@ class _JoinGameState extends State<JoinGame> {
       });
       _showInSnackBar(jsonDecode(data)['error'], Colors.red);
     }
+    return null;
   }
 }
