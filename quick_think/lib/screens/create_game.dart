@@ -1,12 +1,10 @@
 import 'dart:convert';
-
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:quickthink/screens/quiz_page.dart';
+import 'package:quickthink/model/categories.dart';
+import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
@@ -15,10 +13,9 @@ import 'package:clipboard_manager/clipboard_manager.dart';
 // TODO: Visual feedback for when a selected
 // TODO: Tell user when category isn't selected... category validation
 // TODO: Change colours of modal fonts and line from black
-// TODO: Center progress loading text
-// TODO: Change progress loading colour from black
+// TODO: Center progress loading text //
+// TODO: Change progress loading colour from black //Done
 // TODO: Visual feedback for copy code
-
 
 const String fetchGameCode_Api = 'http://mohammedadel.pythonanywhere.com/game';
 
@@ -28,18 +25,30 @@ class CreateGame extends StatefulWidget {
 }
 
 class _CreateGameState extends State<CreateGame> {
-  SizeConfig _sizeConfig;
+  Services services = new Services();
+  //GetCategories getCategories = new GetCategories();
 
+  List<Categories> listCategories = [];
+  Future getCat;
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  SizeConfig _sizeConfig;
   String userName = '';
   String category;
   String hintText;
   String gameCode;
   TextEditingController userNameController = TextEditingController();
+  Future categories;
+
+  Future _fetchCategory() async {
+    listCategories = await services.getCategories();
+  }
 
   @override
   void initState() {
     userNameController.addListener(() {});
     super.initState();
+    categories = _fetchCategory();
+    getCat = services.getCategories();
   }
 
   Future<String> getCode(context, username) async {
@@ -76,6 +85,7 @@ class _CreateGameState extends State<CreateGame> {
         isDismissible: false, type: ProgressDialogType.Normal);
 
     progressDialog.style(
+      message: 'Creating Game ...',
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       progressWidget: SpinKitThreeBounce(color: Color(0xFF18C5D9), size: 25),
@@ -88,6 +98,7 @@ class _CreateGameState extends State<CreateGame> {
     );
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -184,37 +195,95 @@ class _CreateGameState extends State<CreateGame> {
   }
 
   Widget _allCategories({Function(String option) onSelect}) {
-    final List<String> categoryNames = [
-      "Math",
-      "English",
-      "HNG",
-      "Science",
-      "Art",
-      "games"
-    ];
-    return Wrap(
-        direction: Axis.horizontal,
-        spacing: 16.0,
-        children: List.generate(categoryNames.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              onSelect(categoryNames[index]);
-            },
-            child: Chip(
-              backgroundColor: Color(0xFF38208C),
-              label: Text(
-                categoryNames[index],
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: SizeConfig().textSize(context, 2.2),
-                ),
+    // [
+    //   "Math",
+    //   "English",
+    //   "HNG",
+    //   "Science",
+    //   "Art",
+    //   "games"
+    // ];
+    return FutureBuilder(
+      future: getCat,
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 6.0),
+            child: Wrap(
+              direction: Axis.horizontal,
+              spacing: 16.0,
+              children: List.generate(
+                listCategories.length,
+                (index) {
+                  Categories categoryNames = listCategories[index];
+                  return GestureDetector(
+                    onTap: () {
+                      onSelect(categoryNames.name.toString());
+                    },
+                    child: Chip(
+                      backgroundColor: Color(0xFF38208C),
+                      label: Text(
+                        categoryNames.name.toString(),
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: SizeConfig().textSize(context, 2.2),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );
-        }));
+        }
+        return Center(
+          child: SpinKitThreeBounce(
+            color: Color(0xFF18C5D9),
+            size: 25,
+          ),
+        );
+      },
+    );
+    //Check if list is not empty
+    // : listCategories.isEmpty
+    //     ? Center(
+    //         child: SpinKitThreeBounce(
+    //           color: Color(0xFF18C5D9),
+    //           size: 25,
+    //         ),
+    //       )
+    //     :
+    // Padding(
+    //     padding: const EdgeInsets.only(left: 6.0),
+    //     child: Wrap(
+    //         direction: Axis.horizontal,
+    //         spacing: 16.0,
+    //         children: List.generate(listCategories.length, (index) {
+    //           Categories categoryNames = listCategories[index];
+    //           return GestureDetector(
+    //             onTap: () {
+    //               onSelect(categoryNames.name.toString());
+    //             },
+    //             child: Chip(
+    //               backgroundColor: Color(0xFF38208C),
+    //               label: Text(
+    //                 categoryNames.name.toString(),
+    //                 textAlign: TextAlign.start,
+    //                 style: TextStyle(
+    //                   fontFamily: 'Poppins',
+    //                   color: Colors.white,
+    //                   fontWeight: FontWeight.w500,
+    //                   fontSize: SizeConfig().textSize(context, 2.2),
+    //                 ),
+    //               ),
+    //             ),
+    //           );
+    //         })),
+    //   );
   }
 
   Widget _logoText() {
@@ -292,14 +361,16 @@ class _CreateGameState extends State<CreateGame> {
         right: SizeConfig().xMargin(context, 2.0),
       ),
       child: TextFormField(
+        textAlign: TextAlign.center,
+        controller: TextEditingController(text: hintText),
         enabled: false,
         style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
             fontSize: SizeConfig().textSize(context, 3),
-            color: Colors.white),
+            color: Colors.black),
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: '',
           hintStyle: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
@@ -384,6 +455,7 @@ class _CreateGameState extends State<CreateGame> {
               SizedBox(height: 21),
               _quizCode(),
               // why not use screen util
+              //lol I am using a custom class for responsiveness
               SizedBox(height: 30),
               SizedBox(
                 width: double.maxFinite,
@@ -393,10 +465,14 @@ class _CreateGameState extends State<CreateGame> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                     ClipboardManager.copyToClipBoard(hintText);
+                    ClipboardManager.copyToClipBoard(hintText);
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => JoinGame(),));
+                    //Flutter Toast
                   },
                   child: Text(
-                    "Copy",
+                    "Join game",
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 16,
