@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/categories.dart';
@@ -29,46 +28,29 @@ class _CreateGameState extends State<CreateGame> {
   //GetCategories getCategories = new GetCategories();
 
   List<Categories> listCategories = [];
-  var getCat;
+  Future getCat;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   SizeConfig _sizeConfig;
-  bool isLoading;
   String userName = '';
   String category;
-  String hintText = '2467';
+  String hintText;
   String gameCode;
   TextEditingController userNameController = TextEditingController();
+  Future categories;
 
   Future _fetchCategory() async {
-    setState(() {
-      isLoading = true;
-    });
     listCategories = await services.getCategories();
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override
   void initState() {
     userNameController.addListener(() {});
-    _fetchCategory();
-
     super.initState();
-  }
-
-  void _showInSnackBar(String value, color) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(value),
-      backgroundColor: color,
-      duration: new Duration(seconds: 3),
-    ));
+    categories = _fetchCategory();
+    getCat = services.getCategories();
   }
 
   Future<String> getCode(context, username) async {
-    setState(() {
-      progressDialog.show();
-    });
     http.Response response = await http.post(
       fetchGameCode_Api,
       headers: {'Accept': 'application/json'},
@@ -78,18 +60,8 @@ class _CreateGameState extends State<CreateGame> {
     if (response.statusCode == 200) {
       String data = response.body;
       gameCode = jsonDecode(data)['game_code'].toString();
-      setState(() {
-        progressDialog.hide();
-        hintText = gameCode;
-      });
-      _showInSnackBar(gameCode, Colors.green);
-      showQuizCodeBottomSheet(context, gameCode);
       return gameCode;
     } else {
-      setState(() {
-        progressDialog.hide();
-      });
-      _showInSnackBar(response.body, Colors.red);
       throw Exception('Failed to retrieve code');
     }
   }
@@ -230,7 +202,7 @@ class _CreateGameState extends State<CreateGame> {
     //   "games"
     // ];
     return FutureBuilder(
-      future: services.getCategories(),
+      future: getCat,
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
@@ -435,19 +407,22 @@ class _CreateGameState extends State<CreateGame> {
     var form = _formKey.currentState;
     if (form.validate() && category != null) {
       form.save();
+      setState(() {
+        progressDialog.show();
+      });
 
       hintText = await getCode(userName, category);
-      print('HintText: $hintText');
 
-      // hintText != null ? showQuizCodeBottomSheet(context) : Container();
-
-      //showQuizCodeBottomSheet(context);
+      setState(() {
+        progressDialog.hide();
+      });
+      showQuizCodeBottomSheet(context);
     }
     userNameController.clear();
     category = null;
   }
 
-  showQuizCodeBottomSheet(BuildContext context, String text) {
+  showQuizCodeBottomSheet(BuildContext context) {
     var radius = Radius.circular(10);
 
     return showModalBottomSheet(

@@ -18,8 +18,7 @@ class Categories {
 
 class Services {
   Future<List<Categories>> getCategories() async {
-    try {
-      Map<String, String> headers = {
+    Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
@@ -31,25 +30,13 @@ class Services {
       if (response.statusCode == 200) {
         List<Categories> _categories = [];
         List apiData = jsonDecode(response.body)['data'];
-        print('ApiData $apiData');
-
-        for (var i = 0; i < apiData.length; i++) {
-          _categories.add(
-            Categories(
-              name: apiData[i]['name'],
-            ),
-          );
-        }
-        // _categories =
-        //     apiData.map((item) => new Categories.fromMap(item)).toList();
-        print(_categories);
+      
+        _categories =
+          apiData.map((item) => Categories.fromMap(item)).toList();
+      
         return _categories;
       } else {
-        print(response.body);
-        return null;
+        throw Exception('Failed to retrieve code');
       }
-    } catch (e) {
-      print(e);
-    }
   }
 }
