@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/new_questions_model.dart';
@@ -10,6 +13,7 @@ import 'package:quickthink/screens/dashboard.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/widgets/no_internet.dart';
 
 const String url = 'http://mohammedadel.pythonanywhere.com/game/play';
 
@@ -21,12 +25,54 @@ class JoinGame extends StatefulWidget {
 class _JoinGameState extends State<JoinGame> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+
+  bool _connection = false;
+
   String username = '';
   String gameCode = '';
 
   final _formKey = GlobalKey<FormState>();
 
   ProgressDialog progressDialog;
+
+  @override
+  void initState() {
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          setState(() {
+            if (!mounted) return;
+            startTime();
+            _connection = false;
+          });
+        } else {
+          setState(() {
+            if (!mounted) return;
+            _connection = true;
+          });
+        }
+      },
+    );
+    super.initState();
+  }
+
+  startTime() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => JoinGame()));
+      },
+    );
+  }
 
   void _showInSnackBar(String value, color) {
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -36,13 +82,13 @@ class _JoinGameState extends State<JoinGame> {
     ));
   }
 
-  void _showToast(String value, color) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(value),
-      backgroundColor: color,
-      duration: new Duration(seconds: 3),
-    ));
-  }
+  // void _showToast(String value, color) {
+  //   _scaffoldKey.currentState.showSnackBar(new SnackBar(
+  //     content: new Text(value),
+  //     backgroundColor: color,
+  //     duration: new Duration(seconds: 3),
+  //   ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,28 +108,30 @@ class _JoinGameState extends State<JoinGame> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              _logoText(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 10),
+    return _connection
+        ? NoInternet()
+        : Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Theme.of(context).primaryColor,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    _logoText(),
+                    SizedBox(
+                      height: SizeConfig().yMargin(context, 10),
+                    ),
+                    _prompt(),
+                    _form(),
+                    _loginBtn(),
+                    _or(),
+                    _createGameLink(),
+                  ],
+                ),
               ),
-              _prompt(),
-              _form(),
-              _loginBtn(),
-              _or(),
-              _createGameLink(),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget _or() {

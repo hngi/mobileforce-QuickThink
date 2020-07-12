@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +11,7 @@ import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
 import 'package:clipboard_manager/clipboard_manager.dart';
+import 'package:quickthink/widgets/no_internet.dart';
 
 // TODO: Visual feedback for when a selected
 // TODO: Tell user when category isn't selected... category validation
@@ -25,9 +28,15 @@ class CreateGame extends StatefulWidget {
 }
 
 class _CreateGameState extends State<CreateGame> {
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+
+  bool _connection = false;
+
   Services services = new Services();
   //GetCategories getCategories = new GetCategories();
-
+  bool isSelected = false;
   List<Categories> listCategories = [];
   Future getCat;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -49,6 +58,38 @@ class _CreateGameState extends State<CreateGame> {
     super.initState();
     categories = _fetchCategory();
     getCat = services.getCategories();
+
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          setState(() {
+            if (!mounted) return;
+            startTime();
+            _connection = false;
+          });
+        } else {
+          setState(() {
+            if (!mounted) return;
+            _connection = true;
+          });
+        }
+      },
+    );
+  }
+
+  startTime() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CreateGame()));
+      },
+    );
   }
 
   Future<String> getCode(context, username) async {
@@ -96,53 +137,55 @@ class _CreateGameState extends State<CreateGame> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _logoText(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 10),
+    return _connection
+        ? NoInternet()
+        : Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Theme.of(context).primaryColor,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      _logoText(),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 10),
+                      ),
+                      _prompt(),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 4),
+                      ),
+                      _userName(),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 7),
+                      ),
+                      _promptCategory(),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 1),
+                      ),
+                      _allCategories(
+                        onSelect: (String categoryChosen) {
+                          setState(() {
+                            category = categoryChosen;
+                            print(category);
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 4),
+                      ),
+                      _loginBtn(),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 1),
+                      ),
+                    ],
+                  ),
                 ),
-                _prompt(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _userName(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 7),
-                ),
-                _promptCategory(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
-                ),
-                _allCategories(
-                  onSelect: (String categoryChosen) {
-                    setState(() {
-                      category = categoryChosen;
-                      print(category);
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _loginBtn(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   Widget _prompt() {
@@ -466,8 +509,11 @@ class _CreateGameState extends State<CreateGame> {
                   onPressed: () {
                     ClipboardManager.copyToClipBoard(hintText);
 
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => JoinGame(),));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JoinGame(),
+                        ));
                     //Flutter Toast
                   },
                   child: Text(
