@@ -85,6 +85,7 @@ class _CreateGameState extends State<CreateGame> {
         isDismissible: false, type: ProgressDialogType.Normal);
 
     progressDialog.style(
+      message: 'Creating Game ...',
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       progressWidget: SpinKitThreeBounce(color: Color(0xFF18C5D9), size: 25),
