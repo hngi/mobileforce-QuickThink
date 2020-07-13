@@ -37,7 +37,7 @@ class QuickThink {
             }
 
             return new CustomQuestionView(
-                questionData: filteredQuestions, userName: userName,gameCode: gameCode);
+                questionData: filteredQuestions, userName: userName,gameCode: gameCode,model: _fetchedQuestions);
           }
 
           return new Center(
@@ -56,8 +56,9 @@ class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
   final String userName;
   final String gameCode;
+  final FetchedQuestions model;
 
-  CustomQuestionView({this.questionData, this.userName,this.gameCode});
+  CustomQuestionView({this.questionData, this.userName,this.gameCode,this.model});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
@@ -208,6 +209,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     return option;
   }
 
+
+
   // Widget _optionOne(heightBox, widthBox) {
   //   return Positioned(
   //     top: heightBox * .26,
@@ -345,6 +348,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
       if (userResponse == correctAnswer) {
         incrementScore();
+        widget.model.updateScore(widget.model.userID);
         if (isFinished() == true) {
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
@@ -355,8 +359,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           ).showEndMsg(context);
 
           reset();
+        }else {
+          nextQuestion();
         }
-        nextQuestion();
       } else {
         decrementScore();
 
@@ -375,6 +380,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
       }
     });
   }
+
 
   Widget _question(heightBox, widthBox) {
     return Positioned(
