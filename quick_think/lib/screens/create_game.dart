@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +9,7 @@ import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
-import 'package:clipboard_manager/clipboard_manager.dart';
+//import 'package:clipboard_manager/clipboard_manager.dart';
 
 // TODO: Visual feedback for when a selected
 // TODO: Tell user when category isn't selected... category validation
@@ -465,7 +466,7 @@ class _CreateGameState extends State<CreateGame> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                    ClipboardManager.copyToClipBoard(hintText);
+                    FlutterClipboard.copy(hintText).then(( value ) => print('copied'));
 
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => JoinGame(),));

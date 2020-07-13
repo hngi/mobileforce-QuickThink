@@ -129,9 +129,10 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           ),
           child: Stack(
             children: <Widget>[
+              _progress(height, width),
               _nextButton(height, width, heightBox, widthBox),
               _question(heightBox, widthBox),
-              _progress(height, width),
+              
 
               Positioned(
                   top: heightBox * .26,
