@@ -37,7 +37,7 @@ class QuickThink {
             }
 
             return new CustomQuestionView(
-                questionData: filteredQuestions, userName: userName);
+                questionData: filteredQuestions, userName: userName,gameCode: gameCode);
           }
 
           return new Center(
@@ -55,8 +55,9 @@ class QuickThink {
 class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
   final String userName;
+  final String gameCode;
 
-  CustomQuestionView({this.questionData, this.userName});
+  CustomQuestionView({this.questionData, this.userName,this.gameCode});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
@@ -337,6 +338,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           IQEnds(
             totalScore: totalScore,
             username: _userName,
+              gameCode: widget.gameCode
           ).showEndMsg(context);
 
           reset();
@@ -351,6 +353,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           IQEnds(
             totalScore: totalScore,
             username: _userName,
+            gameCode: widget.gameCode
           ).showEndMsg(context);
 
           reset();

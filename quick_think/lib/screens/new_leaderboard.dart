@@ -11,6 +11,8 @@ import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/theme/theme.dart';
 
 class NewLeaderBoard extends StatefulWidget {
+  final String gameCode;
+  NewLeaderBoard({this.gameCode});
   @override
   _NewLeaderBoardState createState() => _NewLeaderBoardState();
 }
@@ -18,12 +20,11 @@ class NewLeaderBoard extends StatefulWidget {
 class _NewLeaderBoardState extends State<NewLeaderBoard> {
   bool light = CustomTheme.light;
   final model = LeaderboardModel();
-  final quizPageModel = QuizPage();
   List<User> topUsers;
 
   @override
   void initState() {
-    model.getLeaderboard(quizPageModel.gameCode);
+    model.getLeaderboard(widget.gameCode);
     super.initState();
   }
 
@@ -155,14 +156,14 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
   return StreamBuilder(
     stream: model.leaderboardState,
       builder: (context,snapshot){
+        if(snapshot.hasError || snapshot.data == fetchState.NoData){
+          return Error(snapshot.error);
+        }
         if(!snapshot.hasData || snapshot.data == fetchState.Busy){
           return SpinKitFoldingCube(
             color: light ? Color(0xff1C1046) : Colors.white,
             size: 20.0,
           );
-        }
-        if(snapshot.hasError || snapshot.data == fetchState.NoData){
-          return Error(snapshot.error);
         }
         return Container(
           height: 200.0,
