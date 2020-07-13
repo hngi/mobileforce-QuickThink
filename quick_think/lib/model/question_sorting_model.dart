@@ -37,7 +37,7 @@ class QuickThink {
             }
 
             return new CustomQuestionView(
-                questionData: filteredQuestions, userName: userName);
+                questionData: filteredQuestions, userName: userName,gameCode: gameCode);
           }
 
           return new Center(
@@ -55,8 +55,9 @@ class QuickThink {
 class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
   final String userName;
+  final String gameCode;
 
-  CustomQuestionView({this.questionData, this.userName});
+  CustomQuestionView({this.questionData, this.userName,this.gameCode});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
@@ -176,7 +177,10 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: colorPickedAnswer()[i] ? Colors.green : Colors.white,
+                    color: colorPickedAnswer()[i] ?
+                    isCorrect(userAnswer) ? Colors.green : Colors.red
+                        :
+                    Colors.white,
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
@@ -323,6 +327,16 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     );
   }
 
+  bool isCorrect(String userResponse){
+    bool correct = true;
+    String correctAnswer = getCorrectAnswer();
+    if(userResponse == correctAnswer){
+      return correct;
+    }else{
+      return correct = false;
+    }
+  }
+
   void checkAnswer(String option) {
     String correctAnswer = getCorrectAnswer();
 
@@ -337,6 +351,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           IQEnds(
             totalScore: totalScore,
             username: _userName,
+              gameCode: widget.gameCode
           ).showEndMsg(context);
 
           reset();
@@ -351,6 +366,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           IQEnds(
             totalScore: totalScore,
             username: _userName,
+            gameCode: widget.gameCode
           ).showEndMsg(context);
 
           reset();
