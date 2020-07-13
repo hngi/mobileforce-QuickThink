@@ -95,12 +95,12 @@ class _JoinGameState extends State<JoinGame> {
         //right: SizeConfig().xMargin(context, 3.0),
       ),
       child: Text(
-        'or',
+        '- OR -',
         style: GoogleFonts.poppins(
           color: Colors.white,
           fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.w500,
-          fontSize: SizeConfig().textSize(context, 3),
+          fontWeight: FontWeight.w200,
+          fontSize: SizeConfig().textSize(context, 1.5),
         ),
       ),
     );
@@ -121,9 +121,11 @@ class _JoinGameState extends State<JoinGame> {
             style: GoogleFonts.poppins(
               fontSize: SizeConfig().textSize(context, 3),
               color: Colors.white,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
-            )),
+              decoration: TextDecoration.underline,
+            ),
+          ),
       ),
     );
   }
@@ -304,18 +306,21 @@ class _JoinGameState extends State<JoinGame> {
     if (form.validate()) {
       form.save();
       print(gameCode.text + username.text);
-      Navigator.push(
+      
+    /* List<Question> responseFromFunction = await _joinGame(gameCode.text, username.text);
+      if (responseFromFunction != null) {
+       
+      } */
+       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (o) => QuizPage(
                     gameCode: gameCode.text,
                     userName: username.text,
                   )));
-      //_joinGame(gameCode, username);
-      //    handleRegistration(nick, password);
     }
   }
-
+ 
   Future<List<Question>> _joinGame(code, user) async {
     setState(() {
       progressDialog.show();
@@ -329,12 +334,13 @@ class _JoinGameState extends State<JoinGame> {
     if (response.statusCode == 200) {
       String data = response.body;
       List decodedQuestions = jsonDecode(data)['data']['questions'];
-
+    
       print(decodedQuestions);
       setState(() {
         progressDialog.hide();
+        
       });
-      _showInSnackBar('Game Coming Soon', Colors.green);
+      // _showInSnackBar('Game Coming Soon', Colors.green);
       return decodedQuestions
           .map((questions) => Question.fromJson(questions))
           .toList();
@@ -343,8 +349,9 @@ class _JoinGameState extends State<JoinGame> {
       setState(() {
         progressDialog.hide();
       });
-      _showInSnackBar(jsonDecode(data)['error'], Colors.red);
+      _showInSnackBar(jsonDecode(data)['error, invalid credentials'], Colors.red);
+      return List();
     }
-    return null;
+    
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:quickthink/registration.dart';
 import 'package:quickthink/utils/responsiveness.dart';
-import 'package:quickthink/screens/create_game.dart';
+import 'package:quickthink/screens/join_game.dart';
 
 class ThirdOnBoardScreen extends StatefulWidget {
   @override
@@ -134,7 +133,7 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
 
 Route _createRoute() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => CreateGame(),
+    pageBuilder: (context, animation, secondaryAnimation) => JoinGame(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
       var end = Offset.zero;

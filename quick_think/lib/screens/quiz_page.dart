@@ -116,7 +116,7 @@ class _QuizPageState extends State<QuizPage> {
             // _textTitle(height, width),
             _timer(height, width),
             //_progress(height, width),
-            _quickThink.questionList(widget.gameCode,widget.userName)
+            _quickThink,
             //_box(height, width, heightBox, widthBox),
           ],
         ));

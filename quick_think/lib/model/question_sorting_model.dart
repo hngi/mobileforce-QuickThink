@@ -3,25 +3,40 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
 import 'package:quickthink/model/question_ends.dart';
 import 'package:quickthink/model/question_model.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
-class QuickThink {
-  String response = "";
-  int totalQuestions = 0;
+class QuickThink extends StatefulWidget {
   final String gameCode;
   final String userName;
+  final Function questionList;
+  QuickThink({this.gameCode, this.userName, this.questionList});
+  @override
+  _QuickThinkState createState() => _QuickThinkState();
+}
+
+class _QuickThinkState extends State<QuickThink> {
+  String response = "";
+  int totalQuestions = 0;
 
   FetchedQuestions _fetchedQuestions = new FetchedQuestions();
 
+  List<QuestionModel> fetchedQuestions;
+
+  Future fq;
+
   QuestionModel questions = QuestionModel();
 
-  QuickThink({this.gameCode, this.userName});
+  
+  @override
+  void initState() {
+  fq = _fetchedQuestions.questionUpdate(widget.gameCode, widget.userName);
+    super.initState();
+  }
 
-  Widget questionList(String gameCode, String userName) {
-    print(gameCode + userName);
-    return FutureBuilder<List<QuestionModel>>(
-        future: _fetchedQuestions.questionUpdate(gameCode, userName),
+  @override
+  Widget build(BuildContext context) {
+    return  FutureBuilder<List<QuestionModel>>(
+        future: fq,
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           print('SnapShot: ${snapshot.data}');
           if (snapshot.hasData &&
@@ -35,9 +50,8 @@ class QuickThink {
                 filteredQuestions.add(data);
               }
             }
-
             return new CustomQuestionView(
-                questionData: filteredQuestions, userName: userName);
+                questionData: filteredQuestions, userName: widget.userName);
           }
 
           return new Center(
@@ -46,11 +60,22 @@ class QuickThink {
           ));
         });
   }
-
-  // get player {
-  //   return username;
-  // }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
