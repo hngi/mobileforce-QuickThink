@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:quickthink/registration.dart';
 import 'package:quickthink/utils/responsiveness.dart';
-import 'package:quickthink/screens/create_game.dart';
+import 'package:quickthink/screens/join_game.dart';
 
 class ThirdOnBoardScreen extends StatefulWidget {
   @override
@@ -107,25 +106,26 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
       // padding: const EdgeInsets.only(top: 18.0),
       child: Center(
         child: SizedBox(
-          height: SizeConfig().yMargin(context, 6.0),
-          width: SizeConfig().xMargin(context, 30),
-          child: RaisedButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            color: Hexcolor('#18C5D9'),
-            child: Text(
-              'Next',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: SizeConfig().textSize(context, 2),
-                  color: Colors.white),
-            ),
-            onPressed: () =>
-                /* Navigator.of(context).push(
+            height: SizeConfig().yMargin(context, 6.0),
+            width: SizeConfig().xMargin(context, 30),
+            child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                color: Hexcolor('#18C5D9'),
+                child: Text(
+                  'Next',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: SizeConfig().textSize(context, 2),
+                      color: Colors.white),
+                ),
+                onPressed: () => Navigator.of(context)
+                    .pushAndRemoveUntil(_createRoute(), (route) => false))
+            /* Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => SecondOnBoardScreen())) */
-                Navigator.of(context).push(_createRoute()),
-          ),
-        ),
+            //  Navigator.of(context).pushandReplace(_createRoute()),
+
+            ),
       ),
     );
   }
@@ -133,7 +133,7 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
 
 Route _createRoute() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => CreateGame(),
+    pageBuilder: (context, animation, secondaryAnimation) => JoinGame(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
       var end = Offset.zero;

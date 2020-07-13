@@ -1,6 +1,8 @@
 import 'dart:convert';
-import 'package:clipboard/clipboard.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -9,7 +11,6 @@ import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
-//import 'package:clipboard_manager/clipboard_manager.dart';
 
 // TODO: Visual feedback for when a selected
 // TODO: Tell user when category isn't selected... category validation
@@ -221,6 +222,30 @@ class _CreateGameState extends State<CreateGame> {
                   return GestureDetector(
                     onTap: () {
                       onSelect(categoryNames.name.toString());
+                      Flushbar(
+                        titleText:  Text(
+                          "Category Selected",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        messageText: Text(
+                          categoryNames.name.toString(),
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                        icon: Icon(
+                          FlutterIcons.select1_ant,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        leftBarIndicatorColor: Color(0xFF18C5D9),
+                        duration: Duration(milliseconds: 2000),
+                      )..show(context);
                     },
                     child: Chip(
                       backgroundColor: Color(0xFF38208C),
@@ -466,8 +491,7 @@ class _CreateGameState extends State<CreateGame> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
-                    FlutterClipboard.copy(hintText).then(( value ) => print('copied'));
-
+                    Clipboard.setData(new ClipboardData(text: hintText));
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => JoinGame(),));
                     //Flutter Toast
