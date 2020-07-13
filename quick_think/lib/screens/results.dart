@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quickthink/screens/join_game.dart';
+//import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/share_result/share_result.dart';
 import 'package:share/share.dart';
@@ -9,7 +11,7 @@ class Result extends StatefulWidget {
   final String name;
   final String score;
   final String gameCode;
-  Result({this.name, this.score,this.gameCode});
+  Result({this.name, this.score, this.gameCode});
   @override
   _ResultState createState() => _ResultState();
 }
@@ -94,11 +96,12 @@ class _ResultState extends State<Result> {
                 color: Colors.white,
                 elevation: 30.0,
                 child: ListTile(
-                  onTap: (){
+                  onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (o) => NewLeaderBoard(gameCode: widget.gameCode)));
+                            builder: (o) =>
+                                NewLeaderBoard(gameCode: widget.gameCode)));
                   },
                   title: Text(
                     "Check leaderboard",
@@ -128,6 +131,10 @@ class _ResultState extends State<Result> {
                       color: Colors.white,
                     ),
                   ),
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(JoinGame.routeName);
+                  },
                 ),
               ),
               SizedBox(

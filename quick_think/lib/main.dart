@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/help.dart';
+import 'package:quickthink/screens/join_game.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,6 +53,7 @@ class _MyAppState extends State<MyApp> {
         'showOnBoardScreen': (context) => OnBoardScreen(),
         'showSplashPage': (context) => SplashPage(),
         Registration.id: (context) => Registration(),
+        JoinGame.routeName: (context) => JoinGame(),
       },
     );
   }
