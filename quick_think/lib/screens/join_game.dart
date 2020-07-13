@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 const String url = 'http://mohammedadel.pythonanywhere.com/game/play';
 
 class JoinGame extends StatefulWidget {
+  static const routeName = 'join-game';
   @override
   _JoinGameState createState() => _JoinGameState();
 }
