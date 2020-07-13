@@ -107,25 +107,26 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
       // padding: const EdgeInsets.only(top: 18.0),
       child: Center(
         child: SizedBox(
-          height: SizeConfig().yMargin(context, 6.0),
-          width: SizeConfig().xMargin(context, 30),
-          child: RaisedButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            color: Hexcolor('#18C5D9'),
-            child: Text(
-              'Next',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: SizeConfig().textSize(context, 2),
-                  color: Colors.white),
-            ),
-            onPressed: () =>
-                /* Navigator.of(context).push(
+            height: SizeConfig().yMargin(context, 6.0),
+            width: SizeConfig().xMargin(context, 30),
+            child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                color: Hexcolor('#18C5D9'),
+                child: Text(
+                  'Next',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: SizeConfig().textSize(context, 2),
+                      color: Colors.white),
+                ),
+                onPressed: () => Navigator.of(context)
+                    .pushAndRemoveUntil(_createRoute(), (route) => false))
+            /* Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => SecondOnBoardScreen())) */
-                Navigator.of(context).push(_createRoute()),
-          ),
-        ),
+            //  Navigator.of(context).pushandReplace(_createRoute()),
+
+            ),
       ),
     );
   }
