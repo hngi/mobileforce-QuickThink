@@ -177,7 +177,10 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: colorPickedAnswer()[i] ? Colors.green : Colors.white,
+                    color: colorPickedAnswer()[i] ?
+                    isCorrect(userAnswer) ? Colors.green : Colors.red
+                        :
+                    Colors.white,
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
@@ -322,6 +325,16 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         ),
       ),
     );
+  }
+
+  bool isCorrect(String userResponse){
+    bool correct = true;
+    String correctAnswer = getCorrectAnswer();
+    if(userResponse == correctAnswer){
+      return correct;
+    }else{
+      return correct = false;
+    }
   }
 
   void checkAnswer(String option) {
