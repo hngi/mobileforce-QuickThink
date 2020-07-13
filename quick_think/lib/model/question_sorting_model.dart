@@ -154,9 +154,10 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           ),
           child: Stack(
             children: <Widget>[
-              _nextButton(height, width, heightBox, widthBox),
-              _question(heightBox, widthBox),
               _progress(height, width),
+              //_nextButton(height, width, heightBox, widthBox),
+              _question(heightBox, widthBox),
+              
 
               Positioned(
                   top: heightBox * .26,
@@ -187,13 +188,19 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
       option.add(
         InkWell(
           onTap: () {
-            isPicked = [false, false, false, false];
+            //isPicked = [false, false, false, false];
             setState(() {
               _isSelected = !_isSelected;
               isPicked[i] = _isSelected;
               userAnswer = getOptions()[i];
               print(isPicked);
             });
+             print('getUserPickedAnswer:$userAnswer');
+
+            if (userAnswer.isNotEmpty && userAnswer != null) {
+              checkAnswer(userAnswer);
+              //isPicked = [false, false, false, false];
+            }
           },
           child: Column(
             children: <Widget>[
@@ -201,7 +208,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: colorPickedAnswer()[i] ? Colors.green : Colors.white,
+                    color: isPicked[i] ? Colors.green : Colors.white,
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
@@ -312,41 +319,41 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         ));
   }
 
-  Widget _nextButton(height, width, heightBox, widthBox) {
-    return Positioned(
-      top: heightBox * .89,
-      left: widthBox * .58,
-      right: widthBox * .0,
-      bottom: heightBox * .0,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          color: Color(0xFF18C5D9),
-        ),
-        height: height * .069,
-        width: width * .368,
-        child: FlatButton(
-          child: Text(
-            'Next',
-            style: style.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFFFFFFF),
-              fontSize: 16,
-              letterSpacing: 0.5,
-            ),
-          ),
-          onPressed: () {
-            print('getUserPickedAnswer:$userAnswer');
+  // Widget _nextButton(height, width, heightBox, widthBox) {
+  //   return Positioned(
+  //     top: heightBox * .89,
+  //     left: widthBox * .58,
+  //     right: widthBox * .0,
+  //     bottom: heightBox * .0,
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(5.0),
+  //         color: Color(0xFF18C5D9),
+  //       ),
+  //       height: height * .069,
+  //       width: width * .368,
+  //       child: FlatButton(
+  //         child: Text(
+  //           'Next',
+  //           style: style.copyWith(
+  //             fontWeight: FontWeight.bold,
+  //             color: Color(0xFFFFFFFF),
+  //             fontSize: 16,
+  //             letterSpacing: 0.5,
+  //           ),
+  //         ),
+  //         onPressed: () {
+  //           print('getUserPickedAnswer:$userAnswer');
 
-            if (userAnswer.isNotEmpty && userAnswer != null) {
-              checkAnswer(userAnswer);
-              isPicked = [false, false, false, false];
-            }
-          },
-        ),
-      ),
-    );
-  }
+  //           if (userAnswer.isNotEmpty && userAnswer != null) {
+  //             checkAnswer(userAnswer);
+  //             isPicked = [false, false, false, false];
+  //           }
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void checkAnswer(String option) {
     String correctAnswer = getCorrectAnswer();
@@ -356,6 +363,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
       if (userResponse == correctAnswer) {
         incrementScore();
+        isPicked = [false, false, false, false];
         if (isFinished() == true) {
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
@@ -369,7 +377,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         nextQuestion();
       } else {
         decrementScore();
-
+isPicked = [false, false, false, false];
         if (isFinished() == true) {
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
