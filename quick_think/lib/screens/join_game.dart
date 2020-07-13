@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:quickthink/model/new_questions_model.dart';
+import 'package:quickthink/model/question_model.dart';
 import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/dashboard.dart';
 
@@ -283,7 +284,6 @@ class _JoinGameState extends State<JoinGame> {
     return RaisedButton(
       padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
       onPressed: () {
-        print('URL: $url');
         onPressed();
       },
       textColor: Colors.white,
@@ -304,6 +304,31 @@ class _JoinGameState extends State<JoinGame> {
     if (form.validate()) {
       form.save();
       print(gameCode.text + username.text);
+
+      _joinGame(gameCode.text, username.text);
+      //    handleRegistration(nick, password);
+    }
+  }
+
+  Future<List<QuestionModel>> _joinGame(String code, String user) async {
+    setState(() {
+      progressDialog.show();
+    });
+    http.Response response = await http.post(
+      url,
+      headers: {'Accept': 'application/json'},
+      body: {"game_code": code, "user_name": user},
+    );
+    print('Params: $code $user');
+    print('Status Code Found: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      String data = response.body;
+      List decodedQuestions = jsonDecode(data)['data']['questions'];
+      print(response.body);
+      print(decodedQuestions);
+      setState(() {
+        progressDialog.hide();
+      });
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -311,38 +336,24 @@ class _JoinGameState extends State<JoinGame> {
                     gameCode: gameCode.text,
                     userName: username.text,
                   )));
-      //_joinGame(gameCode, username);
-      //    handleRegistration(nick, password);
-    }
-  }
 
-  Future<List<Question>> _joinGame(code, user) async {
-    setState(() {
-      progressDialog.show();
-    });
-    // url = Constants().urlJoinGame;
-    http.Response response = await http.post(
-      url,
-      headers: {'Accept': 'application/json'},
-      body: {"game_code": code, "user_name": user},
-    );
-    if (response.statusCode == 200) {
-      String data = response.body;
-      List decodedQuestions = jsonDecode(data)['data']['questions'];
-
-      print(decodedQuestions);
-      setState(() {
-        progressDialog.hide();
-      });
       _showInSnackBar('Game Coming Soon', Colors.green);
       return decodedQuestions
-          .map((questions) => Question.fromJson(questions))
-          .toList();
+          .map((questions) => new QuestionModel.fromJson(questions))
+          .toList()
+            ..shuffle();
     } else {
+      print('Error Code ${response.statusCode}');
       String data = response.body;
+      print(data);
+      //   print('Error Ocurres: ${response.body}');
+      // String error = jsonDecode(data)['error'];
+      // print('Error Decoded: $error');
       setState(() {
         progressDialog.hide();
       });
+      // print('Error: ${response.body}');
+      //_showInSnackBar('Error Ocurred. Check your gameCode', Colors.red);
       _showInSnackBar(jsonDecode(data)['error'], Colors.red);
     }
     return null;
