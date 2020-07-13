@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/data/leaderbord_list.dart';
 import 'package:quickthink/model/leaderboard_model.dart';
+import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/theme/theme.dart';
 
 class NewLeaderBoard extends StatefulWidget {
@@ -16,11 +18,12 @@ class NewLeaderBoard extends StatefulWidget {
 class _NewLeaderBoardState extends State<NewLeaderBoard> {
   bool light = CustomTheme.light;
   final model = LeaderboardModel();
+  final quizPageModel = QuizPage();
   List<User> topUsers;
 
   @override
   void initState() {
-    model.getLeaderboard("1002");
+    model.getLeaderboard(quizPageModel.gameCode);
     super.initState();
   }
 
