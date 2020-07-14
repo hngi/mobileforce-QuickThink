@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
@@ -196,19 +198,23 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
       option.add(
         InkWell(
           onTap: () {
-            //isPicked = [false, false, false, false];
+           // isPicked = [false, false, false, false];
             setState(() {
               _isSelected = !_isSelected;
               isPicked[i] = _isSelected;
               userAnswer = getOptions()[i];
               print(isPicked);
             });
-            print('getUserPickedAnswer:$userAnswer');
 
-            if (userAnswer.isNotEmpty && userAnswer != null) {
-              checkAnswer(userAnswer);
-              //isPicked = [false, false, false, false];
-            }
+            Timer(Duration(milliseconds: 100), () {
+              print('getUserPickedAnswer:$userAnswer');
+
+              if (userAnswer.isNotEmpty && userAnswer != null) {
+                checkAnswer(userAnswer);
+                isPicked = [false, false, false, false];
+              }
+              
+            });
           },
           child: Column(
             children: <Widget>[
@@ -216,7 +222,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: isPicked[i] ? Colors.green : Colors.white,
+                    color: colorPickedAnswer()[i] ? Colors.green : Colors.white,
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
@@ -398,7 +404,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         nextQuestion();
       } else {
         decrementScore();
+
         resetTimer = true;
+
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
           stopTimer = true;
