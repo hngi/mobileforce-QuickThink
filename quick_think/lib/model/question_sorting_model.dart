@@ -51,11 +51,7 @@ class _QuickThinkState extends State<QuickThink> {
               }
             }
             return new CustomQuestionView(
-<<<<<<< HEAD
-                questionData: filteredQuestions, userName: userName,gameCode: gameCode);
-=======
                 questionData: filteredQuestions, userName: widget.userName);
->>>>>>> e2e8d8fc4fec6b88c01732dc62deec119a015217
           }
 
           return new Center(
@@ -136,13 +132,19 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
-    return _box(height, width, heightBox, widthBox);
+    return Container(
+      child: Stack(
+        children: <Widget>[
+          _progress(height, width),
+          _box(height,width,heightBox,widthBox),
+        ],
+      ),
+    );
     //Container();
   }
 
@@ -213,14 +215,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-<<<<<<< HEAD
-                    color: colorPickedAnswer()[i] ?
-                    isCorrect(userAnswer) ? Colors.green : Colors.red
-                        :
-                    Colors.white,
-=======
                     color: isPicked[i] ? Colors.green : Colors.white,
->>>>>>> e2e8d8fc4fec6b88c01732dc62deec119a015217
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
