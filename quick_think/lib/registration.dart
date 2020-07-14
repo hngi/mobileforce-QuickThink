@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bottom_navigation_bar.dart';
@@ -25,7 +25,7 @@ class _RegistrationState extends State<Registration> {
   ProgressDialog progressDialog;
   bool isLoading = false;
   File _image;
-  final picker = ImagePicker();
+  // final picker = ImagePicker();
   String nick = '';
   String password = '';
   String _initUrl = 'cat';
@@ -41,12 +41,12 @@ class _RegistrationState extends State<Registration> {
     ));
   }
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      _image = File(pickedFile.path);
-    });
-  }
+  // Future getImage() async {
+  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _image = File(pickedFile.path);
+  //   });
+  // }
 
   void handleRegistration(nick, password) async {
     setState(() {

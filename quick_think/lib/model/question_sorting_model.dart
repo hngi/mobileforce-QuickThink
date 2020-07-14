@@ -146,7 +146,27 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         child: TimerQuiz(
           endQ: stopTimer,
           nextQ: resetTimer,
-          callBackFunc: nextQuestion,
+          callBackFunc: () {
+            setState(() {
+              if (isFinished() == false) {
+              /* setState(() {
+                
+              }); */
+              resetTimer = true;
+                nextQuestion();
+            } else {
+              IQEnds(
+                totalScore: totalScore,
+                username: _userName,
+                message:
+                    'Oops! You have run out of time, proceed to your result.',
+              ).showEndMsg(context);
+              reset();
+            }
+            
+            });
+            
+          },
         ),
       ),
     );
@@ -198,7 +218,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
       option.add(
         InkWell(
           onTap: () {
-           // isPicked = [false, false, false, false];
+            // isPicked = [false, false, false, false];
             setState(() {
               _isSelected = !_isSelected;
               isPicked[i] = _isSelected;
@@ -213,7 +233,6 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
                 checkAnswer(userAnswer);
                 isPicked = [false, false, false, false];
               }
-              
             });
           },
           child: Column(
@@ -369,16 +388,6 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   //   );
   // }
 
-  void timeOutTimer() {
-    IQEnds(
-      // msg: 'You have run out of time, proceed to your result',
-      totalScore: totalScore,
-      username: _userName,
-      message: 'Oops! You have run out of time, proceed to your result.'
-    ).showEndMsg(context);
-    reset();
-  }
-
   void checkAnswer(String option) {
     String correctAnswer = getCorrectAnswer();
 
@@ -391,12 +400,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
           stopTimer = true;
-//        Navigator.sth to the results page
-//      Throw an alert to the user that evaluation has finished
+
           IQEnds(
             totalScore: totalScore,
             username: _userName,
-            message: 'You have successfully completed the test proceed for the result',
+            message:
+                'You have successfully completed the test proceed for the result',
           ).showEndMsg(context);
 
           reset();
@@ -415,7 +424,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           IQEnds(
             totalScore: totalScore,
             username: _userName,
-            message: 'You have successfully completed the test proceed for the result',
+            message:
+                'You have successfully completed the test proceed for the result',
           ).showEndMsg(context);
 
           reset();
@@ -520,6 +530,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   get getColorPickedAnswer {
     return isPicked;
   }
+
+  void timeOutTimer() {}
 }
 
 class CardOptions extends StatefulWidget {

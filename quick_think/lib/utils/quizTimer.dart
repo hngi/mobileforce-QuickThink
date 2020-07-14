@@ -36,10 +36,10 @@ class _TimerQuizState extends State<TimerQuiz> with TickerProviderStateMixin {
   void initState() {
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 15, milliseconds: 900),
+      duration: Duration(seconds: 10, milliseconds: 900),
     );
 
-    controller.reverse(from: 15).whenComplete(() => widget.callBackFunc());
+    controller.reverse(from: 10).whenComplete(() => widget.callBackFunc());
     super.initState();
   }
 
@@ -56,7 +56,7 @@ class _TimerQuizState extends State<TimerQuiz> with TickerProviderStateMixin {
     endQuiz = widget.endQ;
     if (nextQuestion) {
       controller.reset();
-      controller.reverse(from: 15).whenComplete(() => widget.callBackFunc());
+      controller.reverse(from: 10).whenComplete(() => widget.callBackFunc());
       nextQuestion = false;
     }
     if (endQuiz) {
@@ -69,7 +69,7 @@ class _TimerQuizState extends State<TimerQuiz> with TickerProviderStateMixin {
           return Text(
             timerString,
             style: GoogleFonts.poppins(
-              color: timerSec > 5 ? Color(0xFFFFFFFF) : Color(0xFFFF4D55),
+              color: timerSec > 3 ? Color(0xFFFFFFFF) : Color(0xFFFF4D55),
               fontSize: 16,
               fontStyle: FontStyle.normal,
               fontWeight: FontWeight.bold,
