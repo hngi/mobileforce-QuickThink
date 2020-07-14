@@ -17,7 +17,7 @@ class Result extends StatefulWidget {
 }
 
 class _ResultState extends State<Result> {
-  shareResult(BuildContext context) {
+  shareResult(BuildContext context, score) {
     final RenderBox box = context.findRenderObject();
     // placeholder for the result
     String subject = "QuickThink App Score";
@@ -25,7 +25,7 @@ class _ResultState extends State<Result> {
     String questionTotal = '20';
     String appName = 'QuickThink from HNG Tech Limited';
     String resultSummary =
-        "Hi, I scored $result out of $questionTotal questions in $appName. Do you think you can beat me? Join me and compete";
+        "Hi, I scored $score points $appName. Do you think you can beat me? Join me and compete";
 
     Share.share(resultSummary,
         subject: subject,
@@ -151,7 +151,7 @@ class _ResultState extends State<Result> {
           color: Colors.white,
         ),
         onPressed: () {
-          shareResult(context);
+          shareResult(context, widget.score);
         },
       ),
     );
