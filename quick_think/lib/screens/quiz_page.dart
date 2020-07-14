@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
+import 'package:quickthink/utils/quizTimer.dart';
 
 class QuizPage extends StatefulWidget {
   final String gameCode;final String userName;
@@ -30,26 +29,11 @@ class _QuizPageState extends State<QuizPage> {
   String _numberOfQuestion;
 
   QuickThink _quickThink;
+  
 
-  Timer _quizTimer;
+  
 
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _quizTimer = new Timer.periodic(
-      oneSec,
-      (Timer timer) => setState(
-        () {
-          if (_quizDuration < 1) {
-            timer.cancel();
-          } else {
-            _quizDuration = _quizDuration - 1;
-            print('the time is $_quizDuration');
-          }
-        },
-      ),
-    );
-  }
-
+  
   // @override
   // void dispose() {
   //   _quizTimer.cancel();
@@ -59,6 +43,8 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     _quickThink = QuickThink(gameCode: widget.gameCode,userName: widget.userName);
+    
+  
    // _numberOfQuestion = widget.numberOfQuestions.toString();
 
     // if (widget.difficultyLevel == 'Easy') {
@@ -94,6 +80,8 @@ class _QuizPageState extends State<QuizPage> {
   //   return _marks;
   // }
 
+   
+
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -114,7 +102,7 @@ class _QuizPageState extends State<QuizPage> {
             _backIcon(height, width),
             // _category(height, width),
             // _textTitle(height, width),
-            _timer(height, width),
+            // _timer(height, width),
             //_progress(height, width),
             _quickThink,
             //_box(height, width, heightBox, widthBox),
@@ -190,25 +178,17 @@ class _QuizPageState extends State<QuizPage> {
   //       ));
   // }
 
-  Widget _timer(height, width) {
+  /* Widget _timer(height, width) {
     return Positioned(
       top: height * .10,
       left: width * .75,
       child: FlatButton(
         color: Color(0xFF574E76),
         onPressed: () {},
-        child: Text(
-          '00 : ' + _quizDuration.toString().padLeft(2, '0'),
-          style: GoogleFonts.poppins(
-            color: Color(0xFFFFFFFF),
-            fontSize: 16,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        child:timerQuiz,
       ),
     );
-  }
+  } */
 
   
 }

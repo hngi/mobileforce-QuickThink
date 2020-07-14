@@ -4,6 +4,7 @@ import 'package:quickthink/data/FetchedQuestions.dart';
 import 'package:quickthink/model/question_ends.dart';
 import 'package:quickthink/model/question_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quickthink/utils/quizTimer.dart';
 
 class QuickThink extends StatefulWidget {
   final String gameCode;
@@ -26,16 +27,15 @@ class _QuickThinkState extends State<QuickThink> {
 
   QuestionModel questions = QuestionModel();
 
-  
   @override
   void initState() {
-  fq = _fetchedQuestions.questionUpdate(widget.gameCode, widget.userName);
+    fq = _fetchedQuestions.questionUpdate(widget.gameCode, widget.userName);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return  FutureBuilder<List<QuestionModel>>(
+    return FutureBuilder<List<QuestionModel>>(
         future: fq,
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           print('SnapShot: ${snapshot.data}');
@@ -50,7 +50,7 @@ class _QuickThinkState extends State<QuickThink> {
                 filteredQuestions.add(data);
               }
             }
-            return new CustomQuestionView(
+            return CustomQuestionView(
                 questionData: filteredQuestions, userName: widget.userName);
           }
 
@@ -61,21 +61,6 @@ class _QuickThinkState extends State<QuickThink> {
         });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
@@ -101,6 +86,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   List<QuestionModel> _questionBank;
   String userResponse;
   String userPickedAnswer;
+  bool resetTimer = false;
+  bool stopTimer = false;
 
   String _userName;
 
@@ -128,6 +115,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     this.getUserName();
 
     //quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
+
     super.initState();
   }
 
@@ -137,8 +125,29 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
-    return _box(height, width, heightBox, widthBox);
+    return Stack(
+      children: <Widget>[
+        _box(height, width, heightBox, widthBox),
+        _timer(height, width),
+      ],
+    );
     //Container();
+  }
+
+  Widget _timer(height, width) {
+    return Positioned(
+      top: height * .10,
+      left: width * .75,
+      child: FlatButton(
+        color: Color(0xFF574E76),
+        onPressed: () {},
+        child: TimerQuiz(
+          endQ: stopTimer,
+          nextQ: resetTimer,
+          callBackFunc: nextQuestion,
+        ),
+      ),
+    );
   }
 
   Widget _box(height, width, heightBox, widthBox) {
@@ -157,7 +166,6 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               _progress(height, width),
               //_nextButton(height, width, heightBox, widthBox),
               _question(heightBox, widthBox),
-              
 
               Positioned(
                   top: heightBox * .26,
@@ -195,7 +203,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               userAnswer = getOptions()[i];
               print(isPicked);
             });
-             print('getUserPickedAnswer:$userAnswer');
+            print('getUserPickedAnswer:$userAnswer');
 
             if (userAnswer.isNotEmpty && userAnswer != null) {
               checkAnswer(userAnswer);
@@ -355,6 +363,16 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   //   );
   // }
 
+  void timeOutTimer() {
+    IQEnds(
+      // msg: 'You have run out of time, proceed to your result',
+      totalScore: totalScore,
+      username: _userName,
+      message: 'Oops! You have run out of time, proceed to your result.'
+    ).showEndMsg(context);
+    reset();
+  }
+
   void checkAnswer(String option) {
     String correctAnswer = getCorrectAnswer();
 
@@ -363,13 +381,16 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
       if (userResponse == correctAnswer) {
         incrementScore();
+        resetTimer = true;
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
+          stopTimer = true;
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
             totalScore: totalScore,
             username: _userName,
+            message: 'You have successfully completed the test proceed for the result',
           ).showEndMsg(context);
 
           reset();
@@ -377,13 +398,16 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         nextQuestion();
       } else {
         decrementScore();
-isPicked = [false, false, false, false];
+        resetTimer = true;
+        isPicked = [false, false, false, false];
         if (isFinished() == true) {
+          stopTimer = true;
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
             totalScore: totalScore,
             username: _userName,
+            message: 'You have successfully completed the test proceed for the result',
           ).showEndMsg(context);
 
           reset();
@@ -448,6 +472,8 @@ isPicked = [false, false, false, false];
     _questionNumber = 0;
     _correctResponse = 0;
     _wrongResponse = 0;
+    resetTimer = false;
+    stopTimer = false;
   }
 
   int numberOfQuestions() {

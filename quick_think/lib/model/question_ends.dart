@@ -4,13 +4,13 @@ import 'package:quickthink/screens/results.dart';
 
 class IQEnds {
   final username;
-
+ final String message;
   final int totalScore;
 
-  IQEnds({this.username, this.totalScore});
-
+  IQEnds({this.username, this.totalScore, this.message});
   showEndMsg(context) {
     showDialog<void>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -19,8 +19,8 @@ class IQEnds {
             'Hi $username',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          content: const Text(
-              'You have successfully completed the test proceed for the result',
+          content:  Text(
+              message,
               style: TextStyle(color: Colors.white, fontSize: 16)),
           actions: <Widget>[
             FlatButton(
@@ -46,3 +46,5 @@ class IQEnds {
     );
   }
 }
+
+
