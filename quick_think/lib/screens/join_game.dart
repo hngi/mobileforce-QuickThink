@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:quickthink/model/new_questions_model.dart';
+import 'package:quickthink/model/question_model.dart';
 import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/dashboard.dart';
 
@@ -16,6 +17,7 @@ import 'package:http/http.dart' as http;
 const String url = 'http://mohammedadel.pythonanywhere.com/game/play';
 
 class JoinGame extends StatefulWidget {
+  static const routeName = 'join-game';
   @override
   _JoinGameState createState() => _JoinGameState();
 }
@@ -285,7 +287,6 @@ class _JoinGameState extends State<JoinGame> {
     return RaisedButton(
       padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
       onPressed: () {
-        print('URL: $url');
         onPressed();
       },
       textColor: Colors.white,
@@ -306,6 +307,7 @@ class _JoinGameState extends State<JoinGame> {
     if (form.validate()) {
       form.save();
       print(gameCode.text + username.text);
+
       
     /* List<Question> responseFromFunction = await _joinGame(gameCode.text, username.text);
       if (responseFromFunction != null) {
@@ -322,35 +324,45 @@ class _JoinGameState extends State<JoinGame> {
   }
  
   Future<List<Question>> _joinGame(code, user) async {
+
     setState(() {
       progressDialog.show();
     });
-    // url = Constants().urlJoinGame;
     http.Response response = await http.post(
       url,
       headers: {'Accept': 'application/json'},
       body: {"game_code": code, "user_name": user},
     );
+    print('Params: $code $user');
+    print('Status Code Found: ${response.statusCode}');
     if (response.statusCode == 200) {
       String data = response.body;
       List decodedQuestions = jsonDecode(data)['data']['questions'];
-    
+
       print(decodedQuestions);
       setState(() {
         progressDialog.hide();
         
       });
-      // _showInSnackBar('Game Coming Soon', Colors.green);
+
       return decodedQuestions
-          .map((questions) => Question.fromJson(questions))
-          .toList();
+          .map((questions) => new QuestionModel.fromJson(questions))
+          .toList()
+            ..shuffle();
     } else {
+      print('Error Code ${response.statusCode}');
       String data = response.body;
+      print(data);
+      //   print('Error Ocurres: ${response.body}');
+      // String error = jsonDecode(data)['error'];
+      // print('Error Decoded: $error');
       setState(() {
         progressDialog.hide();
       });
+
       _showInSnackBar(jsonDecode(data)['error, invalid credentials'], Colors.red);
       return List();
+
     }
     
   }

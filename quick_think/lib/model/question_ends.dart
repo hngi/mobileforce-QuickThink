@@ -7,7 +7,12 @@ class IQEnds {
  final String message;
   final int totalScore;
 
-  IQEnds({this.username, this.totalScore, this.message});
+
+  final String gameCode;
+
+  IQEnds({this.username, this.totalScore,this.gameCode});
+
+
   showEndMsg(context) {
     showDialog<void>(
       barrierDismissible: false,
@@ -37,6 +42,7 @@ class IQEnds {
                     builder: (ctx) => Result(
                           score: totalScore.toString(),
                           name: username,
+                          gameCode: gameCode,
                         )));
               },
             ),
