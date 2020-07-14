@@ -53,7 +53,7 @@ class FetchedQuestions {
         List question = json.decode(response)['data']['questions'];
 
         //QuestionModel result = QuestionModel.fromJson(question);
-        print(question);
+       // print(question);
         return question
             .map((questions) => new QuestionModel.fromJson(questions))
             .toList()
