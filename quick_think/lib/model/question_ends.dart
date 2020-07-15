@@ -10,7 +10,7 @@ class IQEnds {
 
   final String gameCode;
 
-  IQEnds({this.username, this.totalScore,this.gameCode});
+  IQEnds({this.username, this.totalScore,this.gameCode,this.message});
 
 
   showEndMsg(context) {
