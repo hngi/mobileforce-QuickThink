@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class FetchedQuestions {
   int responseCode;
   List<QuestionModel> results;
+  String userGameID;
 
   FetchedQuestions({this.responseCode, this.results});
 
@@ -52,6 +53,7 @@ class FetchedQuestions {
       if (statusCode == 200) {
         List question = json.decode(response)['data']['questions'];
 
+        userGameID = json.decode(response)['data']['usergameData']['id'];
         //QuestionModel result = QuestionModel.fromJson(question);
        // print(question);
         return question
@@ -61,6 +63,13 @@ class FetchedQuestions {
       } else
         throw Exception(
             'We were not able to successfully download the json data.');
+    });
+  }
+
+  Future updateScore(String userID) async{
+    final jsonEndpoint = "http://mohammedadel.pythonanywhere.com/game/score";
+    return await http.post(jsonEndpoint, body: {
+      "user_game_id" : userID
     });
   }
 }

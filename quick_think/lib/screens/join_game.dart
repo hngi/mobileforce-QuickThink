@@ -346,7 +346,7 @@ class _JoinGameState extends State<JoinGame> {
       });
 
       return decodedQuestions
-          .map((questions) => new QuestionModel.fromJson(questions))
+          .map((questions) => new Question.fromJson(questions))
           .toList()
             ..shuffle();
     } else {
