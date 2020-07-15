@@ -55,7 +55,6 @@ class _QuickThinkState extends State<QuickThink> {
 
             return CustomQuestionView(
                 questionData: filteredQuestions, userName: widget.userName);
-
           }
 
           return new Center(
@@ -71,7 +70,7 @@ class CustomQuestionView extends StatefulWidget {
   final String userName;
   final String gameCode;
 
-  CustomQuestionView({this.questionData, this.userName,this.gameCode});
+  CustomQuestionView({this.questionData, this.userName, this.gameCode});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
@@ -132,6 +131,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     var widthBox = width * .872;
     return Stack(
       children: <Widget>[
+        _progress(height, width),
         _box(height, width, heightBox, widthBox),
         _timer(height, width),
       ],
@@ -152,23 +152,21 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           callBackFunc: () {
             setState(() {
               if (isFinished() == false) {
-              /* setState(() {
+                /* setState(() {
                 
               }); */
-              resetTimer = true;
+                resetTimer = true;
                 nextQuestion();
-            } else {
-              IQEnds(
-                totalScore: totalScore,
-                username: _userName,
-                message:
-                    'Oops! You have run out of time, proceed to your result.',
-              ).showEndMsg(context);
-              reset();
-            }
-            
+              } else {
+                IQEnds(
+                  totalScore: totalScore,
+                  username: _userName,
+                  message:
+                      'Oops! You have run out of time, proceed to your result.',
+                ).showEndMsg(context);
+                reset();
+              }
             });
-            
           },
         ),
       ),
@@ -244,10 +242,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: colorPickedAnswer()[i] ?
-                    isCorrect(userAnswer) ? Colors.green : Colors.red
-                        :
-                    Colors.white,
+                    color: colorPickedAnswer()[i]
+                        ? isCorrect(userAnswer) ? Colors.green : Colors.red
+                        : Colors.white,
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
@@ -394,12 +391,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   //   );
   // }
 
-  bool isCorrect(String userResponse){
+  bool isCorrect(String userResponse) {
     bool correct = true;
     String correctAnswer = getCorrectAnswer();
-    if(userResponse == correctAnswer){
+    if (userResponse == correctAnswer) {
       return correct;
-    }else{
+    } else {
       return correct = false;
     }
   }
@@ -423,8 +420,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             message:
                 'You have successfully completed the test proceed for the result',
 
-              //gameCode: widget.gameCode
-
+            //gameCode: widget.gameCode
           ).showEndMsg(context);
 
           reset();
@@ -448,7 +444,6 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
                 'You have successfully completed the test proceed for the result',
 
             //gameCode: widget.gameCode
-
           ).showEndMsg(context);
 
           reset();
