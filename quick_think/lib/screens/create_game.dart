@@ -11,6 +11,9 @@ import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
+
+import 'leaderboard.dart';
 
 // TODO: Visual feedback for when a selected
 // TODO: Tell user when category isn't selected... category validation
@@ -27,8 +30,19 @@ class CreateGame extends StatefulWidget {
 }
 
 class _CreateGameState extends State<CreateGame> {
+  List<DropdownMenuItem<Categories>> _dropDownMenuItems;
+  List<Categories> getListCategories;
+  bool isCategoryLoading = false;
+  Categories _selectedCategory;
+
   Services services = new Services();
+
   //GetCategories getCategories = new GetCategories();
+  bool light = CustomTheme.light;
+
+  final _formKey = GlobalKey<FormState>();
+
+  ProgressDialog progressDialog;
 
   List<Categories> listCategories = [];
   Future getCat;
@@ -45,19 +59,55 @@ class _CreateGameState extends State<CreateGame> {
     listCategories = await services.getCategories();
   }
 
+  Future _fetchCat() async {
+    setState(() {
+      isCategoryLoading = true;
+    });
+    getListCategories = await services.getCategories();
+    _dropDownMenuItems = buildDropMenuItems(getListCategories);
+    _selectedCategory = _dropDownMenuItems[0].value;
+    setState(() {
+      isCategoryLoading = false;
+    });
+  }
+
+  List<DropdownMenuItem<Categories>> buildDropMenuItems(List categories) {
+    List<DropdownMenuItem<Categories>> items = List();
+    for (Categories categorys in categories) {
+      items.add(
+        DropdownMenuItem(
+          value: categorys,
+          child: Text(categorys.name),
+        ),
+      );
+    }
+    return items;
+  }
+
+  onChangedDropdownnItem(Categories selectedCategory) {
+    setState(() {
+      _selectedCategory = selectedCategory;
+      category = _selectedCategory.name.toString();
+      //
+      print('Category: $category');
+      //   onSelect(categoryNames.name.toString());
+    });
+  }
+
   @override
   void initState() {
     userNameController.addListener(() {});
     super.initState();
     categories = _fetchCategory();
     getCat = services.getCategories();
+    _fetchCat();
   }
 
   Future<String> getCode(context, username) async {
     http.Response response = await http.post(
       fetchGameCode_Api,
       headers: {'Accept': 'application/json'},
-      body: {"user_name": userName, "category": category},
+      body: {"user_name": userName, "category": '${_selectedCategory.name}'},
     );
 
     if (response.statusCode == 200) {
@@ -69,11 +119,18 @@ class _CreateGameState extends State<CreateGame> {
     }
   }
 
-  bool light = CustomTheme.light;
+  shareCode(BuildContext context) {
+    final RenderBox box = context.findRenderObject();
+    // placeholder for the result
 
-  final _formKey = GlobalKey<FormState>();
+    String code = gameCode;
 
-  ProgressDialog progressDialog;
+    String subject = "QuickThink App Score";
+    String summary = 'Use this code to play my game: $code';
+    Share.share(summary,
+        subject: subject,
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+  }
 
   @override
   void dispose() {
@@ -117,26 +174,36 @@ class _CreateGameState extends State<CreateGame> {
                 SizedBox(
                   height: SizeConfig().yMargin(context, 4),
                 ),
+                _promptUsername(),
                 _userName(),
                 SizedBox(
                   height: SizeConfig().yMargin(context, 7),
                 ),
-                _promptCategory(),
+                // _promptCategory(),
+                _promptCategorys(),
+
                 SizedBox(
                   height: SizeConfig().yMargin(context, 1),
                 ),
-                _allCategories(
-                  onSelect: (String categoryChosen) {
-                    setState(() {
-                      category = categoryChosen;
-                      print(category);
-                    });
-                  },
-                ),
+                _dropDownCategories(onSelect: (String categoryChosen) {
+                  setState(() {
+                    category = categoryChosen;
+                    print(category);
+                  });
+                }),
+                // _allCategories(
+                //   onSelect: (String categoryChosen) {
+                //     setState(() {
+                //       category = categoryChosen;
+                //       print(category);
+                //     });
+                //   },
+                // ),
                 SizedBox(
                   height: SizeConfig().yMargin(context, 4),
                 ),
-                _loginBtn(),
+                //     _loginBtn(),
+                _allBtns(),
                 SizedBox(
                   height: SizeConfig().yMargin(context, 1),
                 ),
@@ -223,13 +290,12 @@ class _CreateGameState extends State<CreateGame> {
                     onTap: () {
                       onSelect(categoryNames.name.toString());
                       Flushbar(
-                        titleText:  Text(
+                        titleText: Text(
                           "Category Selected",
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold
-                          ),
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
                         ),
                         messageText: Text(
                           categoryNames.name.toString(),
@@ -414,6 +480,148 @@ class _CreateGameState extends State<CreateGame> {
     );
   }
 
+  Widget _promptCategorys() {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: SizeConfig().xMargin(context, 5.0),
+        right: SizeConfig().xMargin(context, 3.0),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            ' Category',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: SizeConfig().textSize(context, 2.2),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _promptUsername() {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: SizeConfig().xMargin(context, 5.0),
+        right: SizeConfig().xMargin(context, 3.0),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            ' User name',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: SizeConfig().textSize(context, 2.2),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _createBtn() {
+    return RaisedButton(
+      padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+      onPressed: onPressed,
+      textColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+      color: Color.fromRGBO(24, 197, 217, 1),
+      highlightColor: Color.fromRGBO(24, 197, 217, 1),
+      child: Text('Create ',
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: SizeConfig().textSize(context, 2),
+              color: Colors.white)),
+    );
+  }
+
+  Widget _cancelBtn() {
+    return FlatButton(
+      ///padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
+      onPressed: () {
+        //Go back to Homepage
+        Navigator.pop(context);
+        //    print('Category ${_selectedCategory.name}');
+      },
+      textColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+      color: Theme.of(context).primaryColor,
+      child: Text('Cancel',
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: SizeConfig().textSize(context, 2),
+              color: Colors.white)),
+    );
+  }
+
+  Widget _allBtns() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Flexible(child: _cancelBtn()),
+        Flexible(child: _createBtn()),
+      ],
+    );
+  }
+
+  Widget _dropDownCategories({Function(String option) onSelect}) {
+    return isCategoryLoading
+        ? Center(
+            child: SpinKitThreeBounce(
+              color: Color(0xFF18C5D9),
+              size: 25,
+            ),
+          )
+        : Container(
+            margin: EdgeInsets.only(
+              left: SizeConfig().xMargin(context, 5.0),
+              right: SizeConfig().xMargin(context, 3.0),
+            ),
+            color: Color(0xFF574E76),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Select Category',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: SizeConfig().textSize(context, 2),
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  DropdownButton(
+                    dropdownColor: Color(0xFF574E76),
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: SizeConfig().textSize(context, 2),
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    iconEnabledColor: Colors.white,
+                    items: _dropDownMenuItems,
+                    value: _selectedCategory,
+                    onChanged: onChangedDropdownnItem,
+                  ),
+                ],
+              ),
+            ),
+          );
+  }
+
   Widget _loginBtn() {
     return RaisedButton(
       padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
@@ -444,10 +652,110 @@ class _CreateGameState extends State<CreateGame> {
       setState(() {
         progressDialog.hide();
       });
-      showQuizCodeBottomSheet(context);
+      //showQuizCodeBottomSheet(context);
+      alertDialog(context);
     }
     userNameController.clear();
     category = null;
+  }
+
+  alertDialog(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    // var heightBox = height * .50;
+    // var widthBox = width * .872;
+    // return Scaffold(
+    //   backgroundColor: Colors.transparent,//Hexcolor('00FFFFFF'),
+    //   body: Stack(
+    //
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(.0)),
+            child: Container(
+              height: 350,
+              child: Container(
+                padding: EdgeInsets.all(22),
+                height: 269,
+                child: Column(
+                  children: <Widget>[
+                    smallLine(),
+                    SizedBox(height: 25),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          "Game Code",
+                          style: GoogleFonts.poppins(
+                            color: light ? Color(0xff1C1046) : Colors.white,
+                            fontSize: SizeConfig().textSize(context, 2),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 21),
+                    _quizCode(),
+                    // why not use screen util
+                    //lol I am using a custom class for responsiveness
+                    SizedBox(height: 30),
+                    SizedBox(
+                      width: double.maxFinite,
+                      height: 45,
+                      child: RaisedButton(
+                        color: Color(0xff18C5D9),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        onPressed: () {
+                          Clipboard.setData(new ClipboardData(text: hintText));
+                          shareCode(context);
+                          //Share Code here
+                          //Flutter Toast saying has been copied to clipboard
+                        },
+                        child: Text(
+                          "Share game code",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    SizedBox(
+                      width: double.maxFinite,
+                      height: 45,
+                      child: RaisedButton(
+                        color: Color(0xff18C5D9),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        onPressed: () {
+                          Clipboard.setData(new ClipboardData(text: hintText));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LeaderBoard(),
+                              ));
+                          //Flutter Toast
+                        },
+                        child: Text(
+                          "Leaderboard",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   showQuizCodeBottomSheet(BuildContext context) {
@@ -492,8 +800,11 @@ class _CreateGameState extends State<CreateGame> {
                       borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
                     Clipboard.setData(new ClipboardData(text: hintText));
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => JoinGame(),));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JoinGame(),
+                        ));
                     //Flutter Toast
                   },
                   child: Text(
