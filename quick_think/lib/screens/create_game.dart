@@ -669,6 +669,7 @@ class _CreateGameState extends State<CreateGame> {
     //   body: Stack(
     //
     showDialog(
+      barrierDismissible: false,
         context: context,
         builder: (context) {
           return Dialog(
