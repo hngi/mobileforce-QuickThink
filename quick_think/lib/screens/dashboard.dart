@@ -332,8 +332,6 @@ class _DashBoardState extends State<DashBoard> {
                         text: 'Create questions',
                         onPressed: () {
                           //Navigate to create questions page
-                          //Direct user if not logged in to sign up page
-                          //Direct user if logged in to the create questions page
                         },
                         light: light,
                       ),

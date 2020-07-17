@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/help.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
@@ -38,23 +37,22 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'QuickThink',
-        theme: ThemeData(
-          primaryColor: Color(0xFF1C1046),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: themeLight.colorScheme,
-        ),
-        darkTheme: themeDark,
-        themeMode: currentTheme.currentTheme(),
-        initialRoute: onBoardCount == 0 || onBoardCount == null
-            ? 'showDashBoard'
-            : 'showDashBoard',
-        routes: {
-          'showDashBoard': (context) => DashBoard(username: 'Dumebi'),
-          'joinGame': (context) => JoinGame(),
-          'CreateGame': (context) => CreateGame(),
-          Registration.id: (context) => Registration()
-        });
+      debugShowCheckedModeBanner: false,
+      title: 'QuickThink',
+      theme: ThemeData(
+        primaryColor: Color(0xFF1C1046),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: themeLight.colorScheme,
+      ),
+      darkTheme: themeDark,
+      themeMode: currentTheme.currentTheme(),
+      initialRoute: onBoardCount == 0 || onBoardCount == null
+          ? 'showDashBoard'
+          : 'showDashBoard',
+      routes: {
+        'showDashBoard': (context) => DashBoard(username: 'Dumebi'),
+        Registration.id: (context) => Registration()
+      },
+    );
   }
 }
