@@ -1,4 +1,4 @@
-
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -13,22 +13,48 @@ class SettingsView extends StatefulWidget with WidgetsBindingObserver {
   _SettingsViewState createState() => _SettingsViewState();
 }
 
-void logOut(context) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs?.clear();
-  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => Registration()),
-    ModalRoute.withName('/showOnboardScreen'),);
+
+String bearerId = "Bearer 7b86a5d6955dd524e1250fd4d4a640e0f22a4ee8";
+Future logOut(String bearerId) async{
+  var url = 'http://127.0.0.1:8000/user/logout';
+  var response = await http.post(url,headers:{"Authorization" : "Bearer 7b86a5d6955dd524e1250fd4d4a640e0f22a4ee8"});
+  print('Response status: ${response.statusCode}');
+  print('Response body: ${response.body}');
 }
 
-// Future<http.Response> delete(String id) async {
-//   final http.Response response = await http.delete(
-//     'https://jsonplaceholder.typicode.com/albums/$id',
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//   );
-  
 
+void _showDialog() {
+  showDialog(
+    barrierDismissible: true,
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(""),
+        content: Text("Coming Soon!",
+        style: GoogleFonts.poppins(
+        textStyle: TextStyle(
+          color: Color(0xff1C1046),
+          fontWeight: FontWeight.w600,
+          fontSize: 18),)
+          ),
+        actions: <Widget>[
+          FlatButton(
+            padding: EdgeInsets.symmetric(horizontal: 41, vertical: 17),
+            shape: RoundedRectangleBorder(),
+            color: Color(0xff18C5D9),
+            onPressed: () {Navigator.of(context).pop();},
+            child: Text("Ok!",
+            style: GoogleFonts.poppins(
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 18),),),
+          )
+        ]
+      ); 
+    },  );
+}
+  
 
 class _SettingsViewState extends State<SettingsView> {
   @override
@@ -124,7 +150,7 @@ class _SettingsViewState extends State<SettingsView> {
             ),
             SizedBox(height: 16,),
             InkWell(
-              onTap: () => logOut(context),
+              onTap: () => logOut,
               child: ListTile(
                 title: Text("Logout",
                 style: GoogleFonts.poppins(
@@ -138,7 +164,7 @@ class _SettingsViewState extends State<SettingsView> {
                 )
             ),
             InkWell(
-              onTap: (){}, //delete()
+              onTap: () => _showDialog(), 
               child: ListTile(
                 title: Text("Delete account",
                 style: GoogleFonts.poppins(
@@ -157,3 +183,7 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 }
+
+
+
+
