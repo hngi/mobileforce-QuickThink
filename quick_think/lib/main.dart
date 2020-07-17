@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickthink/screens/dashboard.dart';
 import 'package:quickthink/screens/help.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
@@ -6,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
 import 'registration.dart';
 import 'theme/theme.dart';
-
 
 int onBoardCount;
 void main() async {
@@ -46,11 +46,10 @@ class _MyAppState extends State<MyApp> {
       darkTheme: themeDark,
       themeMode: currentTheme.currentTheme(),
       initialRoute: onBoardCount == 0 || onBoardCount == null
-          ? 'showOnBoardScreen'
-          : 'showSplashPage',
+          ? 'showHomePage'
+          : 'showHomePage',
       routes: {
-        'showOnBoardScreen': (context) => OnBoardScreen(),
-        'showSplashPage': (context) => SplashPage(),
+        'showHomePage': (context) => DashBoard(username: 'Dumebi'),
         Registration.id: (context) => Registration(),
       },
     );
