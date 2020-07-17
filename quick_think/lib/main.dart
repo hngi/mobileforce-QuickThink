@@ -6,8 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
 import 'registration.dart';
 import 'theme/theme.dart';
-import 'package:quickthink/screens/dashboard.dart';
-import 'package:quickthink/screens/join_game.dart';
+
 
 int onBoardCount;
 void main() async {
@@ -47,11 +46,12 @@ class _MyAppState extends State<MyApp> {
       darkTheme: themeDark,
       themeMode: currentTheme.currentTheme(),
       initialRoute: onBoardCount == 0 || onBoardCount == null
-          ? 'showDashBoard'
-          : 'showDashBoard',
+          ? 'showOnBoardScreen'
+          : 'showSplashPage',
       routes: {
-        'showDashBoard': (context) => DashBoard(username: 'Dumebi'),
-        Registration.id: (context) => Registration()
+        'showOnBoardScreen': (context) => OnBoardScreen(),
+        'showSplashPage': (context) => SplashPage(),
+        Registration.id: (context) => Registration(),
       },
     );
   }
