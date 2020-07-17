@@ -323,7 +323,9 @@ class _JoinGameState extends State<JoinGame> {
     }
   }
  
-  // Future<List<Question>> _joinGame(code, user) async {
+
+  Future<List<QuestionModel>> _joinGame(code, user) async {
+
 
   //   setState(() {
   //     progressDialog.show();
