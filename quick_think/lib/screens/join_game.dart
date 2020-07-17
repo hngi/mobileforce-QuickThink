@@ -323,47 +323,47 @@ class _JoinGameState extends State<JoinGame> {
     }
   }
  
-  Future<List<Question>> _joinGame(code, user) async {
+  // Future<List<Question>> _joinGame(code, user) async {
 
-    setState(() {
-      progressDialog.show();
-    });
-    http.Response response = await http.post(
-      url,
-      headers: {'Accept': 'application/json'},
-      body: {"game_code": code, "user_name": user},
-    );
-    print('Params: $code $user');
-    print('Status Code Found: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      String data = response.body;
-      List decodedQuestions = jsonDecode(data)['data']['questions'];
+  //   setState(() {
+  //     progressDialog.show();
+  //   });
+  //   http.Response response = await http.post(
+  //     url,
+  //     headers: {'Accept': 'application/json'},
+  //     body: {"game_code": code, "user_name": user},
+  //   );
+  //   print('Params: $code $user');
+  //   print('Status Code Found: ${response.statusCode}');
+  //   if (response.statusCode == 200) {
+  //     String data = response.body;
+  //     List decodedQuestions = jsonDecode(data)['data']['questions'];
 
-      print(decodedQuestions);
-      setState(() {
-        progressDialog.hide();
+  //     print(decodedQuestions);
+  //     setState(() {
+  //       progressDialog.hide();
         
-      });
+  //     });
 
-      return decodedQuestions
-          .map((questions) => new QuestionModel.fromJson(questions))
-          .toList()
-            ..shuffle();
-    } else {
-      print('Error Code ${response.statusCode}');
-      String data = response.body;
-      print(data);
-      //   print('Error Ocurres: ${response.body}');
-      // String error = jsonDecode(data)['error'];
-      // print('Error Decoded: $error');
-      setState(() {
-        progressDialog.hide();
-      });
+  //     return decodedQuestions
+  //         .map((questions) => new QuestionModel.fromJson(questions))
+  //         .toList()
+  //           ..shuffle();
+  //   } else {
+  //     print('Error Code ${response.statusCode}');
+  //     String data = response.body;
+  //     print(data);
+  //     //   print('Error Ocurres: ${response.body}');
+  //     // String error = jsonDecode(data)['error'];
+  //     // print('Error Decoded: $error');
+  //     setState(() {
+  //       progressDialog.hide();
+  //     });
 
-      _showInSnackBar(jsonDecode(data)['error, invalid credentials'], Colors.red);
-      return List();
+  //     _showInSnackBar(jsonDecode(data)['error, invalid credentials'], Colors.red);
+  //     return List();
 
-    }
+  //   }
     
-  }
+  // }
 }
