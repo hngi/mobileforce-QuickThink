@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/create_game.dart';
+import 'package:quickthink/screens/dashboard.dart';
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'screens/login/view/login.dart';
@@ -47,14 +48,14 @@ class _MyAppState extends State<MyApp> {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         colorScheme: themeLight.colorScheme,
       ),
-      darkTheme: themeDark,
-      themeMode: currentTheme.currentTheme(),
+      // darkTheme: themeDark,
+      // themeMode: currentTheme.currentTheme(),
       initialRoute: onBoardCount == 0 || onBoardCount == null
           ? 'showOnBoardScreen'
           : 'showSplashPage',
       routes: {
-        'showOnBoardScreen': (context) => OnBoardScreen(),
-        'showSplashPage': (context) => SplashPage(),
+        'showOnBoardScreen': (context) => DashBoard(username: 'Dumebi',),
+        'showSplashPage': (context) => DashBoard(username: 'Dumebi',),
         Registration.id: (context) => Registration(),
         JoinGame.routeName: (context) => JoinGame(),
       },
