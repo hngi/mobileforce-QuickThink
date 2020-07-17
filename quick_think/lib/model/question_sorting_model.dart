@@ -229,7 +229,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               print(isPicked);
             });
 
-            Timer(Duration(milliseconds: 100), () {
+            Timer(Duration(milliseconds: 900), () {
               print('getUserPickedAnswer:$userAnswer');
 
               if (userAnswer.isNotEmpty && userAnswer != null) {
@@ -415,7 +415,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         resetTimer = true;
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
-          stopTimer = true;
+          
 
           IQEnds(
             totalScore: totalScore,
@@ -428,6 +428,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           ).showEndMsg(context);
 
           reset();
+          stopTimer = true;
         }
         nextQuestion();
       } else {
@@ -437,7 +438,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
-          stopTimer = true;
+          
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
@@ -452,6 +453,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           ).showEndMsg(context);
 
           reset();
+          stopTimer = true;
         }
         nextQuestion();
       }
