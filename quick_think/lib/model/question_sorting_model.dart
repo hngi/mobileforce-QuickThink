@@ -54,7 +54,7 @@ class _QuickThinkState extends State<QuickThink> {
             }
 
             return CustomQuestionView(
-                questionData: filteredQuestions, userName: widget.userName);
+                questionData: filteredQuestions, userName: widget.userName, gameCode: widget.gameCode,model: _fetchedQuestions);
 
           }
 
@@ -70,8 +70,9 @@ class CustomQuestionView extends StatefulWidget {
   final List<QuestionModel> questionData;
   final String userName;
   final String gameCode;
+  final FetchedQuestions model;
 
-  CustomQuestionView({this.questionData, this.userName,this.gameCode});
+  CustomQuestionView({this.questionData, this.userName,this.gameCode,this.model});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
@@ -163,6 +164,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
                 username: _userName,
                 message:
                     'Oops! You have run out of time, proceed to your result.',
+                gameCode: widget.gameCode
               ).showEndMsg(context);
               reset();
             }
@@ -229,7 +231,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               print(isPicked);
             });
 
-            Timer(Duration(milliseconds: 100), () {
+
+            Timer(Duration(milliseconds: 900), () {
+
               print('getUserPickedAnswer:$userAnswer');
 
               if (userAnswer.isNotEmpty && userAnswer != null) {
@@ -412,10 +416,11 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
       if (userResponse == correctAnswer) {
         incrementScore();
+        widget.model.updateScore(widget.model.userGameID);
         resetTimer = true;
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
-          stopTimer = true;
+          
 
           IQEnds(
             totalScore: totalScore,
@@ -423,11 +428,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             message:
                 'You have successfully completed the test proceed for the result',
 
-              //gameCode: widget.gameCode
+              gameCode: widget.gameCode
 
           ).showEndMsg(context);
 
           reset();
+          stopTimer = true;
         }
         nextQuestion();
       } else {
@@ -437,7 +443,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
-          stopTimer = true;
+          
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
@@ -447,11 +453,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             message:
                 'You have successfully completed the test proceed for the result',
 
-            //gameCode: widget.gameCode
+            gameCode: widget.gameCode
 
           ).showEndMsg(context);
 
           reset();
+          stopTimer = true;
         }
         nextQuestion();
       }
