@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quickthink/screens/create_category.dart';
 import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/create_question.dart';
+import 'package:quickthink/screens/created_categories.dart';
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'screens/login/view/login.dart';
@@ -58,7 +60,8 @@ class _MyAppState extends State<MyApp> {
         'showSplashPage': (context) => SplashPage(),
         Registration.id: (context) => Registration(),
         JoinGame.routeName: (context) => JoinGame(),
-        CreateQuestion.routeName: (context) => CreateQuestion()
+        CreateQuestion.routeName: (context) => CreateQuestion(),
+        CreatedCategories.routeName: (context) => CreatedCategories()
       },
     );
   }

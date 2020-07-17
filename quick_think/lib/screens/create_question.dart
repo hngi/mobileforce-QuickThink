@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
+import 'package:quickthink/screens/created_categories.dart';
 //import 'package:quickthink/utils/quizTimer.dart';
 
 class CreateQuestion extends StatefulWidget {
@@ -142,7 +143,9 @@ class _CreateQuestionState extends State<CreateQuestion> {
               letterSpacing: 0.5,
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, CreatedCategories.routeName);
+          },
         ),
       ),
     );
