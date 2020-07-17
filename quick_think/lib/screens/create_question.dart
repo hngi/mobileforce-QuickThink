@@ -4,6 +4,7 @@ import 'package:quickthink/model/question_sorting_model.dart';
 //import 'package:quickthink/utils/quizTimer.dart';
 
 class CreateQuestion extends StatefulWidget {
+  static const routeName = 'create_question.dart';
   @override
   _CreateQuestionState createState() => _CreateQuestionState();
 }
