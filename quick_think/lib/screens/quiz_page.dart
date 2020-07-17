@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
 import 'package:quickthink/utils/quizTimer.dart';
+import 'package:quickthink/screens/join_game.dart';
 
 class QuizPage extends StatefulWidget {
-  final String gameCode;final String userName;
+  final String gameCode;
+  final String userName;
   final int time;
 
-  QuizPage(
-      {Key key,
-      @required this.gameCode,
-      @required this.userName,
-      this.time,
-     });
+  QuizPage({
+    Key key,
+    @required this.gameCode,
+    @required this.userName,
+    this.time,
+  });
   @override
   _QuizPageState createState() => _QuizPageState();
 }
@@ -29,11 +31,7 @@ class _QuizPageState extends State<QuizPage> {
   String _numberOfQuestion;
 
   QuickThink _quickThink;
-  
 
-  
-
-  
   // @override
   // void dispose() {
   //   _quizTimer.cancel();
@@ -42,10 +40,10 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   void initState() {
-    _quickThink = QuickThink(gameCode: widget.gameCode,userName: widget.userName);
-    
-  
-   // _numberOfQuestion = widget.numberOfQuestions.toString();
+    _quickThink =
+        QuickThink(gameCode: widget.gameCode, userName: widget.userName);
+
+    // _numberOfQuestion = widget.numberOfQuestions.toString();
 
     // if (widget.difficultyLevel == 'Easy') {
     //   _quickThink = QuickThink(difficultyLevel: 'easy');
@@ -80,8 +78,6 @@ class _QuizPageState extends State<QuizPage> {
   //   return _marks;
   // }
 
-   
-
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
@@ -95,7 +91,11 @@ class _QuizPageState extends State<QuizPage> {
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
-    return Scaffold(
+    return WillPopScope(
+    onWillPop: () {
+      exitAlert(context);
+    },
+    child:Scaffold(
         backgroundColor: Color(0xFF1C1046),
         body: Stack(
           children: <Widget>[
@@ -107,7 +107,7 @@ class _QuizPageState extends State<QuizPage> {
             _quickThink,
             //_box(height, width, heightBox, widthBox),
           ],
-        ));
+        )));
   }
 
   Widget _container(double height, double width) {
@@ -131,7 +131,7 @@ class _QuizPageState extends State<QuizPage> {
       left: width * .06,
       child: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          exitAlert(context);
         },
         icon: Icon(
           Icons.arrow_back_ios,
@@ -140,6 +140,93 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ),
       ),
+    );
+  }
+
+  exitAlert(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(2)),
+              child: Container(
+                  height: 250,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only( bottom: 12.0, left: 20.0, right: 20.0),
+                        child: Text(
+                          'You’re leaving the game',
+                          style: style.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            fontStyle: FontStyle.normal,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 12.0, left: 20.0, right: 20.0),
+                        child: Text(
+                          'Are you sure you want to leave the game? all progress will be lost',
+                          style: style.copyWith(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontWeight: FontWeight.normal,
+                            fontStyle: FontStyle.normal,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 20.0, right: 20.0, top: 16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            actionButton(height, width, 'Yes', context,
+                                () {
+                              Navigator.pop(context);
+                              Navigator.of(context)
+                                  .pushReplacementNamed(JoinGame.routeName);
+                            }, Color(0xFFFF1F2E)),
+                            actionButton(height, width, 'No', context, () {
+                              Navigator.pop(context);
+                            }, Color(0xFF86EC88)),
+                          ],
+                        ),
+                      )
+                    ],
+                  )));
+        });
+  }
+
+  Container actionButton(double height, double width, String text,
+      BuildContext context, final onPressed, Color color) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: color,
+      ),
+      height: 48.0,
+      // width: .0,
+      child: FlatButton(
+          child: Text(
+            text,
+            style: style.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 16,
+              letterSpacing: 0.5,
+            ),
+          ),
+          onPressed: onPressed),
     );
   }
 
@@ -190,7 +277,6 @@ class _QuizPageState extends State<QuizPage> {
     );
   } */
 
-  
 }
 /*
   Widget _box(height, width, heightBox, widthBox) {

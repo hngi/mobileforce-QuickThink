@@ -231,7 +231,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               print(isPicked);
             });
 
+
             Timer(Duration(milliseconds: 900), () {
+
               print('getUserPickedAnswer:$userAnswer');
 
               if (userAnswer.isNotEmpty && userAnswer != null) {
