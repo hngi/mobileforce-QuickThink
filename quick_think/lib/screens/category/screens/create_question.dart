@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
@@ -37,7 +38,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
   TextEditingController option3Controller = TextEditingController();
   TextEditingController option4Controller = TextEditingController();
   List<bool> answers = [false, false, false, false];
-
+  String correctAnswer;
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -171,17 +172,28 @@ class _CreateQuestionState extends State<CreateQuestion> {
         onPressed: () {
           final form = formKey.currentState;
           if (form.validate()) {
-            form.save();
-            state.createQuestion(Questions(
-                category: categoryController.text,
-                question: questionController.text,
-                answer: '',
-                options: [
-                  option1Controller.text,
-                  option2Controller.text,
-                  option3Controller.text,
-                  option4Controller.text
-                ]));
+            if (correctAnswer != null) {
+              form.save();
+              state.createQuestion(Questions(
+                  category: categoryController.text,
+                  question: questionController.text,
+                  answer: correctAnswer,
+                  options: [
+                    option1Controller.text,
+                    option2Controller.text,
+                    option3Controller.text,
+                    option4Controller.text
+                  ]));
+                  categoryController.clear();
+                  questionController.clear();
+                  option1Controller.clear();
+                  option2Controller.clear();
+                  option3Controller.clear();
+                  option4Controller.clear();
+            } else {
+              Get.snackbar('error', 'Select an answer to the question',
+                  backgroundColor: Colors.red);
+            }
           }
           // Navigator.pushNamed(context, CreatedCategories.routeName);
         },
@@ -255,10 +267,11 @@ class _CreateQuestionState extends State<CreateQuestion> {
     return Padding(
       padding: const EdgeInsets.only(right: 70.0),
       child: TextFormField(
-        onTap: (){
+        onTap: () {
           setState(() {
+            correctAnswer = option1Controller.text;
             answers[0] = !answers[0];
-            answers[2] =false;
+            answers[2] = false;
             answers[1] = false;
             answers[3] = false;
           });
@@ -297,10 +310,11 @@ class _CreateQuestionState extends State<CreateQuestion> {
     return Padding(
       padding: const EdgeInsets.only(right: 70),
       child: TextFormField(
-        onTap: (){
+        onTap: () {
           setState(() {
+            correctAnswer = option2Controller.text;
             answers[1] = !answers[1];
-            answers[0] =false;
+            answers[0] = false;
             answers[3] = false;
             answers[2] = false;
           });
@@ -339,10 +353,11 @@ class _CreateQuestionState extends State<CreateQuestion> {
     return Padding(
       padding: EdgeInsets.only(right: 70),
       child: TextFormField(
-        onTap: (){
+        onTap: () {
           setState(() {
+            correctAnswer = option3Controller.text;
             answers[2] = !answers[2];
-            answers[0] =false;
+            answers[0] = false;
             answers[1] = false;
             answers[3] = false;
           });
@@ -364,7 +379,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
               //  fontSize: SizeConfig().textSize(context, 2),
               color: Color(0xff38208C)),
           contentPadding: EdgeInsets.fromLTRB(14.0, 12.0, 0.0, 12.0),
-         fillColor: answers[2] == false ? Colors.white : Colors.green,
+          fillColor: answers[2] == false ? Colors.white : Colors.green,
           filled: true,
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color(0xffC4C4C4)),
@@ -381,10 +396,11 @@ class _CreateQuestionState extends State<CreateQuestion> {
     return Padding(
       padding: EdgeInsets.only(right: 70),
       child: TextFormField(
-        onTap: (){
+        onTap: () {
           setState(() {
+            correctAnswer = option4Controller.text;
             answers[3] = !answers[3];
-            answers[0] =false;
+            answers[0] = false;
             answers[1] = false;
             answers[2] = false;
           });
