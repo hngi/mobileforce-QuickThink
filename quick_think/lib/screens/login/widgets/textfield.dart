@@ -8,11 +8,12 @@ import '../services/utils/loginUtil.dart';
 
 
 class TextFieldContainer extends StatelessWidget {
+  final bool obscure;
   final String text;
   final TextEditingController controller;
   final String Function(String) validator;
 
-  const TextFieldContainer({Key key, this.text, this.controller, this.validator}) : super(key: key);
+  const TextFieldContainer({Key key, this.text, this.controller, this.validator, this.obscure}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,12 +32,15 @@ class TextFieldContainer extends StatelessWidget {
           ),
           controller: controller,
           validator: validator,
+          obscureText: obscure,
           decoration: InputDecoration(
             labelText: text,
+            suffixIcon: obscure ? Icon(Icons.visibility) : SizedBox(),
             labelStyle: GoogleFonts.poppins(
               fontSize: SizeConfig().textSize(context, 2.2),
               color: Colors.white,
-              fontWeight: FontWeight.w500
+              fontWeight: FontWeight.w500,
+              
             )
           ),
         ),

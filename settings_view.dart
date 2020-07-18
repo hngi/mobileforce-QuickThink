@@ -1,32 +1,97 @@
-
-
+// import 'dart:html';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/config.dart';
-import 'package:quickthink/registration.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quickthink/screens/onboarding_screens/first_onboard_screen.dart';
 import 'package:http/http.dart' as http;
 
 class SettingsView extends StatefulWidget with WidgetsBindingObserver {
+
   @override
   _SettingsViewState createState() => _SettingsViewState();
 }
 
-void logOut(context) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs?.clear();
-  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => Registration()),
-    ModalRoute.withName('/showOnboardScreen'),);
+
+
+const bearerId = "Bearer 7b86a5d6955dd524e1250fd4d4a640e0f22a4ee8";
+Future logOut(String bearerId, BuildContext context) async{
+  var url = 'http://brainteaser.pythonanywhere.com/user/logout';
+  var response = await http.post(url, headers: {HttpHeaders.authorizationHeader: bearerId});
+  print('Response status: ${response.statusCode}');
+  print('Response body: ${response.body}');
+  if (response.statusCode == 200){
+    Navigator.pushAndRemoveUntil(context,
+    MaterialPageRoute(builder: (context) => OnBoardScreen()),
+    ModalRoute.withName(''));
+  }
+  else{
+    showError(context);
+  }
 }
 
-// Future<http.Response> delete(String id) async {
-//   final http.Response response = await http.delete(
-//     'https://jsonplaceholder.typicode.com/albums/$id',
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//   );
+void showError(context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(""),
+        content: Text("Error Logging Out!",
+        style: GoogleFonts.poppins(
+        textStyle: TextStyle(
+          color: Color(0xff1C1046),
+          fontWeight: FontWeight.w600,
+          fontSize: 18),)
+          ),
+        actions: <Widget>[
+          FlatButton(
+            padding: EdgeInsets.symmetric(horizontal: 41, vertical: 17),
+            shape: RoundedRectangleBorder(),
+            color: Color(0xff18C5D9),
+            onPressed: () {Navigator.of(context).pop();},
+            child: Text("Ok",
+            style: GoogleFonts.poppins(
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 18),),),
+          )
+        ]
+      ); 
+    },  );
+}
+
+void _showDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(""),
+        content: Text("Coming Soon!",
+        style: GoogleFonts.poppins(
+        textStyle: TextStyle(
+          color: Color(0xff1C1046),
+          fontWeight: FontWeight.w600,
+          fontSize: 18),)
+          ),
+        actions: <Widget>[
+          FlatButton(
+            padding: EdgeInsets.symmetric(horizontal: 41, vertical: 17),
+            shape: RoundedRectangleBorder(),
+            color: Color(0xff18C5D9),
+            onPressed: () {Navigator.of(context).pop();},
+            child: Text("Ok!",
+            style: GoogleFonts.poppins(
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 18),),),
+          )
+        ]
+      ); 
+    },  );
+}
   
 
 
@@ -124,7 +189,7 @@ class _SettingsViewState extends State<SettingsView> {
             ),
             SizedBox(height: 16,),
             InkWell(
-              onTap: () => logOut(context),
+              onTap: () => logOut,
               child: ListTile(
                 title: Text("Logout",
                 style: GoogleFonts.poppins(
@@ -138,13 +203,13 @@ class _SettingsViewState extends State<SettingsView> {
                 )
             ),
             InkWell(
-              onTap: (){}, //delete()
+              onTap: () => _showDialog(context), 
               child: ListTile(
                 title: Text("Delete account",
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                     fontSize: 14,
-                    color: Colors.white,
+                    color: Colors.white, 
                     letterSpacing: 2.0
                   )
                 ),),
@@ -157,3 +222,7 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 }
+
+
+
+

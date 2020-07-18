@@ -78,6 +78,9 @@ class _JoinGameState extends State<JoinGame> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              SizedBox(
+                height: SizeConfig().yMargin(context, 4),
+              ),
               _logoText(),
               SizedBox(
                 height: SizeConfig().yMargin(context, 10),
@@ -437,9 +440,9 @@ class _JoinGameState extends State<JoinGame> {
 
     return response;
   }
+ 
 
-  Future _joinGame(code, user) async {
-
+  Future<List<QuestionModel>> _joinGame(code, user) async {
     setState(() {
       progressDialog.show();
     });
