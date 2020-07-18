@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
+import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
 
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,17 +18,11 @@ class CreatedCategories extends StatefulHookWidget {
 
 class _CreatedCategoriesState extends State<CreatedCategories> {
   @override
-  void initState() {
-    ApiCallService().getUserCategory();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     final state = useProvider(apiState);
-    print(state.categoryList.length);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
@@ -40,7 +36,18 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 SizedBox(
-                  height: SizeConfig().yMargin(context, 10),
+                  height: SizeConfig().yMargin(context, 2),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    color: buttonColor,
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Get.back(),
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 4),
                 ),
                 _prompt(),
                 SizedBox(
@@ -65,7 +72,18 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                       itemBuilder: (context, index) {
                                         return _cards(
                                             game: snapshot.data[index]['name'],
-                                            onTap: () {});
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CreateQuestion(
+                                                              categoryName:
+                                                                  snapshot.data[
+                                                                          index]
+                                                                      [
+                                                                      'name'])));
+                                            });
                                       },
                                     )
                                   : Center(child: Text('No created category'))
