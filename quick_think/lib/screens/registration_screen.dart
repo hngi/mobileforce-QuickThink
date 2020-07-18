@@ -3,30 +3,32 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../view/test.dart';
-import '../../../utils/responsiveness.dart';
-import '../responsiveness/res.dart';
-import '../services/enum/enum.dart';
-import '../services/state/state.dart';
-import '../services/utils/loginUtil.dart';
-import '../widgets/textfield.dart';
-import '../services/utils/validators.dart';
-import '../widgets/button.dart';
-import '../widgets/quest.dart';
+import 'package:quickthink/screens/login/responsiveness/res.dart';
+import 'package:quickthink/screens/login/services/enum/enum.dart';
+import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
+import 'package:quickthink/screens/login/services/utils/validators.dart';
+import 'package:quickthink/screens/login/view/login.dart';
+import 'package:quickthink/screens/login/view/test.dart';
+import 'package:quickthink/screens/login/widgets/button.dart';
+import 'package:quickthink/screens/login/widgets/quest.dart';
+import 'package:quickthink/screens/login/widgets/textfield.dart';
+import 'package:quickthink/utils/responsiveness.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-final auth = ChangeNotifierProvider((_) => LoginState());
+//final auth = ChangeNotifierProvider((_) => LoginState());
 
-class LoginScreen extends StatefulHookWidget {
-  static const routeName = 'login.dart';
+class RegistrationScreen extends StatefulHookWidget {
+  static const routeName = 'registration_screen.dart';
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final usernameController = useTextEditingController();
+    final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
     final state = useProvider(auth);
     return Scaffold(
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Login to access your games',
+                  'Sign up to play cool games',
                   style: GoogleFonts.poppins(
                       color: Colors.white,
                       //fontWeight: FontWeight.w600,
@@ -78,8 +80,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: McGyver.rsDoubleH(context, 5)),
             TextFieldContainer(
-              text: 'Email',
+              text: 'Name',
               controller: usernameController,
+              validator: EmailValidator.validate,
+            ),
+            SizedBox(height: McGyver.rsDoubleH(context, 3)),
+            TextFieldContainer(
+              text: 'Email',
+              controller: emailController,
               validator: EmailValidator.validate,
             ),
             SizedBox(height: McGyver.rsDoubleH(context, 3)),
@@ -96,11 +104,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: buttonColor,
                         size: 30,
                       )
-                    : LoginButton(
+                    : SignUpButton(
                         onPressed: () {
                           state
-                              .login(
+                              .signup(
                             usernameController.text,
+                            emailController.text,
                             passwordController.text,
                           )
                               .then((value) {
@@ -111,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       )),
             SizedBox(height: McGyver.rsDoubleH(context, 3)),
-            Quest()
+            Quest2()
           ],
         ),
       ),
