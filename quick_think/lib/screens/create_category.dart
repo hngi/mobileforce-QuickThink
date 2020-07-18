@@ -3,6 +3,7 @@ import 'package:quickthink/screens/create_question.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 
 class CreateCategory extends StatefulWidget {
+  static const routeName = 'create_category';
   @override
   _CreateCategoryState createState() => _CreateCategoryState();
 }

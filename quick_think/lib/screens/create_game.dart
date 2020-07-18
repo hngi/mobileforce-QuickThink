@@ -25,6 +25,7 @@ import 'leaderboard.dart';
 const String fetchGameCode_Api = 'http://mohammedadel.pythonanywhere.com/game';
 
 class CreateGame extends StatefulWidget {
+  static const routeName = 'create_game';
   @override
   _CreateGameState createState() => _CreateGameState();
 }
@@ -669,7 +670,7 @@ class _CreateGameState extends State<CreateGame> {
     //   body: Stack(
     //
     showDialog(
-      barrierDismissible: false,
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return Dialog(

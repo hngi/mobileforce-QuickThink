@@ -18,6 +18,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 final auth = ChangeNotifierProvider((_) => LoginState());
 
 class LoginScreen extends StatefulHookWidget {
+  static const routeName = 'login.dart';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -69,15 +70,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   'Login to access your games',
                   style: GoogleFonts.poppins(
-                      color: Colors.white54,
-                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      //fontWeight: FontWeight.w600,
                       fontSize: SizeConfig().textSize(context, 2)),
                 ),
               ),
             ),
             SizedBox(height: McGyver.rsDoubleH(context, 5)),
             TextFieldContainer(
-              text: 'Username',
+              text: 'Email',
               controller: usernameController,
               validator: EmailValidator.validate,
             ),
@@ -91,7 +92,10 @@ class _LoginScreenState extends State<LoginScreen> {
             Align(
                 alignment: Alignment.center,
                 child: state.buttonState == ButtonState.Pressed
-                    ? SpinKitThreeBounce(color: buttonColor, size: 30,)
+                    ? SpinKitThreeBounce(
+                        color: buttonColor,
+                        size: 30,
+                      )
                     : LoginButton(
                         onPressed: () {
                           state
