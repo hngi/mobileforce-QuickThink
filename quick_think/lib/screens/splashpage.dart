@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/screens/login/view/login.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,7 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => JoinGame(),
+            builder: (context) => (DashboardScreen()),
           ),
         );
       } else {
@@ -41,7 +42,7 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => JoinGame(),
+            builder: (context) => DashboardScreen(),
           ),
         );
       }

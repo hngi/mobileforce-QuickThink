@@ -15,6 +15,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'create_question.dart';
 
 class CreateCategory extends StatefulHookWidget {
+  static const routeName = 'create_category';
   @override
   _CreateCategoryState createState() => _CreateCategoryState();
 }

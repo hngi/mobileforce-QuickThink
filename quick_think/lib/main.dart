@@ -8,6 +8,11 @@ import 'package:quickthink/screens/join_game.dart';
 import 'screens/category/screens/create_category.dart';
 import 'screens/category/screens/create_question.dart';
 import 'screens/category/screens/created_categories.dart';
+
+import 'package:quickthink/screens/help.dart';
+import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/screens/new_dashboard.dart';
+import 'package:quickthink/screens/registration_screen.dart';
 import 'screens/login/view/login.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
@@ -62,7 +67,11 @@ class _MyAppState extends State<MyApp> {
         Registration.id: (context) => Registration(),
         JoinGame.routeName: (context) => JoinGame(),
         CreateQuestion.routeName: (context) => CreateQuestion(),
-        CreatedCategories.routeName: (context) => CreatedCategories()
+        CreatedCategories.routeName: (context) => CreatedCategories(),
+        CreateCategory.routeName: (context) => CreateCategory(),
+        CreateGame.routeName: (context) => CreateGame(),
+        LoginScreen.routeName: (context) => LoginScreen(),
+        RegistrationScreen.routeName: (context) => RegistrationScreen()
       },
     );
   }
