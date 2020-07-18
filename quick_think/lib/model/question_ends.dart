@@ -10,12 +10,8 @@ class IQEnds {
 
   final String gameCode;
 
-<<<<<<< HEAD
-  IQEnds({this.message, this.username, this.totalScore,this.gameCode});
-=======
 
   IQEnds({this.username,this.message, this.totalScore,this.gameCode});
->>>>>>> 8250e253a4f7c78b98d1230d26da9f00ac21be95
 
 
   showEndMsg(context) {

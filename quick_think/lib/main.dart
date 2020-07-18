@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quickthink/screens/create_category.dart';
+
 import 'package:quickthink/screens/create_game.dart';
-<<<<<<< HEAD
-import 'package:quickthink/screens/dashboard.dart';
-=======
-import 'package:quickthink/screens/create_question.dart';
-import 'package:quickthink/screens/created_categories.dart';
->>>>>>> 8250e253a4f7c78b98d1230d26da9f00ac21be95
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/screens/join_game.dart';
+import 'screens/category/screens/create_category.dart';
+import 'screens/category/screens/create_question.dart';
+import 'screens/category/screens/created_categories.dart';
 import 'screens/login/view/login.dart';
 import 'screens/splashpage.dart';
 import 'screens/onboarding_screens/first_onboard_screen.dart';
@@ -60,8 +57,8 @@ class _MyAppState extends State<MyApp> {
           ? 'showOnBoardScreen'
           : 'showSplashPage',
       routes: {
-        'showOnBoardScreen': (context) => DashBoard(username: 'Dumebi',),
-        'showSplashPage': (context) => DashBoard(username: 'Dumebi',),
+        'showOnBoardScreen': (context) =>CreateCategory(),
+        'showSplashPage': (context) => CreateCategory(),
         Registration.id: (context) => Registration(),
         JoinGame.routeName: (context) => JoinGame(),
         CreateQuestion.routeName: (context) => CreateQuestion(),
