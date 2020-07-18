@@ -191,32 +191,35 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             borderRadius: BorderRadius.circular(5.0),
             color: Color(0xFFFFFFFF),
           ),
-          child: Stack(
-            children: <Widget>[
-              _progress(height, width),
-              //_nextButton(height, width, heightBox, widthBox),
-              _question(heightBox, widthBox),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 1000),
+            switchInCurve: Curves.easeIn,
+            switchOutCurve: Curves.easeOut,
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return ScaleTransition(child: child, scale: animation);
+            },
+            child: Stack(
+              key: ValueKey<int>(count),
+              children: <Widget>[
+                _progress(height, width),
+                //_nextButton(height, width, heightBox, widthBox),
+                _question(heightBox, widthBox),
 
-              Positioned(
+                Positioned(
                   top: heightBox * .26,
                   left: widthBox * .055,
                   right: widthBox * .055,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 800),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
-                      return ScaleTransition(child: child, scale: animation);
-                    },
-                    child: Column(
-                      key: ValueKey<int>(count),
-                      children: _options(),
-                    ),
-                  )),
-              // _optionOne(heightBox, widthBox),
-              // _optionTwo(heightBox, widthBox),
-              // _optionThree(heightBox, widthBox),
-              // _optionFour(heightBox, widthBox)
-            ],
+                  child: Column(
+                    children: _options(),
+                  ),
+                )
+                // ),
+                // _optionOne(heightBox, widthBox),
+                // _optionTwo(heightBox, widthBox),
+                // _optionThree(heightBox, widthBox),
+                // _optionFour(heightBox, widthBox)
+              ],
+            ),
           ),
         ));
   }
@@ -250,8 +253,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
                 count++;
                 isPicked = [false, false, false, false];
               }
-            }
-            );
+            });
           },
           child: Column(
             children: <Widget>[
