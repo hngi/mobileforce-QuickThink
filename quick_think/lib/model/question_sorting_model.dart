@@ -55,8 +55,10 @@ class _QuickThinkState extends State<QuickThink> {
             }
 
             return CustomQuestionView(
-                questionData: filteredQuestions, userName: widget.userName, gameCode: widget.gameCode,model: _fetchedQuestions);
-
+                questionData: filteredQuestions,
+                userName: widget.userName,
+                gameCode: widget.gameCode,
+                model: _fetchedQuestions);
           }
 
           return new Center(
@@ -73,7 +75,8 @@ class CustomQuestionView extends StatefulWidget {
   final String gameCode;
   final FetchedQuestions model;
 
-  CustomQuestionView({this.questionData, this.userName,this.gameCode,this.model});
+  CustomQuestionView(
+      {this.questionData, this.userName, this.gameCode, this.model});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
@@ -95,6 +98,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
   String userPickedAnswer;
   bool resetTimer = false;
   bool stopTimer = false;
+
+  int count = 0;
 
   String _userName;
 
@@ -173,26 +178,26 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
           callBackFunc: () {
             setState(() {
               if (isFinished() == false) {
-              /* setState(() {
+                /* setState(() {
                 
               }); */
+
               resetTimer = true;
               controller.reset();
              controller.forward();
+
                 nextQuestion();
-            } else {
-              IQEnds(
-                totalScore: totalScore,
-                username: _userName,
-                message:
-                    'Oops! You have run out of time, proceed to your result.',
-                gameCode: widget.gameCode
-              ).showEndMsg(context);
-              reset();
-            }
-            
+              } else {
+                IQEnds(
+                        totalScore: totalScore,
+                        username: _userName,
+                        message:
+                            'Oops! You have run out of time, proceed to your result.',
+                        gameCode: widget.gameCode)
+                    .showEndMsg(context);
+                reset();
+              }
             });
-            
           },
         ),
       ),
@@ -210,24 +215,35 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
             borderRadius: BorderRadius.circular(5.0),
             color: Color(0xFFFFFFFF),
           ),
-          child: Stack(
-            children: <Widget>[
-              _progress(height, width),
-              //_nextButton(height, width, heightBox, widthBox),
-              _question(heightBox, widthBox),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 1000),
+            switchInCurve: Curves.easeIn,
+            switchOutCurve: Curves.easeOut,
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return ScaleTransition(child: child, scale: animation);
+            },
+            child: Stack(
+              key: ValueKey<int>(count),
+              children: <Widget>[
+                _progress(height, width),
+                //_nextButton(height, width, heightBox, widthBox),
+                _question(heightBox, widthBox),
 
-              Positioned(
+                Positioned(
                   top: heightBox * .26,
                   left: widthBox * .055,
                   right: widthBox * .055,
                   child: Column(
                     children: _options(),
-                  )),
-              // _optionOne(heightBox, widthBox),
-              // _optionTwo(heightBox, widthBox),
-              // _optionThree(heightBox, widthBox),
-              // _optionFour(heightBox, widthBox)
-            ],
+                  ),
+                )
+                // ),
+                // _optionOne(heightBox, widthBox),
+                // _optionTwo(heightBox, widthBox),
+                // _optionThree(heightBox, widthBox),
+                // _optionFour(heightBox, widthBox)
+              ],
+            ),
           ),
         ));
   }
@@ -253,13 +269,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
               print(isPicked);
             });
 
-
-            Timer(Duration(milliseconds: 900), () {
-
+            Timer(Duration(milliseconds: 100), () {
               print('getUserPickedAnswer:$userAnswer');
 
               if (userAnswer.isNotEmpty && userAnswer != null) {
                 checkAnswer(userAnswer);
+                count++;
                 isPicked = [false, false, false, false];
               }
             });
@@ -270,10 +285,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: colorPickedAnswer()[i] ?
-                    isCorrect(userAnswer) ? Colors.green : Colors.red
-                        :
-                    Colors.white,
+                    color: colorPickedAnswer()[i]
+                        ? isCorrect(userAnswer) ? Colors.green : Colors.red
+                        : Colors.white,
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
@@ -420,12 +434,12 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
   //   );
   // }
 
-  bool isCorrect(String userResponse){
+  bool isCorrect(String userResponse) {
     bool correct = true;
     String correctAnswer = getCorrectAnswer();
-    if(userResponse == correctAnswer){
+    if (userResponse == correctAnswer) {
       return correct;
-    }else{
+    } else {
       return correct = false;
     }
   }
@@ -444,17 +458,13 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
         resetTimer = true;
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
-          
-
           IQEnds(
-            totalScore: totalScore,
-            username: _userName,
-            message:
-                'You have successfully completed the test proceed for the result',
-
-              gameCode: widget.gameCode
-
-          ).showEndMsg(context);
+                  totalScore: totalScore,
+                  username: _userName,
+                  message:
+                      'You have successfully completed the test proceed for the result',
+                  gameCode: widget.gameCode)
+              .showEndMsg(context);
 
           reset();
           stopTimer = true;
@@ -467,19 +477,15 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
 
         isPicked = [false, false, false, false];
         if (isFinished() == true) {
-          
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
           IQEnds(
-            totalScore: totalScore,
-            username: _userName,
-
-            message:
-                'You have successfully completed the test proceed for the result',
-
-            gameCode: widget.gameCode
-
-          ).showEndMsg(context);
+                  totalScore: totalScore,
+                  username: _userName,
+                  message:
+                      'You have successfully completed the test proceed for the result',
+                  gameCode: widget.gameCode)
+              .showEndMsg(context);
 
           reset();
           stopTimer = true;
