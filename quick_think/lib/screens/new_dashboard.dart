@@ -4,10 +4,16 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/screens/category/screens/create_category.dart';
+
+import 'package:quickthink/screens/create_game.dart';
+import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/screens/login/view/login.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/views/question_view.dart';
 import 'package:quickthink/screens/quiz_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'help.dart';
 
@@ -259,15 +265,13 @@ class _DashBoardState extends State<DashBoard> {
                               style: GoogleFonts.poppins(
                                   fontSize: SizeConfig().textSize(context, 3.2),
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w400)
-                                  ),
+                                  fontWeight: FontWeight.w400)),
                           TextSpan(
                               text: widget.username,
                               style: GoogleFonts.poppins(
                                   fontSize: SizeConfig().textSize(context, 3.2),
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold)
-                                  ),
+                                  fontWeight: FontWeight.bold)),
                           TextSpan(text: '\n'),
                           TextSpan(
                               text: "Glad you're back",
@@ -312,8 +316,18 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                       QuestionSelectionCard(
                         text: 'Join game',
-                        onPressed: () {
-                          //Navigate to Join Game Page
+                        onPressed: () async {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          final key = "username";
+                          final valueStored = pref.getString(key) ?? null;
+
+                          if (valueStored == null) {
+                            Navigator.pushNamed(context, LoginScreen.routeName);
+                          } else {
+                            //Navigate to Join Game Page
+                            Navigator.pushNamed(context, JoinGame.routeName);
+                          }
                         },
                         light: light,
                       ),
@@ -322,8 +336,18 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                       QuestionSelectionCard(
                         text: 'Create game',
-                        onPressed: () {
-                         //Navigate to Create Game Page
+                        onPressed: () async {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          final key = "username";
+                          final valueStored = pref.getString(key) ?? null;
+
+                          if (valueStored == null) {
+                            Navigator.pushNamed(context, LoginScreen.routeName);
+                          } else {
+                            //Navigate to Create Game Page
+                            Navigator.pushNamed(context, CreateGame.routeName);
+                          }
                         },
                         light: light,
                       ),
@@ -332,8 +356,19 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                       QuestionSelectionCard(
                         text: 'Create questions',
-                        onPressed: () {
-                          //Navigate to create questions page
+                        onPressed: () async {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          final key = "username";
+                          final valueStored = pref.getString(key) ?? null;
+
+                          if (valueStored == null) {
+                            Navigator.pushNamed(context, LoginScreen.routeName);
+                          } else {
+                            //Navigate to create questions page
+                            Navigator.pushNamed(
+                                context, CreateCategory.routeName);
+                          }
                         },
                         light: light,
                       ),

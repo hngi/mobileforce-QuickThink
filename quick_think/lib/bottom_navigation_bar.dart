@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickthink/screens/leaderboard.dart';
+import 'package:quickthink/screens/new_dashboard.dart';
 import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
-import 'package:quickthink/screens/dashboard.dart';
+//import 'package:quickthink/screens/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 /* void main() => runApp(new BottomNavBar());
 
