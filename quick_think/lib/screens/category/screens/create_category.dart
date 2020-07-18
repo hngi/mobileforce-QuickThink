@@ -64,7 +64,9 @@ class _CreateCategoryState extends State<CreateCategory> {
                 Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    onTap: () {Get.to(CreatedCategories());},
+                    onTap: () {
+                      Get.to(CreatedCategories());
+                    },
                     child: Text(
                       'View Categories',
                       style: GoogleFonts.poppins(

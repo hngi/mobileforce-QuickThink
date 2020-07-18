@@ -8,6 +8,7 @@ import 'package:quickthink/model/question_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickthink/utils/quizTimer.dart';
 
+
 class QuickThink extends StatefulWidget {
   final String gameCode;
   final String userName;
@@ -78,7 +79,7 @@ class CustomQuestionView extends StatefulWidget {
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
 }
 
-class _CustomQuestionViewState extends State<CustomQuestionView> {
+class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTickerProviderStateMixin{
   QuickThink quickThink;
 
   String userAnswer;
@@ -97,6 +98,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
   String _userName;
 
+  AnimationController controller;
+  
   List<bool> isPicked = [false, false, false, false];
 
   var style = GoogleFonts.poppins(
@@ -122,11 +125,28 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
     //quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
 
+     controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1)
+      );
+
+      
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    controller.forward();
+
+      controller.addListener(() {
+        setState(() {
+          
+        });
+      });
+    
+
+   
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
@@ -157,6 +177,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
                 
               }); */
               resetTimer = true;
+              controller.reset();
+             controller.forward();
                 nextQuestion();
             } else {
               IQEnds(
@@ -410,8 +432,10 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
 
   void checkAnswer(String option) {
     String correctAnswer = getCorrectAnswer();
-
+    
     setState(() {
+      controller.reset();
+      controller.forward();
       userResponse = option;
 
       if (userResponse == correctAnswer) {
@@ -473,7 +497,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
       child: Text(
         getQuestionText(),
         style: GoogleFonts.poppins(
-          color: Color(0xFF38208C),
+          color: Color(0xFF38208C).withOpacity(controller.value),
           fontSize: 20,
           fontWeight: FontWeight.bold,
           fontStyle: FontStyle.normal,
@@ -483,6 +507,25 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
       ),
     );
   }
+
+
+/* child: TextLiquidFill(
+        speed: ,
+        text: getQuestionText(),
+        boxBackgroundColor: Colors.white,
+        waveColor: Color(0xFF38208C),
+        textStyle: GoogleFonts.poppins(
+          // color: Color(0xFF38208C),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.normal,
+          // fontWeight: FontWeight.w500,
+        ),
+        // textAlign: TextAlign.justify,
+      ), */
+
+
+
 
   void nextQuestion() {
     if (_questionNumber < _questionBank.length - 1) {
