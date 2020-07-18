@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quickthink/screens/category/screens/create_category.dart';
-import 'package:quickthink/screens/category/screens/create_question.dart';
-import 'package:quickthink/screens/category/screens/created_categories.dart';
 
 import 'package:quickthink/screens/create_game.dart';
+import 'package:quickthink/screens/help.dart';
+import 'package:quickthink/screens/join_game.dart';
+import 'screens/category/screens/create_category.dart';
+import 'screens/category/screens/create_question.dart';
+import 'screens/category/screens/created_categories.dart';
 
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/screens/join_game.dart';
@@ -57,7 +59,7 @@ class _MyAppState extends State<MyApp> {
       // darkTheme: themeDark,
       // themeMode: currentTheme.currentTheme(),
       initialRoute: onBoardCount == 0 || onBoardCount == null
-          ? 'showSplashPage'
+          ? 'showOnBoardScreen'
           : 'showSplashPage',
       routes: {
         'showOnBoardScreen': (context) => OnBoardScreen(),
