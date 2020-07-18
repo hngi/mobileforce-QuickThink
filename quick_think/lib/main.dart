@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: themeDark,
       themeMode: currentTheme.currentTheme(),
       initialRoute: onBoardCount == 0 || onBoardCount == null
-          ? 'showOnBoardScreen'
+          ? 'showSplashPage'
           : 'showSplashPage',
       routes: {
         'showOnBoardScreen': (context) => OnBoardScreen(),
