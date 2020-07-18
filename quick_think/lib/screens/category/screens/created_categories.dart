@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
 import 'package:quickthink/screens/category/services/utils/animations.dart';
@@ -67,7 +68,7 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                             return Container();
                           }
                           return snapshot.hasData
-                              ? snapshot.data.length != null
+                              ? snapshot.data.isNotEmpty
                                   ? ListView.builder(
                                       itemCount: snapshot.data.length,
                                       itemBuilder: (context, index) {
@@ -91,7 +92,12 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                         );
                                       },
                                     )
-                                  : Center(child: Text('No created category'))
+                                  : Center(
+                                      child: Text(
+                                      'No created category',
+                                      style: GoogleFonts.poppins(
+                                          color: buttonColor, fontSize: SizeConfig().textSize(context, 2.8)),
+                                    ))
                               : Center(child: CircularProgressIndicator());
                         }))
                 // _cards(),

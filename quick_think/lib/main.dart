@@ -62,8 +62,8 @@ class _MyAppState extends State<MyApp> {
           ? 'showOnBoardScreen'
           : 'showSplashPage',
       routes: {
-        'showOnBoardScreen': (context) =>CreateCategory(),
-        'showSplashPage': (context) => CreateCategory(),
+        'showOnBoardScreen': (context) => OnBoardScreen(),
+        'showSplashPage': (context) => SplashPage(),
         Registration.id: (context) => Registration(),
         JoinGame.routeName: (context) => JoinGame(),
         CreateQuestion.routeName: (context) => CreateQuestion(),

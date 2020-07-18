@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       body: new PageView(
         children: [
-          new DashBoard(username: userName, uri: uri),
+          new DashBoard(uri: uri),
           new NewLeaderBoard(),
           new SettingsView(),
         ],
