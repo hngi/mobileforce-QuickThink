@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quickthink/screens/category/screens/created_categories.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 import 'package:quickthink/screens/login/services/enum/enum.dart';
@@ -35,7 +38,18 @@ class _CreateCategoryState extends State<CreateCategory> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 SizedBox(
-                  height: SizeConfig().yMargin(context, 10),
+                  height: SizeConfig().yMargin(context, 2),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    color: buttonColor,
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Get.back(),
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 4),
                 ),
                 _prompt(),
                 _form(controller),
@@ -45,6 +59,19 @@ class _CreateCategoryState extends State<CreateCategory> {
                         color: buttonColor,
                         size: 30,
                       ),
+                SizedBox(height: SizeConfig().yMargin(context, 3)),
+                Align(
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {Get.to(CreatedCategories());},
+                    child: Text(
+                      'View Categories',
+                      style: GoogleFonts.poppins(
+                          color: buttonColor,
+                          fontSize: SizeConfig().textSize(context, 2.6)),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -96,7 +123,7 @@ class _CreateCategoryState extends State<CreateCategory> {
       controller: controller,
       validator: (val) {
         if (val.length == 0) {
-          return 'Username Should Not Be Empty';
+          return 'Field Should Not Be Empty';
         }
         if (val.length <= 2) {
           return 'should be 3 or more characters';

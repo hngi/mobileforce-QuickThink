@@ -92,9 +92,6 @@ class ApiCallService with ChangeNotifier {
           _list.add(CategoryGame(
               game: listt[i]['name'], userID: listt[i]['user'].toString()));
         }
-        _category = _list;
-        print(_category.length);
-        notifyListeners();
         return listt;
       } else {
         print(response.statusCode);
