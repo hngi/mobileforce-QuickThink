@@ -4,7 +4,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:quickthink/screens/create_category.dart';
+import 'package:quickthink/screens/category/screens/create_category.dart';
+
 import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/login/view/login.dart';
@@ -322,8 +323,7 @@ class _DashBoardState extends State<DashBoard> {
                           final valueStored = pref.getString(key) ?? null;
 
                           if (valueStored == null) {
-                            Navigator.pushReplacementNamed(
-                                context, LoginScreen.routeName);
+                            Navigator.pushNamed(context, LoginScreen.routeName);
                           } else {
                             //Navigate to Join Game Page
                             Navigator.pushNamed(context, JoinGame.routeName);
@@ -343,8 +343,7 @@ class _DashBoardState extends State<DashBoard> {
                           final valueStored = pref.getString(key) ?? null;
 
                           if (valueStored == null) {
-                            Navigator.pushReplacementNamed(
-                                context, LoginScreen.routeName);
+                            Navigator.pushNamed(context, LoginScreen.routeName);
                           } else {
                             //Navigate to Create Game Page
                             Navigator.pushNamed(context, CreateGame.routeName);
@@ -364,8 +363,7 @@ class _DashBoardState extends State<DashBoard> {
                           final valueStored = pref.getString(key) ?? null;
 
                           if (valueStored == null) {
-                            Navigator.pushReplacementNamed(
-                                context, LoginScreen.routeName);
+                            Navigator.pushNamed(context, LoginScreen.routeName);
                           } else {
                             //Navigate to create questions page
                             Navigator.pushNamed(

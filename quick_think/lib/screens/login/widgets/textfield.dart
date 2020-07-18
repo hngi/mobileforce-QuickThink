@@ -5,40 +5,33 @@ import '../../../utils/responsiveness.dart';
 import '../responsiveness/res.dart';
 import '../services/utils/loginUtil.dart';
 
-
-
 class TextFieldContainer extends StatelessWidget {
   final String text;
   final TextEditingController controller;
   final String Function(String) validator;
 
-  const TextFieldContainer({Key key, this.text, this.controller, this.validator}) : super(key: key);
+  const TextFieldContainer(
+      {Key key, this.text, this.controller, this.validator})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       decoration: BoxDecoration(
-        color: textFieldColor,
-        borderRadius: BorderRadius.circular(10)
-      ),
+          color: textFieldColor, borderRadius: BorderRadius.circular(10)),
       // height: McGyver.rsDoubleH(context, 100),
       width: McGyver.rsDoubleW(context, 85),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: TextFormField(
-          style: GoogleFonts.poppins(
-            color: Colors.white
-          ),
+          style: GoogleFonts.poppins(color: Colors.white),
           controller: controller,
           validator: validator,
           decoration: InputDecoration(
-            labelText: text,
-            labelStyle: GoogleFonts.poppins(
-              fontSize: SizeConfig().textSize(context, 2.2),
-              color: Colors.white,
-              fontWeight: FontWeight.w500
-            )
-          ),
+              labelText: text,
+              labelStyle: GoogleFonts.poppins(
+                  fontSize: SizeConfig().textSize(context, 2.2),
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500)),
         ),
       ),
     );
