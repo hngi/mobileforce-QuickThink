@@ -15,6 +15,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'create_question.dart';
 
 class CreateCategory extends StatefulHookWidget {
+  static const routeName = 'create_category';
   @override
   _CreateCategoryState createState() => _CreateCategoryState();
 }
@@ -63,7 +64,9 @@ class _CreateCategoryState extends State<CreateCategory> {
                 Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    onTap: () {Get.to(CreatedCategories());},
+                    onTap: () {
+                      Get.to(CreatedCategories());
+                    },
                     child: Text(
                       'View Categories',
                       style: GoogleFonts.poppins(

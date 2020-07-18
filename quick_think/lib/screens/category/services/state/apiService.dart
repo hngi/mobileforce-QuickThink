@@ -73,7 +73,6 @@ class ApiCallService with ChangeNotifier {
   }
 
   Future<List> getUserCategory() async {
-    setState(ButtonState.Pressed);
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     if (token != null) {
@@ -84,7 +83,6 @@ class ApiCallService with ChangeNotifier {
       };
       Response response = await http.get(getUsersCategory, headers: headers);
       if (response.statusCode == 200) {
-        setState(ButtonState.Idle);
         final Map list = json.decode(response.body);
         final List listt = list['data'];
         List<CategoryGame> _list = [];
@@ -95,7 +93,6 @@ class ApiCallService with ChangeNotifier {
         return listt;
       } else {
         print(response.statusCode);
-        setState(ButtonState.Idle);
         // SnackBarService.instance.showSnackBarError('Server Error. Try again');
         return null;
       }
@@ -141,6 +138,35 @@ class ApiCallService with ChangeNotifier {
       setState(ButtonState.Idle);
       SnackBarService.instance.showSnackBarError('Server Error. Try again');
       return null;
+    }
+    return null;
+  }
+
+  Future<String> logout() async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Response response = await http.post(logoutUrl, headers: headers);
+      if (response.statusCode == 200) {
+        setState(ButtonState.Idle);
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString('token', null);
+        pref.setString('username', null);
+        final Map list = json.decode(response.body);
+        final listt = list['data'];
+        return listt;
+      } else {
+        print(response.statusCode);
+        setState(ButtonState.Idle);
+        SnackBarService.instance.showSnackBarError('Server Error. Try again');
+        return null;
+      }
     }
     return null;
   }
