@@ -607,7 +607,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
 
   _textTitle(height, width) {
     return Text(
-      ' Create question',
+      '${widget.categoryName} category',
       style: GoogleFonts.poppins(
         color: Color(0xFFFFFFFF),
         fontSize: 20,

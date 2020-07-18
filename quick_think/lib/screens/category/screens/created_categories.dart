@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
+import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
 
 import 'package:quickthink/utils/responsiveness.dart';
@@ -70,20 +71,24 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                   ? ListView.builder(
                                       itemCount: snapshot.data.length,
                                       itemBuilder: (context, index) {
-                                        return _cards(
-                                            game: snapshot.data[index]['name'],
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CreateQuestion(
-                                                              categoryName:
-                                                                  snapshot.data[
-                                                                          index]
-                                                                      [
-                                                                      'name'])));
-                                            });
+                                        return FadeIn(
+                                          delay: index - 0.3,
+                                          child: _cards(
+                                              game: snapshot.data[index]
+                                                  ['name'],
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CreateQuestion(
+                                                                categoryName:
+                                                                    snapshot.data[
+                                                                            index]
+                                                                        [
+                                                                        'name'])));
+                                              }),
+                                        );
                                       },
                                     )
                                   : Center(child: Text('No created category'))
