@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:quickthink/model/new_questions_model.dart';
@@ -15,6 +18,7 @@ import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
 
 const String url = 'http://mohammedadel.pythonanywhere.com/game/play';
+const String checkUrl = 'http://brainteaser.pythonanywhere.com/game/user/play/check';
 
 class JoinGame extends StatefulWidget {
   static const routeName = 'join-game';
@@ -313,17 +317,128 @@ class _JoinGameState extends State<JoinGame> {
       if (responseFromFunction != null) {
        
       } */
-       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (o) => QuizPage(
-                    gameCode: gameCode.text,
-                    userName: username.text,
-                  )));
+      progressDialog.show();
+
+      await _joiningGame(gameCode.text, username.text).then(
+              (response) {
+                  if(response.statusCode == 200){
+                    progressDialog.hide();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (o) => QuizPage(
+                              gameCode: gameCode.text,
+                              userName: username.text,
+                            )));
+                  }else if (response.statusCode == 400){
+                    progressDialog.hide();
+                    setState(() {
+                      showError(json.decode(response.body)['error']);
+                    });
+                  }else{
+                    progressDialog.hide();
+                    setState(() {
+                      showError("Oops! Cannot join game at this time \n Try again later");
+                    });
+                  }
+              }
+      );
+
     }
   }
- 
-  Future<List<Question>> _joinGame(code, user) async {
+
+  Future showError(String error){
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context){
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        child: Container(
+          height: height * .4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 20.0,bottom: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(left: 50.0),
+                        child: Icon(
+                          FlutterIcons.alert_circle_mco,
+                          color: Hexcolor('#FF1F2E'),
+                          size: 36.0,
+                        ),
+                      ),
+                    SizedBox(width: 10.0),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "Wait a Minute!",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24.0,
+                            color: Hexcolor('#1C1046')),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                child: SingleChildScrollView(
+                  child: Text(
+                    error,
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 22.0,
+                        letterSpacing: 1.0,
+                        color: Hexcolor('#1C1046')),
+                  ),
+                ),
+              ),
+              SizedBox(height: 50.0),
+              RaisedButton(
+                padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                color: Hexcolor('#18C5D9'),
+                child: Text('Join new game',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20.0,
+                        color: Colors.white)),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        ),
+      );
+      }
+    );
+  }
+
+  Future<http.Response> _joiningGame(code,user) async {
+
+    http.Response response = await http.post(
+      checkUrl,
+      headers: {'Accept': 'application/json'},
+      body: {"game_code": code, "user_name": user},
+    );
+
+    return response;
+  }
+
+  Future _joinGame(code, user) async {
 
     setState(() {
       progressDialog.show();
