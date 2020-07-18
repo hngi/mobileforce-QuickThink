@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/screens/join_game.dart';
 
@@ -133,7 +134,7 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
 
 Route _createRoute() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => JoinGame(),
+    pageBuilder: (context, animation, secondaryAnimation) => DashboardScreen(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
       var end = Offset.zero;
