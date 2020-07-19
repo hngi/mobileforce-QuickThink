@@ -65,9 +65,18 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: <Widget>[
-                                            _roundContainer('2', model.listUsers[1].name, light),
-                                            _roundContainer1(model.listUsers[0].name, light),
-                                            _roundContainer('3', model.listUsers[2].name, light)
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer('2', model.listUsers[1].name, light)
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer1(model.listUsers[0].name, light)
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer('3', model.listUsers[2].name, light)
+                                            )
                                           ],
                                         )
                                   )
