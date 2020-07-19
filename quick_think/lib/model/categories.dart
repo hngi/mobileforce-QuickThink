@@ -22,7 +22,7 @@ class Services {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
-      String url = 'http://mohammedadel.pythonanywhere.com/game/category';
+      String url = 'http://brainteaser.pythonanywhere.com/game/category';
       http.Response response = await http.get(
         url,
         headers: headers,
