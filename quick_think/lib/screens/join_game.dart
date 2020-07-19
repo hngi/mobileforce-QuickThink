@@ -17,7 +17,7 @@ import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
 
-const String url = 'http://mohammedadel.pythonanywhere.com/game/play';
+const String url = 'http://brainteaser.pythonanywhere.com/game/play';
 const String checkUrl = 'http://brainteaser.pythonanywhere.com/game/user/play/check';
 
 class JoinGame extends StatefulWidget {
@@ -463,8 +463,8 @@ class _JoinGameState extends State<JoinGame> {
         
       });
 
-       decodedQuestions
-          .map((questions) => new Question.fromJson(questions))
+      return decodedQuestions
+          .map((questions) => new QuestionModel.fromJson(questions))
           .toList()
             ..shuffle();
     } else {
