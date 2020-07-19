@@ -463,7 +463,7 @@ class _JoinGameState extends State<JoinGame> {
         
       });
 
-      return decodedQuestions
+       decodedQuestions
           .map((questions) => new Question.fromJson(questions))
           .toList()
             ..shuffle();
