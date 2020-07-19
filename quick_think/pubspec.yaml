@@ -31,13 +31,18 @@ dependencies:
   flutter_icons: ^1.1.0
   flutter_svg: ^0.17.4
   progress_dialog: ^1.2.4
-  device_preview: ^0.4.5
- 
+  flushbar: ^1.10.4
+  clipboard: ^0.1.2+8
+  hooks_riverpod:
+  get:
+  device_preview:
+  simple_animations:
+  supercharged:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
-  image_picker: ^0.6.7+2
+  #image_picker: ^0.6.7+2
   flutter_spinkit: 4.1.2+1
 
 dev_dependencies:
@@ -53,8 +58,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  
-    
 
   assets:
     - assets/images/phone_icon.png
@@ -78,10 +81,6 @@ flutter:
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins-Regular.ttf
-        
-  
-        
-        
   #fonts:
   #  - family: Poppins
   #    fonts:

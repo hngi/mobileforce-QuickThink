@@ -1,18 +1,20 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/model/question_sorting_model.dart';
+import 'package:quickthink/utils/quizTimer.dart';
+import 'package:quickthink/screens/join_game.dart';
 
 class QuizPage extends StatefulWidget {
-  final String difficultyLevel;
-  final int numberOfQuestions;
+  final String gameCode;
+  final String userName;
   final int time;
 
-  QuizPage(
-      {Key key,
-      @required this.difficultyLevel,
-      this.numberOfQuestions,
-      this.time});
+  QuizPage({
+    Key key,
+    @required this.gameCode,
+    @required this.userName,
+    this.time,
+  });
   @override
   _QuizPageState createState() => _QuizPageState();
 }
@@ -22,53 +24,59 @@ class _QuizPageState extends State<QuizPage> {
   int _quizDuration = 0;
   int _marks = 0;
   bool _correctAnswer;
-  Timer _quizTimer;
 
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _quizTimer = new Timer.periodic(
-      oneSec,
-      (Timer timer) => setState(
-        () {
-          if (_quizDuration < 1) {
-            timer.cancel();
-          } else {
-            _quizDuration = _quizDuration - 1;
-            print('the time is $_quizDuration');
-          }
-        },
-      ),
-    );
-  }
+  String userResponse;
+  String userAnswer;
+  String _difficultyLevel;
+  String _numberOfQuestion;
+
+  QuickThink _quickThink;
+
+  // @override
+  // void dispose() {
+  //   _quizTimer.cancel();
+  //   super.dispose();
+  // }
 
   @override
   void initState() {
-    if (widget.difficultyLevel == 'Easy') {
-      setState(() {
-        _quizDuration = 60;
-        _quizMark = 1;
-      });
-    } else if (widget.difficultyLevel == 'Average') {
-      setState(() {
-        _quizDuration = 45;
-        _quizMark = 2;
-      });
-    } else if (widget.difficultyLevel == 'Hard') {
-      setState(() {
-        _quizDuration = 30;
-        _quizMark = 3;
-      });
-    }
-    startTimer();
+    _quickThink =
+        QuickThink(gameCode: widget.gameCode, userName: widget.userName);
+
+    // _numberOfQuestion = widget.numberOfQuestions.toString();
+
+    // if (widget.difficultyLevel == 'Easy') {
+    //   _quickThink = QuickThink(difficultyLevel: 'easy');
+    //   setState(() {
+    //     _difficultyLevel = 'easy';
+    //     _quizDuration = 60;
+    //     _quizMark = 1;
+    //   });
+    // } else if (widget.difficultyLevel == 'Average') {
+    //   _quickThink = QuickThink(difficultyLevel: 'medium');
+    //   setState(() {
+    //     _difficultyLevel = 'medium';
+    //     _quizDuration = 45;
+    //     _quizMark = 2;
+    //   });
+    // } else if (widget.difficultyLevel == 'Hard') {
+    //   _quickThink = QuickThink(difficultyLevel: 'hard');
+    //   setState(() {
+    //     _difficultyLevel = 'hard';
+    //     _quizDuration = 30;
+    //     _quizMark = 3;
+    //   });
+    // }
+    // startTimer();
     super.initState();
   }
 
-  int getTotalMarks() {
-    for (int i = 0; i <= widget.numberOfQuestions; i++) {
-      _correctAnswer ? _marks += _quizMark : _marks = _marks;
-    }
-    return _marks;
-  }
+  // int getTotalMarks() {
+  //   for (int i = 0; i <= widget.numberOfQuestions; i++) {
+  //     _correctAnswer ? _marks += _quizMark : _marks = _marks;
+  //   }
+  //   return _marks;
+  // }
 
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
@@ -83,18 +91,23 @@ class _QuizPageState extends State<QuizPage> {
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
-    return Scaffold(
+    return WillPopScope(
+    onWillPop: () {
+      exitAlert(context);
+    },
+    child:Scaffold(
         backgroundColor: Color(0xFF1C1046),
         body: Stack(
           children: <Widget>[
             _backIcon(height, width),
-            _category(height, width),
-            _textTitle(height, width),
-            _timer(height, width),
-            _progress(height, width),
-            _box(height, width, heightBox, widthBox),
+            // _category(height, width),
+            // _textTitle(height, width),
+            // _timer(height, width),
+            //_progress(height, width),
+            _quickThink,
+            //_box(height, width, heightBox, widthBox),
           ],
-        ));
+        )));
   }
 
   Widget _container(double height, double width) {
@@ -118,7 +131,7 @@ class _QuizPageState extends State<QuizPage> {
       left: width * .06,
       child: IconButton(
         onPressed: () {
-          Navigator.pop(context);
+          exitAlert(context);
         },
         icon: Icon(
           Icons.arrow_back_ios,
@@ -130,80 +143,146 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  Widget _category(height, width) {
+  exitAlert(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(2)),
+              child: Container(
+                  height: 250,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only( bottom: 12.0, left: 20.0, right: 20.0),
+                        child: Text(
+                          'You’re leaving the game',
+                          style: style.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            fontStyle: FontStyle.normal,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 12.0, left: 20.0, right: 20.0),
+                        child: Text(
+                          'Are you sure you want to leave the game? all progress will be lost',
+                          style: style.copyWith(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontWeight: FontWeight.normal,
+                            fontStyle: FontStyle.normal,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 20.0, right: 20.0, top: 16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            actionButton(height, width, 'Yes', context,
+                                () {
+                              Navigator.pop(context);
+                              Navigator.of(context)
+                                  .pushReplacementNamed(JoinGame.routeName);
+                            }, Color(0xFFFF1F2E)),
+                            actionButton(height, width, 'No', context, () {
+                              Navigator.pop(context);
+                            }, Color(0xFF86EC88)),
+                          ],
+                        ),
+                      )
+                    ],
+                  )));
+        });
+  }
+
+  Container actionButton(double height, double width, String text,
+      BuildContext context, final onPressed, Color color) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: color,
+      ),
+      height: 48.0,
+      // width: .0,
+      child: FlatButton(
+          child: Text(
+            text,
+            style: style.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 16,
+              letterSpacing: 0.5,
+            ),
+          ),
+          onPressed: onPressed),
+    );
+  }
+
+  // Widget _category(height, width) {
+  //   return Positioned(
+  //     top: height * .10,
+  //     left: width * .496,
+  //     child: FlatButton(
+  //       color: Color(0xFF574E76),
+  //       onPressed: () {},
+  //       child: Text(
+  //         widget.difficultyLevel,
+  //         style: GoogleFonts.poppins(
+  //           color: Color(0xFF86EC88),
+  //           fontSize: 16,
+  //           fontStyle: FontStyle.normal,
+  //           fontWeight: FontWeight.w500,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget _textTitle(height, width) {
+  //   return Positioned(
+  //       top: height * .12,
+  //       left: width * .075,
+  //       child: Text(
+  //         widget.numberOfQuestions.toString() + ' Questions',
+  //         style: GoogleFonts.poppins(
+  //           color: Color(0xFFFFFFFF),
+  //           fontSize: 20,
+  //           fontStyle: FontStyle.normal,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ));
+  // }
+
+  /* Widget _timer(height, width) {
     return Positioned(
       top: height * .10,
-      left: width * .4,
+      left: width * .75,
       child: FlatButton(
         color: Color(0xFF574E76),
         onPressed: () {},
-        child: Text(
-          widget.difficultyLevel,
-          style: GoogleFonts.poppins(
-            color: Color(0xFF86EC88),
-            fontSize: 16,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        child:timerQuiz,
       ),
     );
-  }
+  } */
 
-  Widget _textTitle(height, width) {
-    return Positioned(
-        top: height * .12,
-        left: width * .075,
-        child: Text(
-          widget.numberOfQuestions.toString() + ' Questions',
-          style: GoogleFonts.poppins(
-            color: Color(0xFFFFFFFF),
-            fontSize: 20,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.bold,
-          ),
-        ));
-  }
-
-  Widget _timer(height, width) {
-    return Positioned(
-      top: height * 0.1,
-      left: width * .63,
-      child: FlatButton(
-        color: Color(0xFF574E76),
-        onPressed: () {},
-        child: Text(
-          '00 : ' + _quizDuration.toString().padLeft(3, '0'),
-          style: GoogleFonts.poppins(
-            color: Color(0xFFFFFFFF),
-            fontSize: 16,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _progress(height, width) {
-    return Positioned(
-        top: height * .17,
-        left: width * .064,
-        child: Text(
-          'Question 1 of ' + widget.numberOfQuestions.toString(),
-          style: GoogleFonts.poppins(
-            color: Color(0xFFFFFFFF),
-            fontSize: 16,
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w500,
-          ),
-        ));
-  }
-
+}
+/*
   Widget _box(height, width, heightBox, widthBox) {
     return Positioned(
-        top: height * .22,
-        bottom: height * 0,
+        top: height * .28,
+        bottom: height * .11,
         left: width * .064,
         right: width * .064,
         child: Container(
@@ -270,8 +349,8 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _nextButton(height, width, heightBox, widthBox) {
     return Positioned(
-      top: heightBox * .90,
-      left: widthBox * .4,
+      top: heightBox * .89,
+      left: widthBox * .58,
       right: widthBox * .0,
       bottom: heightBox * .0,
       child: Container(
@@ -279,7 +358,7 @@ class _QuizPageState extends State<QuizPage> {
           borderRadius: BorderRadius.circular(5.0),
           color: Color(0xFF18C5D9),
         ),
-        //height: height * .069,
+        height: height * .069,
         width: width * .368,
         child: FlatButton(
           child: Text(
@@ -367,3 +446,4 @@ class _CardOptionsState extends State<CardOptions> {
     );
   }
 }
+*/
