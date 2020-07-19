@@ -435,9 +435,11 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
   // }
 
   bool isCorrect(String userResponse) {
+    stopTimer = true;
     bool correct = true;
     String correctAnswer = getCorrectAnswer();
     if (userResponse == correctAnswer) {
+
       return correct;
     } else {
       return correct = false;
@@ -467,7 +469,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
               .showEndMsg(context);
 
           reset();
-          stopTimer = true;
+         
         }
         nextQuestion();
       } else {
@@ -488,7 +490,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
               .showEndMsg(context);
 
           reset();
-          stopTimer = true;
+          
         }
         nextQuestion();
       }
