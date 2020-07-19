@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/categories.dart';
 import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
@@ -738,8 +739,8 @@ class _CreateGameState extends State<CreateGame> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LeaderBoard(),
-                              ));
+                                  builder: (o) =>
+                                      NewLeaderBoard(gameCode: gameCode)));
                           //Flutter Toast
                         },
                         child: Text(
