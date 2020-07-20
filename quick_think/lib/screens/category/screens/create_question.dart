@@ -41,9 +41,16 @@ class _CreateQuestionState extends State<CreateQuestion> {
       option2Controller.text = widget.question['options'][1];
       option3Controller.text = widget.question['options'][2];
       option4Controller.text = widget.question['options'][3];
+      for(var i =0; i<widget.question['options'].length; i++){
+        if(widget.question['options'][i] == widget.question['answer']){
+          answers[i] = true;
+          correctAnswer = widget.question['options'][i];
+        }
+      }
     } else {
       categoryController.text = widget.categoryName;
     }
+    
     super.initState();
   }
 
