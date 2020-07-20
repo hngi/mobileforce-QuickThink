@@ -8,7 +8,6 @@ import 'package:quickthink/model/question_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickthink/utils/quizTimer.dart';
 
-
 class QuickThink extends StatefulWidget {
   final String gameCode;
   final String userName;
@@ -82,7 +81,8 @@ class CustomQuestionView extends StatefulWidget {
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
 }
 
-class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTickerProviderStateMixin{
+class _CustomQuestionViewState extends State<CustomQuestionView>
+    with SingleTickerProviderStateMixin {
   QuickThink quickThink;
 
   String userAnswer;
@@ -104,7 +104,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
   String _userName;
 
   AnimationController controller;
-  
+
   List<bool> isPicked = [false, false, false, false];
 
   var style = GoogleFonts.poppins(
@@ -130,12 +130,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
 
     //quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
 
-     controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 1)
-      );
-
-      
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
 
     super.initState();
   }
@@ -144,20 +140,17 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
   Widget build(BuildContext context) {
     controller.forward();
 
-      controller.addListener(() {
-        setState(() {
-          
-        });
-      });
-    
+    controller.addListener(() {
+      setState(() {});
+    });
 
-   
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
     return Stack(
       children: <Widget>[
+        _progress(height, width),
         _box(height, width, heightBox, widthBox),
         _timer(height, width),
       ],
@@ -182,9 +175,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
                 
               }); */
 
-              resetTimer = true;
-              controller.reset();
-             controller.forward();
+                resetTimer = true;
+                controller.reset();
+                controller.forward();
 
                 nextQuestion();
               } else {
@@ -446,7 +439,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
 
   void checkAnswer(String option) {
     String correctAnswer = getCorrectAnswer();
-    
+
     setState(() {
       controller.reset();
       controller.forward();
@@ -514,7 +507,6 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
     );
   }
 
-
 /* child: TextLiquidFill(
         speed: ,
         text: getQuestionText(),
@@ -529,9 +521,6 @@ class _CustomQuestionViewState extends State<CustomQuestionView> with SingleTick
         ),
         // textAlign: TextAlign.justify,
       ), */
-
-
-
 
   void nextQuestion() {
     if (_questionNumber < _questionBank.length - 1) {
