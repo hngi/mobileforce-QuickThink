@@ -170,4 +170,81 @@ class ApiCallService with ChangeNotifier {
     }
     return null;
   }
+
+  Future<List> getUserQuestions() async {
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Response response = await http.get(getUsersQuestions, headers: headers);
+      if (response.statusCode == 200) {
+        final Map list = json.decode(response.body);
+        final List listt = list['data'];
+        List<Questions> _list = [];
+        for (var i = 0; i < listt.length; i++) {
+          _list.add(Questions(
+            id: listt[i]['id'],
+            question: listt[i]['question'],
+            category: listt[i]['category'],
+            answer: listt[i]['answer'],
+            options: listt[i]['options'],
+          ));
+        }
+        return listt;
+      } else {
+        print(response.statusCode);
+        // SnackBarService.instance.showSnackBarError('Server Error. Try again');
+        return null;
+      }
+    }
+    return null;
+  }
+
+
+  Future<String> editQuestion(Questions questions) async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Map data = {
+        "Question": {
+          "id": questions.id,
+          "category": questions.category,
+          "question": questions.question,
+          "answer": questions.answer,
+          "options": questions.options,
+        },
+      };
+      String payload = json.encode(data);
+      Response response =
+          await http.put(editQuestionsUrl, headers: headers, body: payload);
+      if (response.statusCode == 400) {
+        setState(ButtonState.Idle);
+        SnackBarService.instance.showSnackBarError('Enter Valid Category');
+        return null;
+      } else if (response.statusCode == 200) {
+        final Map list = json.decode(response.body);
+        final Map listt = list['data'];
+        SnackBarService.instance
+            .showSnackBarSuccess('Question updated successfully');
+        setState(ButtonState.Idle);
+
+        return listt['id'];
+      }
+      print(response.statusCode);
+      setState(ButtonState.Idle);
+      SnackBarService.instance.showSnackBarError('Server Error. Try again');
+      return null;
+    }
+    return null;
+  }
 }

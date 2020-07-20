@@ -83,6 +83,9 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             CreateQuestion(
+                                                                questionState:
+                                                                    QuestionState
+                                                                        .Adding,
                                                                 categoryName:
                                                                     snapshot.data[
                                                                             index]
@@ -96,7 +99,9 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                       child: Text(
                                       'No created category',
                                       style: GoogleFonts.poppins(
-                                          color: buttonColor, fontSize: SizeConfig().textSize(context, 2.8)),
+                                          color: buttonColor,
+                                          fontSize: SizeConfig()
+                                              .textSize(context, 2.8)),
                                     ))
                               : Center(child: CircularProgressIndicator());
                         }))

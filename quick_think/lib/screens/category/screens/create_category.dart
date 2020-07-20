@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/category/screens/created_categories.dart';
+import 'package:quickthink/screens/category/screens/viewQuestions.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 import 'package:quickthink/screens/login/services/enum/enum.dart';
@@ -64,9 +65,26 @@ class _CreateCategoryState extends State<CreateCategory> {
                 Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    onTap: () {Get.to(CreatedCategories());},
+                    onTap: () {
+                      Get.to(CreatedCategories());
+                    },
                     child: Text(
                       'View Categories',
+                      style: GoogleFonts.poppins(
+                          color: buttonColor,
+                          fontSize: SizeConfig().textSize(context, 2.6)),
+                    ),
+                  ),
+                ),
+                SizedBox(height: SizeConfig().yMargin(context, 3)),
+                Align(
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(ViewQuestions());
+                    },
+                    child: Text(
+                      'View Questions',
                       style: GoogleFonts.poppins(
                           color: buttonColor,
                           fontSize: SizeConfig().textSize(context, 2.6)),

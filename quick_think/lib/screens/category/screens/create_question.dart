@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
+import 'package:quickthink/screens/category/screens/viewQuestions.dart';
 import 'package:quickthink/screens/category/services/models/questions.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
@@ -13,20 +15,36 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'created_categories.dart';
 
 //import 'package:quickthink/utils/quizTimer.dart';
+enum QuestionState { Editing, Adding }
 
 class CreateQuestion extends StatefulHookWidget {
+  final QuestionState questionState;
   static const routeName = 'create_question.dart';
+  final Map<String, dynamic> question;
   String categoryName;
-  CreateQuestion({this.categoryName});
+  CreateQuestion({
+    @required this.questionState,
+    this.question,
+    @required this.categoryName,
+  });
   @override
   _CreateQuestionState createState() => _CreateQuestionState();
 }
 
 class _CreateQuestionState extends State<CreateQuestion> {
   @override
-  void didChangeDependencies() {
-    categoryController.text = widget.categoryName;
-    super.didChangeDependencies();
+  void initState() {
+    if (widget.questionState == QuestionState.Editing) {
+      categoryController.text = widget.question['category'];
+      questionController.text = widget.question['question'];
+      option1Controller.text = widget.question['options'][0];
+      option2Controller.text = widget.question['options'][1];
+      option3Controller.text = widget.question['options'][2];
+      option4Controller.text = widget.question['options'][3];
+    } else {
+      categoryController.text = widget.categoryName;
+    }
+    super.initState();
   }
 
   var style = GoogleFonts.poppins(
@@ -67,25 +85,36 @@ class _CreateQuestionState extends State<CreateQuestion> {
                       height: SizeConfig().yMargin(context, 20),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(children: [
-                          RaisedButton(
-                            color: buttonColor,
-                            onPressed: () {
-                              //Navigate to view question screen
-                            },
-                            child: Text('View All Questions'),
-                          ),
-                          Spacer(),
-                          RaisedButton(
-                            color: buttonColor,
-                            onPressed: () {
-                              setState(() {
-                                changed = false;
-                              });
-                            },
-                            child: Text('New Question'),
-                          ),
-                        ]),
+                        child: Wrap(
+                            alignment: WrapAlignment.center,
+                            runSpacing: 10,
+                            spacing: 10,
+                            children: [
+                              RaisedButton(
+                                color: buttonColor,
+                                onPressed: () {
+                                  Get.to(ViewQuestions());
+                                },
+                                child: Text('View All Questions'),
+                              ),
+                              // Spacer(),
+                              RaisedButton(
+                                color: buttonColor,
+                                onPressed: () {
+                                  setState(() {
+                                    changed = false;
+                                  });
+                                },
+                                child: Text('New Question'),
+                              ),
+                              RaisedButton(
+                                color: buttonColor,
+                                onPressed: () {
+                                  Get.to(DashboardScreen());
+                                },
+                                child: Text('DashBoard'),
+                              ),
+                            ]),
                       ),
                     )),
               ))
@@ -96,7 +125,6 @@ class _CreateQuestionState extends State<CreateQuestion> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        
                         Align(
                           alignment: Alignment.topLeft,
                           child: IconButton(
@@ -221,41 +249,82 @@ class _CreateQuestionState extends State<CreateQuestion> {
           ),
         ),
         onPressed: () {
-          final form = formKey.currentState;
-          if (form.validate()) {
-            if (correctAnswer != null) {
-              form.save();
-              state
-                  .createQuestion(Questions(
-                      category: categoryController.text,
-                      question: questionController.text,
-                      answer: correctAnswer,
-                      options: [
-                    option1Controller.text,
-                    option2Controller.text,
-                    option3Controller.text,
-                    option4Controller.text
-                  ]))
-                  .then((value) {
-                if (value != null) {
-                  categoryController.clear();
-                  questionController.clear();
-                  option1Controller.clear();
-                  option2Controller.clear();
-                  option3Controller.clear();
-                  option4Controller.clear();
-                  setState(() {
-                    answers[0] = false;
-                    answers[1] = false;
-                    answers[2] = false;
-                    answers[3] = false;
-                    changed = true;
-                  });
-                }
-              });
-            } else {
-              Get.snackbar('error', 'Select an answer to the question',
-                  backgroundColor: Colors.red);
+          if (widget.questionState == QuestionState.Adding) {
+            final form = formKey.currentState;
+            if (form.validate()) {
+              if (correctAnswer != null) {
+                form.save();
+                state
+                    .createQuestion(Questions(
+                        category: categoryController.text,
+                        question: questionController.text,
+                        answer: correctAnswer,
+                        options: [
+                      option1Controller.text,
+                      option2Controller.text,
+                      option3Controller.text,
+                      option4Controller.text
+                    ]))
+                    .then((value) {
+                  if (value != null) {
+                    categoryController.clear();
+                    questionController.clear();
+                    option1Controller.clear();
+                    option2Controller.clear();
+                    option3Controller.clear();
+                    option4Controller.clear();
+                    setState(() {
+                      answers[0] = false;
+                      answers[1] = false;
+                      answers[2] = false;
+                      answers[3] = false;
+                      changed = true;
+                    });
+                  }
+                });
+              } else {
+                Get.snackbar('error', 'Select an answer to the question',
+                    backgroundColor: Colors.red);
+              }
+            }
+          } else {
+            final form = formKey.currentState;
+            if (form.validate()) {
+              if (correctAnswer != null) {
+                form.save();
+                state
+                    .editQuestion(Questions(
+                        id: widget.question['id'],
+                        category: categoryController.text,
+                        question: questionController.text,
+                        answer: correctAnswer,
+                        options: [
+                      option1Controller.text,
+                      option2Controller.text,
+                      option3Controller.text,
+                      option4Controller.text
+                    ]))
+                    .then((value) {
+                  if (value != null) {
+                    categoryController.clear();
+                    questionController.clear();
+                    option1Controller.clear();
+                    option2Controller.clear();
+                    option3Controller.clear();
+                    option4Controller.clear();
+                    setState(() {
+                      answers[0] = false;
+                      answers[1] = false;
+                      answers[2] = false;
+                      answers[3] = false;
+                      changed = true;
+                    });
+                  }
+                });
+              } else {
+                Get.snackbar('error', 'Select an answer to the question',
+                    backgroundColor: Colors.red);
+              }
             }
           }
           // Navigator.pushNamed(context, CreatedCategories.routeName);
@@ -373,6 +442,9 @@ class _CreateQuestionState extends State<CreateQuestion> {
                 setState(() {
                   correctAnswer = option1Controller.text;
                   answers[0] = !answers[0];
+                  if (!answers[0]) {
+                    correctAnswer = null;
+                  }
                   answers[2] = false;
                   answers[1] = false;
                   answers[3] = false;
@@ -435,6 +507,9 @@ class _CreateQuestionState extends State<CreateQuestion> {
               setState(() {
                 correctAnswer = option2Controller.text;
                 answers[1] = !answers[1];
+                if (!answers[1]) {
+                  correctAnswer = null;
+                }
                 answers[0] = false;
                 answers[3] = false;
                 answers[2] = false;
@@ -494,6 +569,9 @@ class _CreateQuestionState extends State<CreateQuestion> {
                 setState(() {
                   correctAnswer = option3Controller.text;
                   answers[2] = !answers[2];
+                  if (!answers[2]) {
+                    correctAnswer = null;
+                  }
                   answers[0] = false;
                   answers[1] = false;
                   answers[3] = false;
@@ -554,6 +632,9 @@ class _CreateQuestionState extends State<CreateQuestion> {
               setState(() {
                 correctAnswer = option4Controller.text;
                 answers[3] = !answers[3];
+                if (!answers[3]) {
+                  correctAnswer = null;
+                }
                 answers[0] = false;
                 answers[1] = false;
                 answers[2] = false;
