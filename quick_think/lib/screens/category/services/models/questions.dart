@@ -1,10 +1,11 @@
 class Questions {
+  String id;
   String category;
   String question;
   String answer;
-  List<String> options;
+  List<dynamic> options;
 
-  Questions({this.answer, this.category, this.options, this.question});
+  Questions({this.answer, this.category, this.options, this.question, this.id});
 
 
    Map<String, dynamic> toMap() {
@@ -18,6 +19,7 @@ class Questions {
 
   factory Questions.fromMap(Map<String, dynamic> json) {
     return Questions(
+      id: json['id'],
       category: json['category'],
       question: json['question'],
       answer: json['answer'],
