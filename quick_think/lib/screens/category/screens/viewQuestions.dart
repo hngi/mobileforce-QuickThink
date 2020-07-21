@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 import 'package:quickthink/screens/category/services/utils/animations.dart';
@@ -60,11 +61,13 @@ class _ViewQuestionsState extends State<ViewQuestions> {
                                     itemCount: snapshot.data.length,
                                     itemBuilder: (context, index) {
                                       var data = snapshot.data[index];
+                                      var newd = snapshot.data;
                                       return FadeIn(
                                         delay: index - 0.3,
                                         child: QuestionsCard(
                                           questions: data,
                                           number: index,
+                                          list: snapshot.data
                                         ),
                                       );
                                     },
@@ -74,7 +77,14 @@ class _ViewQuestionsState extends State<ViewQuestions> {
                                         height: McGyver.rsDoubleH(context, 5),
                                       );
                                     })
-                                : Center(child: Text('No Created Questions'))
+                                : Center(
+                                    child: Text(
+                                    'No Created Questions',
+                                    style: GoogleFonts.poppins(
+                                      color: buttonColor,
+                                      fontSize: SizeConfig().textSize(context, 2.8)
+                                    ),
+                                  ))
                             : Center(child: CircularProgressIndicator());
                       }),
                 ),

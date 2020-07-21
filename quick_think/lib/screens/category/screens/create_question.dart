@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:quickthink/screens/category/screens/viewQuestions.dart';
 import 'package:quickthink/screens/category/services/models/questions.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
+import 'package:quickthink/screens/login/services/enum/enum.dart';
 import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
 import 'package:quickthink/screens/login/services/utils/validators.dart';
 import 'package:quickthink/utils/responsiveness.dart';
@@ -41,8 +43,8 @@ class _CreateQuestionState extends State<CreateQuestion> {
       option2Controller.text = widget.question['options'][1];
       option3Controller.text = widget.question['options'][2];
       option4Controller.text = widget.question['options'][3];
-      for(var i =0; i<widget.question['options'].length; i++){
-        if(widget.question['options'][i] == widget.question['answer']){
+      for (var i = 0; i < widget.question['options'].length; i++) {
+        if (widget.question['options'][i] == widget.question['answer']) {
           answers[i] = true;
           correctAnswer = widget.question['options'][i];
         }
@@ -50,7 +52,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
     } else {
       categoryController.text = widget.categoryName;
     }
-    
+
     super.initState();
   }
 
@@ -218,14 +220,13 @@ class _CreateQuestionState extends State<CreateQuestion> {
             //     )),
             Align(
               alignment: Alignment.bottomRight,
-              child: Row(
-                //overflow: Overflow.visible,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  _nextButton(
+              child: apiCallService.buttonState == ButtonState.Pressed
+                  ? SpinKitThreeBounce(
+                    size: 30,
+                    color: buttonColor,
+                  )
+                  : _nextButton(
                       height, width, heightBox, widthBox, apiCallService),
-                ],
-              ),
             )
           ],
         ),
