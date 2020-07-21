@@ -26,6 +26,12 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('username');
+  }
+
   @override
   void initState() {
     getUsername();
@@ -128,11 +134,13 @@ class _SettingsViewState extends State<SettingsView> {
                     child: ListTile(
                       contentPadding: EdgeInsets.all(0),
                       onTap: () {
-                        state.logout().then((value) {
-                          if (value != null) {
-                            Get.to(LoginScreen());
-                          }
-                        });
+                        // state.logout().then((value) {
+                        //   if (value != null) {
+                        //     Get.to(LoginScreen());
+                        //   }
+                        // });
+                        logout();
+                        Get.to(LoginScreen());
                       },
                       title: Text(
                         "Log out",
