@@ -428,9 +428,11 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
   // }
 
   bool isCorrect(String userResponse) {
+    stopTimer = true;
     bool correct = true;
     String correctAnswer = getCorrectAnswer();
     if (userResponse == correctAnswer) {
+
       return correct;
     } else {
       return correct = false;
@@ -460,7 +462,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
               .showEndMsg(context);
 
           reset();
-          stopTimer = true;
+         
         }
         nextQuestion();
       } else {
@@ -481,7 +483,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
               .showEndMsg(context);
 
           reset();
-          stopTimer = true;
+          
         }
         nextQuestion();
       }
