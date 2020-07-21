@@ -188,8 +188,9 @@ class ApiCallService with ChangeNotifier {
         pref.setString('token', null);
         pref.setString('username', null);
         final Map list = json.decode(response.body);
+        print(list);
         SnackBarService.instance
-            .showSnackBarError('Account Deleted succesfully');
+            .showSnackBarSuccess('Account Deleted succesfully');
         final listt = list['data'];
         return listt;
       } else {

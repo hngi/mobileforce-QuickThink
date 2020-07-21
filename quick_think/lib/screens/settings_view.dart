@@ -167,7 +167,8 @@ class _SettingsViewState extends State<SettingsView> {
                     onTap: () {
                       state.deleteAccount().then((value) {
                         if (value != null) {
-                          Get.to(LoginScreen());
+                          Future.delayed(Duration(seconds: 3))
+                              .then((value) => Get.to(LoginScreen()));
                         }
                       });
                     },
