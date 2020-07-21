@@ -41,8 +41,7 @@ class LoginState extends ChangeNotifier {
       return null;
     } else if (response.statusCode == 400) {
       setState(ButtonState.Idle);
-      SnackBarService.instance
-          .showSnackBarError('User does not exist');
+      SnackBarService.instance.showSnackBarError('User does not exist');
       return null;
     } else if (response.statusCode == 200) {
       final Map user = json.decode(response.body);
