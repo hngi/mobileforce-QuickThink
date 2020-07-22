@@ -116,8 +116,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                                   .then((value) {
                                 if (value != null) {
-                                  Future.delayed(Duration(seconds: 3))
-                                      .then((value) => Get.to(DashboardScreen()));
+                                  Future.delayed(Duration(seconds: 3)).then(
+                                      (value) => Get.to(DashboardScreen()));
                                 }
                               });
                             }
