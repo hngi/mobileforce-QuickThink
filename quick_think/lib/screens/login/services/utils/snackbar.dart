@@ -21,7 +21,7 @@ class SnackBarService {
       messageText: Text(
         _message,
         style: TextStyle(
-            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+            color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
       ),
       backgroundColor: Colors.red,
     );
@@ -35,7 +35,7 @@ class SnackBarService {
       messageText: Text(
         _message,
         style: TextStyle(
-            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+            color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
       ),
       backgroundColor: Colors.green,
     );

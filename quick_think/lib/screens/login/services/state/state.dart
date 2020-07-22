@@ -33,15 +33,19 @@ class LoginState extends ChangeNotifier {
     print(response.statusCode);
     if (response.statusCode == 500) {
       setState(ButtonState.Idle);
-      SnackBarService.instance.showSnackBarError('Server Error. Try again');
+      final Map error = json.decode(response.body);
+      SnackBarService.instance.showSnackBarError(error['error']);
       return null;
     } else if (response.statusCode == 404) {
       setState(ButtonState.Idle);
-      SnackBarService.instance.showSnackBarError('User does not exists');
+      final Map error = json.decode(response.body);
+      SnackBarService.instance.showSnackBarError(error['error']);
       return null;
     } else if (response.statusCode == 400) {
       setState(ButtonState.Idle);
-      SnackBarService.instance.showSnackBarError('User does not exist');
+      final Map error = json.decode(response.body);
+      SnackBarService.instance
+          .showSnackBarError(error['error']);
       return null;
     } else if (response.statusCode == 200) {
       final Map user = json.decode(response.body);
@@ -58,7 +62,9 @@ class LoginState extends ChangeNotifier {
     }
     print(response.statusCode);
     setState(ButtonState.Idle);
-    SnackBarService.instance.showSnackBarError('Server Error. Try again');
+    final Map error = json.decode(response.body);
+    
+    SnackBarService.instance.showSnackBarError(error['error']);
     return null;
   }
 
@@ -75,12 +81,14 @@ class LoginState extends ChangeNotifier {
     print(response.statusCode);
     if (response.statusCode == 500) {
       setState(ButtonState.Idle);
-      SnackBarService.instance.showSnackBarError('Server Error. Try again');
+      final Map error = json.decode(response.body);
+      SnackBarService.instance.showSnackBarError(error['error']);
       return null;
     } else if (response.statusCode == 400) {
       setState(ButtonState.Idle);
+      final Map error = json.decode(response.body);
       SnackBarService.instance
-          .showSnackBarError('User already Exists. Try again');
+          .showSnackBarError(error['error']);
       return null;
     } else if (response.statusCode == 201) {
       final Map user = json.decode(response.body);
@@ -96,7 +104,8 @@ class LoginState extends ChangeNotifier {
     }
     print(response.statusCode);
     setState(ButtonState.Idle);
-    SnackBarService.instance.showSnackBarError('Server Error. Try again');
+    final Map error = json.decode(response.body);
+    SnackBarService.instance.showSnackBarError(error['error']);
     return null;
   }
 }
