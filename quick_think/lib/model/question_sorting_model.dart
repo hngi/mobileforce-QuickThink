@@ -158,6 +158,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
     var widthBox = width * .872;
     return Stack(
       children: <Widget>[
+        _progress(height, width),
         _box(height, width, heightBox, widthBox),
         _timer(height, width),
       ],
@@ -446,7 +447,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
   }
 
   void checkAnswer(String option) {
+
     String correctAnswer = questionFunctions.getCorrectAnswer();
+
 
     setState(() {
       controller.reset();
@@ -529,6 +532,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
         ),
         // textAlign: TextAlign.justify,
       ), */
+
 
 }
 
@@ -614,6 +618,7 @@ class QuestionFunctions {
     //_questionNumber = _questionBank.length;
     //print('_questionBank:$_questionBank');
   }
+
 
   void nextQuestion() {
     if (_questionNumber < _questionBank.length - 1) {

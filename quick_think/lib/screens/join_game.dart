@@ -18,7 +18,8 @@ import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
 
 const String url = 'http://brainteaser.pythonanywhere.com/game/play';
-const String checkUrl = 'http://brainteaser.pythonanywhere.com/game/user/play/check';
+const String checkUrl =
+    'http://brainteaser.pythonanywhere.com/game/user/play/check';
 
 class JoinGame extends StatefulWidget {
   static const routeName = 'join-game';
@@ -126,15 +127,16 @@ class _JoinGameState extends State<JoinGame> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => CreateGame()));
         },
-        child: Text('Create a game',
-            style: GoogleFonts.poppins(
-              fontSize: SizeConfig().textSize(context, 3),
-              color: Colors.white,
-              fontWeight: FontWeight.w400,
-              fontStyle: FontStyle.normal,
-              decoration: TextDecoration.underline,
-            ),
+        child: Text(
+          'Create a game',
+          style: GoogleFonts.poppins(
+            fontSize: SizeConfig().textSize(context, 3),
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+            decoration: TextDecoration.underline,
           ),
+        ),
       ),
     );
   }
@@ -315,123 +317,119 @@ class _JoinGameState extends State<JoinGame> {
       form.save();
       print(gameCode.text + username.text);
 
-      
-    /* List<Question> responseFromFunction = await _joinGame(gameCode.text, username.text);
+      /* List<Question> responseFromFunction = await _joinGame(gameCode.text, username.text);
       if (responseFromFunction != null) {
        
       } */
       progressDialog.show();
 
-      await _joiningGame(gameCode.text, username.text).then(
-              (response) {
-                  if(response.statusCode == 200){
-                    progressDialog.hide();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (o) => QuizPage(
-                              gameCode: gameCode.text,
-                              userName: username.text,
-                            )));
-                  }else if (response.statusCode == 400){
-                    progressDialog.hide();
-                    setState(() {
-                      showError(json.decode(response.body)['error']);
-                    });
-                  }else{
-                    progressDialog.hide();
-                    setState(() {
-                      showError("Oops! Cannot join game at this time \n Try again later");
-                    });
-                  }
-              }
-      );
-
+      await _joiningGame(gameCode.text, username.text).then((response) {
+        if (response.statusCode == 200) {
+          progressDialog.hide();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (o) => QuizPage(
+                        gameCode: gameCode.text,
+                        userName: username.text,
+                      )));
+        } else if (response.statusCode == 400) {
+          progressDialog.hide();
+          setState(() {
+            showError(json.decode(response.body)['error']);
+          });
+        } else {
+          progressDialog.hide();
+          setState(() {
+            showError("Oops! Cannot join game at this time \n Try again later");
+          });
+        }
+      });
     }
   }
 
-  Future showError(String error){
+  Future showError(String error) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context){
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        child: Container(
-          height: height * .4,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 20.0,bottom: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 50.0),
-                        child: Icon(
-                          FlutterIcons.alert_circle_mco,
-                          color: Hexcolor('#FF1F2E'),
-                          size: 36.0,
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            child: Container(
+              height: height * .4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(top: 20.0, bottom: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 50.0),
+                          child: Icon(
+                            FlutterIcons.alert_circle_mco,
+                            color: Hexcolor('#FF1F2E'),
+                            size: 36.0,
+                          ),
                         ),
-                      ),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                      flex: 2,
+                        SizedBox(width: 10.0),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "Wait a Minute!",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 24.0,
+                                color: Hexcolor('#1C1046')),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: SingleChildScrollView(
                       child: Text(
-                        "Wait a Minute!",
+                        error,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 22.0,
+                            letterSpacing: 1.0,
+                            color: Hexcolor('#1C1046')),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 50.0),
+                  RaisedButton(
+                    padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    color: Hexcolor('#18C5D9'),
+                    child: Text('Join new game',
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
-                            fontSize: 24.0,
-                            color: Hexcolor('#1C1046')),
-                      ),
-                    )
-                  ],
-                ),
+                            fontSize: 20.0,
+                            color: Colors.white)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
               ),
-              Container(
-                child: SingleChildScrollView(
-                  child: Text(
-                    error,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22.0,
-                        letterSpacing: 1.0,
-                        color: Hexcolor('#1C1046')),
-                  ),
-                ),
-              ),
-              SizedBox(height: 50.0),
-              RaisedButton(
-                padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                color: Hexcolor('#18C5D9'),
-                child: Text('Join new game',
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20.0,
-                        color: Colors.white)),
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          ),
-        ),
-      );
-      }
-    );
+            ),
+          );
+        });
   }
 
-  Future<http.Response> _joiningGame(code,user) async {
-
+  Future<http.Response> _joiningGame(code, user) async {
     http.Response response = await http.post(
       checkUrl,
       headers: {'Accept': 'application/json'},
@@ -440,7 +438,6 @@ class _JoinGameState extends State<JoinGame> {
 
     return response;
   }
- 
 
   Future<List<QuestionModel>> _joinGame(code, user) async {
     setState(() {
@@ -460,7 +457,6 @@ class _JoinGameState extends State<JoinGame> {
       print(decodedQuestions);
       setState(() {
         progressDialog.hide();
-        
       });
 
       return decodedQuestions
@@ -478,10 +474,9 @@ class _JoinGameState extends State<JoinGame> {
         progressDialog.hide();
       });
 
-      _showInSnackBar(jsonDecode(data)['error, invalid credentials'], Colors.red);
+      _showInSnackBar(
+          jsonDecode(data)['error, invalid credentials'], Colors.red);
       return List();
-
     }
-    
   }
 }
