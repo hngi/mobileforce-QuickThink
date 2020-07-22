@@ -57,7 +57,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                   _text(),
                                   Container(
                                     margin: EdgeInsets.only(top: 30),
-                                    child: (model.listUsers == null || model.listUsers.length == 0) ?
+                                    child: (model.listUsers[2] == null || model.listUsers.length == 0) ?
                                     SpinKitFoldingCube(
                                       color: Colors.white,
                                       size: 20.0,
