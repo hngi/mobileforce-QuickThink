@@ -188,6 +188,38 @@ class ApiCallService with ChangeNotifier {
     return null;
   }
 
+  Future<String> deleteAccount() async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Response response = await http.post(deleteAccountUrl, headers: headers);
+      if (response.statusCode == 200) {
+        setState(ButtonState.Idle);
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString('token', null);
+        pref.setString('username', null);
+        final Map list = json.decode(response.body);
+        print(list);
+        SnackBarService.instance
+            .showSnackBarSuccess('Account Deleted succesfully');
+        final listt = list['data'];
+        return listt;
+      } else {
+        print(response.statusCode);
+        setState(ButtonState.Idle);
+        SnackBarService.instance.showSnackBarError('Server Error. Try again');
+        return null;
+      }
+    }
+    return null;
+  }
+
   Future<List> getUserQuestions() async {
     try {
       final prefs = await SharedPreferences.getInstance();

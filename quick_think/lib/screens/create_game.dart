@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/categories.dart';
 import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +23,7 @@ import 'leaderboard.dart';
 // TODO: Change progress loading colour from black //Done
 // TODO: Visual feedback for copy code
 
-const String fetchGameCode_Api = 'http://mohammedadel.pythonanywhere.com/game';
+const String fetchGameCode_Api = 'http://brainteaser.pythonanywhere.com/game';
 
 class CreateGame extends StatefulWidget {
   static const routeName = 'create_game';
@@ -108,7 +109,10 @@ class _CreateGameState extends State<CreateGame> {
     http.Response response = await http.post(
       fetchGameCode_Api,
       headers: {'Accept': 'application/json'},
-      body: {"user_name": userName, "category": '${_selectedCategory.name}'},
+      body: {
+        "user_name": userName,
+        "category": '${_selectedCategory.name.toString()}'
+      },
     );
 
     if (response.statusCode == 200) {
@@ -116,7 +120,9 @@ class _CreateGameState extends State<CreateGame> {
       gameCode = jsonDecode(data)['game_code'].toString();
       return gameCode;
     } else {
-      throw Exception('Failed to retrieve code');
+      //  throw Exception('Failed to retrieve code');
+      print('Status Code: ${response.statusCode}');
+      print('Respinse From API: ${response.body}');
     }
   }
 
@@ -738,8 +744,8 @@ class _CreateGameState extends State<CreateGame> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LeaderBoard(),
-                              ));
+                                  builder: (o) =>
+                                      NewLeaderBoard(gameCode: gameCode)));
                           //Flutter Toast
                         },
                         child: Text(

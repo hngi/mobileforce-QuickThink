@@ -46,16 +46,26 @@ class _QuickThinkState extends State<QuickThink> {
             List<QuestionModel> questionData = snapshot.data;
             List<QuestionModel> filteredQuestions = List();
 
-            for (QuestionModel data in questionData) {
-              print('${data.incorrectAnswers.length}');
-              if (data.incorrectAnswers.length >= 3) {
-                filteredQuestions.add(data);
-              }
+            // for (QuestionModel data in questionData) {
+            //   print('${data.incorrectAnswers.length}');
+            //   if (data.incorrectAnswers.length >= 3) {
+            //     filteredQuestions.add(data);
+            //   }
+            // }
+
+            if (questionData.length == 0) {
+              return Center(
+                  child: Text(
+                'There is no question created for this game code yet',
+                style: TextStyle(color: Colors.white, fontSize: 24.0),
+              ));
             }
 
             return CustomQuestionView(
-                questionData: filteredQuestions, userName: widget.userName, gameCode: widget.gameCode,model: _fetchedQuestions);
-
+                questionData: questionData,
+                userName: widget.userName,
+                gameCode: widget.gameCode,
+                model: _fetchedQuestions);
           }
 
           return new Center(
@@ -72,20 +82,21 @@ class CustomQuestionView extends StatefulWidget {
   final String gameCode;
   final FetchedQuestions model;
 
-  CustomQuestionView({this.questionData, this.userName,this.gameCode,this.model});
+  CustomQuestionView(
+      {this.questionData, this.userName, this.gameCode, this.model});
 
   @override
   _CustomQuestionViewState createState() => _CustomQuestionViewState();
 }
 
-class _CustomQuestionViewState extends State<CustomQuestionView> {
+class _CustomQuestionViewState extends State<CustomQuestionView>
+    with SingleTickerProviderStateMixin {
   QuickThink quickThink;
+
+  QuestionFunctions questionFunctions;
 
   String userAnswer;
 
-  int _correctResponse = 0;
-  int _wrongResponse = 0;
-  int _questionNumber = 0;
   String response = "";
   int totalQuestions = 0;
   int _totalScore = 0;
@@ -95,7 +106,11 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   bool resetTimer = false;
   bool stopTimer = false;
 
+  int count = 0;
+
   String _userName;
+
+  AnimationController controller;
 
   List<bool> isPicked = [false, false, false, false];
 
@@ -117,22 +132,33 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   @override
   void initState() {
     _questionBank = widget.questionData;
-    print('_questionBank: $_questionBank');
+    questionFunctions = new QuestionFunctions(_questionBank);
+    print('_questionBank56: $_questionBank');
     this.getUserName();
 
     //quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
+
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    controller.forward();
+
+    controller.addListener(() {
+      setState(() {});
+    });
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
     return Stack(
       children: <Widget>[
+        _progress(height, width),
         _box(height, width, heightBox, widthBox),
         _timer(height, width),
       ],
@@ -152,25 +178,27 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
           nextQ: resetTimer,
           callBackFunc: () {
             setState(() {
-              if (isFinished() == false) {
-              /* setState(() {
+              if (questionFunctions.isFinished() == false) {
+                /* setState(() {
                 
               }); */
-              resetTimer = true;
-                nextQuestion();
-            } else {
-              IQEnds(
-                totalScore: totalScore,
-                username: _userName,
-                message:
-                    'Oops! You have run out of time, proceed to your result.',
-                gameCode: widget.gameCode
-              ).showEndMsg(context);
-              reset();
-            }
-            
+
+                resetTimer = true;
+                controller.reset();
+                controller.forward();
+
+                questionFunctions.nextQuestion();
+              } else {
+                IQEnds(
+                        totalScore: questionFunctions.totalScore,
+                        username: _userName,
+                        message:
+                            'Oops! You have run out of time, proceed to your result.',
+                        gameCode: widget.gameCode)
+                    .showEndMsg(context);
+                questionFunctions.reset();
+              }
             });
-            
           },
         ),
       ),
@@ -188,25 +216,36 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             borderRadius: BorderRadius.circular(5.0),
             color: Color(0xFFFFFFFF),
           ),
+          // child: AnimatedSwitcher(
+          //   duration: const Duration(milliseconds: 1000),
+          //   switchInCurve: Curves.easeIn,
+          //   switchOutCurve: Curves.easeOut,
+          //   transitionBuilder: (Widget child, Animation<double> animation) {
+          //     return ScaleTransition(child: child, scale: animation);
+          //   },
           child: Stack(
+            //key: ValueKey<int>(count),
             children: <Widget>[
               _progress(height, width),
               //_nextButton(height, width, heightBox, widthBox),
               _question(heightBox, widthBox),
 
               Positioned(
-                  top: heightBox * .26,
-                  left: widthBox * .055,
-                  right: widthBox * .055,
-                  child: Column(
-                    children: _options(),
-                  )),
+                top: heightBox * .26,
+                left: widthBox * .055,
+                right: widthBox * .055,
+                child: Column(
+                  children: _options(),
+                ),
+              )
+              // ),
               // _optionOne(heightBox, widthBox),
               // _optionTwo(heightBox, widthBox),
               // _optionThree(heightBox, widthBox),
               // _optionFour(heightBox, widthBox)
             ],
           ),
+          //),
         ));
   }
 
@@ -218,7 +257,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     List<Widget> option = List();
     bool _isSelected = false;
 
-    for (var i = 0; i < getOptions().length; i++) {
+    for (var i = 0; i < questionFunctions.getOptions().length; i++) {
       //isPicked.add(false);
       option.add(
         InkWell(
@@ -227,17 +266,16 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
             setState(() {
               _isSelected = !_isSelected;
               isPicked[i] = _isSelected;
-              userAnswer = getOptions()[i];
+              userAnswer = questionFunctions.getOptions()[i];
               print(isPicked);
             });
 
-
-            Timer(Duration(milliseconds: 900), () {
-
+            Timer(Duration(milliseconds: 100), () {
               print('getUserPickedAnswer:$userAnswer');
 
               if (userAnswer.isNotEmpty && userAnswer != null) {
                 checkAnswer(userAnswer);
+                count++;
                 isPicked = [false, false, false, false];
               }
             });
@@ -248,10 +286,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: colorPickedAnswer()[i] ?
-                    isCorrect(userAnswer) ? Colors.green : Colors.red
-                        :
-                    Colors.white,
+                    color: questionFunctions.colorPickedAnswer()[i]
+                        ? isCorrect(userAnswer) ? Colors.green : Colors.red
+                        : Colors.white,
                     border: Border.all(color: Colors.black26)),
                 height: heightBox * .128,
                 width: widthBox * .77,
@@ -260,7 +297,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
                     child: Text(
-                      getOptions()[i],
+                      questionFunctions.getOptions()[i],
                       style: GoogleFonts.poppins(
                         fontStyle: FontStyle.normal,
                         fontWeight: FontWeight.normal,
@@ -350,9 +387,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
         left: width * .064,
         child: Text(
           'Question ' +
-              currentQuestion().toString() +
+              questionFunctions.currentQuestion().toString() +
               ' of ' +
-              numberOfQuestions().toString(),
+              questionFunctions.numberOfQuestions().toString(),
           style: GoogleFonts.poppins(
             color: Color(0xFFFFFFFF),
             fontSize: 16,
@@ -398,69 +435,66 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   //   );
   // }
 
-  bool isCorrect(String userResponse){
+  bool isCorrect(String userResponse) {
+    stopTimer = true;
     bool correct = true;
-    String correctAnswer = getCorrectAnswer();
-    if(userResponse == correctAnswer){
+    String correctAnswer = questionFunctions.getCorrectAnswer();
+    if (userResponse == correctAnswer) {
       return correct;
-    }else{
+    } else {
       return correct = false;
     }
   }
 
   void checkAnswer(String option) {
-    String correctAnswer = getCorrectAnswer();
+
+    String correctAnswer = questionFunctions.getCorrectAnswer();
+
 
     setState(() {
+      controller.reset();
+      controller.forward();
       userResponse = option;
 
       if (userResponse == correctAnswer) {
-        incrementScore();
+        questionFunctions.incrementScore();
         widget.model.updateScore(widget.model.userGameID);
         resetTimer = true;
         isPicked = [false, false, false, false];
-        if (isFinished() == true) {
-          
-
+        if (questionFunctions.isFinished() == true) {
+          print('_userName: $_userName');
           IQEnds(
-            totalScore: totalScore,
-            username: _userName,
-            message:
-                'You have successfully completed the test proceed for the result',
+                  totalScore: questionFunctions.totalScore,
+                  username: _userName,
+                  message:
+                      'You have successfully completed the test proceed for the result',
+                  gameCode: widget.gameCode)
+              .showEndMsg(context);
 
-              gameCode: widget.gameCode
-
-          ).showEndMsg(context);
-
-          reset();
-          stopTimer = true;
+          questionFunctions.reset();
         }
-        nextQuestion();
+        questionFunctions.nextQuestion();
       } else {
-        decrementScore();
+        questionFunctions.decrementScore();
 
         resetTimer = true;
 
         isPicked = [false, false, false, false];
-        if (isFinished() == true) {
-          
+        if (questionFunctions.isFinished() == true) {
 //        Navigator.sth to the results page
 //      Throw an alert to the user that evaluation has finished
+          print('_userName: $_userName');
           IQEnds(
-            totalScore: totalScore,
-            username: _userName,
+                  totalScore: questionFunctions.totalScore,
+                  username: _userName,
+                  message:
+                      'You have successfully completed the test proceed for the result',
+                  gameCode: widget.gameCode)
+              .showEndMsg(context);
 
-            message:
-                'You have successfully completed the test proceed for the result',
-
-            gameCode: widget.gameCode
-
-          ).showEndMsg(context);
-
-          reset();
-          stopTimer = true;
+          questionFunctions.reset();
         }
-        nextQuestion();
+        questionFunctions.nextQuestion();
       }
     });
   }
@@ -471,9 +505,9 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
       left: widthBox * .11,
       right: widthBox * .13,
       child: Text(
-        getQuestionText(),
+        questionFunctions.getQuestionText(),
         style: GoogleFonts.poppins(
-          color: Color(0xFF38208C),
+          color: Color(0xFF38208C).withOpacity(controller.value),
           fontSize: 20,
           fontWeight: FontWeight.bold,
           fontStyle: FontStyle.normal,
@@ -484,6 +518,108 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
     );
   }
 
+/* child: TextLiquidFill(
+        speed: ,
+        text: getQuestionText(),
+        boxBackgroundColor: Colors.white,
+        waveColor: Color(0xFF38208C),
+        textStyle: GoogleFonts.poppins(
+          // color: Color(0xFF38208C),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.normal,
+          // fontWeight: FontWeight.w500,
+        ),
+        // textAlign: TextAlign.justify,
+      ), */
+
+
+}
+
+class CardOptions extends StatefulWidget {
+  final String title;
+  final bool selected;
+  final onTap;
+
+  final Color color;
+  CardOptions({@required this.title, this.selected, this.color, this.onTap});
+
+  @override
+  _CardOptionsState createState() => _CardOptionsState();
+}
+
+class _CardOptionsState extends State<CardOptions> {
+  bool _selected = false;
+
+  @override
+  void initState() {
+    _selected = widget.selected;
+    super.initState();
+  }
+
+  _CustomQuestionViewState view = _CustomQuestionViewState();
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    var heightBox = height * .618;
+    var widthBox = width * .872;
+    return Column(
+      children: <Widget>[
+        SizedBox(height: 10),
+
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: widget.color,
+              border: Border.all(color: Colors.black26)),
+          height: heightBox * .128,
+          width: widthBox * .77,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: Text(widget.title,
+                  style: GoogleFonts.poppins(
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                  )),
+            ),
+          ),
+        ),
+
+        //),
+      ],
+    );
+  }
+}
+
+class QuestionFunctions {
+  int _correctResponse = 0;
+  int _wrongResponse = 0;
+  int _questionNumber = 0;
+  String response = "";
+  int totalQuestions = 0;
+  int _totalScore = 0;
+  List<QuestionModel> _questionBank;
+  String userResponse;
+  String userPickedAnswer;
+  bool resetTimer = false;
+  bool stopTimer = false;
+
+  int count = 0;
+  AnimationController controller;
+  List<bool> isPicked = [false, false, false, false];
+
+  QuestionFunctions(List<QuestionModel> questionBank) {
+    _questionBank = questionBank;
+    //_questionNumber = _questionBank.length;
+    //print('_questionBank:$_questionBank');
+  }
+
+
   void nextQuestion() {
     if (_questionNumber < _questionBank.length - 1) {
       _questionNumber++;
@@ -491,6 +627,8 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   String getQuestionText() {
+    //print('_questionBank1:$_questionBank');
+    print('_questionBanknum:${_questionBank[_questionNumber].question}');
     return _questionBank[_questionNumber].question;
   }
 
@@ -562,65 +700,4 @@ class _CustomQuestionViewState extends State<CustomQuestionView> {
   }
 
   void timeOutTimer() {}
-}
-
-class CardOptions extends StatefulWidget {
-  final String title;
-  final bool selected;
-  final onTap;
-
-  final Color color;
-  CardOptions({@required this.title, this.selected, this.color, this.onTap});
-
-  @override
-  _CardOptionsState createState() => _CardOptionsState();
-}
-
-class _CardOptionsState extends State<CardOptions> {
-  bool _selected = false;
-
-  @override
-  void initState() {
-    _selected = widget.selected;
-    super.initState();
-  }
-
-  _CustomQuestionViewState view = _CustomQuestionViewState();
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    var heightBox = height * .618;
-    var widthBox = width * .872;
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 10),
-
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: widget.color, //_selected ? Colors.green : Colors.white,
-
-              border: Border.all(color: Colors.black26)),
-          height: heightBox * .128,
-          width: widthBox * .77,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: Text(widget.title,
-                  style: GoogleFonts.poppins(
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 16,
-                  )),
-            ),
-          ),
-        ),
-
-        //),
-      ],
-    );
-  }
 }

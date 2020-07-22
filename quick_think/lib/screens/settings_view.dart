@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/config.dart';
 import 'package:quickthink/registration.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
+import 'package:quickthink/utils/responsiveness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -24,6 +26,12 @@ class _SettingsViewState extends State<SettingsView> {
     setState(() {
       token = user;
     });
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('username');
   }
 
   @override
@@ -63,7 +71,7 @@ class _SettingsViewState extends State<SettingsView> {
               style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 2.0)),
             ),
@@ -115,40 +123,76 @@ class _SettingsViewState extends State<SettingsView> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
-              child: Divider(
-                height: 5.0,
-                color: Colors.white70,
-              ),
-            ),
+            SizedBox(height: SizeConfig().yMargin(context, 8)),
+            token == null
+                ? Container()
+                : Text(
+                    "Account",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 2.0)),
+                  ),
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
+            //   child: Divider(
+            //     height: 5.0,
+            //     color: Colors.white70,
+            //   ),
+            // ),
             token == null
                 ? Container()
                 : InkWell(
                     child: ListTile(
+
                       contentPadding: EdgeInsets.all(0),
                       onTap: () {
-                        state.logout().then((value) {
-                          if (value != null) {
-                            Get.to(LoginScreen());
-                          }
-                        });
+                        // state.logout().then((value) {
+                        //   if (value != null) {
+                        //     Get.to(LoginScreen());
+                        //   }
+                        // });
+                        logout();
+                        Get.to(LoginScreen());
                       },
-                      title: Text(
-                        "Log out",
-                        style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 2.0)),
-                      ),
-                      leading: Icon(
-                        FlutterIcons.account_circle_mco,
-                        color: Colors.white,
-                      ),
-                    ),
+                    
+                        title: Text(
+                          "Log out",
+                          style: GoogleFonts.poppins(
+                              textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 2.0),),
+                        ),
+                        leading: SvgPicture.asset('images/log-out.svg'),),
                   ),
+            token == null
+                ? Container()
+                : InkWell(
+                    child: ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    onTap: () {
+                      state.deleteAccount().then((value) {
+                        if (value != null) {
+                          Future.delayed(Duration(seconds: 3))
+                              .then((value) => Get.to(LoginScreen()));
+                        }
+                      });
+                    },
+                    title: Text(
+                      "Delete account",
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0)),
+                    ),
+                    leading: SvgPicture.asset('images/trash-2.svg'),
+                  )),
           ],
         ),
       ),

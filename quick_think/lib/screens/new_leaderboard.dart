@@ -57,7 +57,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                   _text(),
                                   Container(
                                     margin: EdgeInsets.only(top: 30),
-                                    child: (model.listUsers == null) ?
+                                    child: (model.listUsers == null || model.listUsers.length == 0) ?
                                     SpinKitFoldingCube(
                                       color: Colors.white,
                                       size: 20.0,
@@ -65,9 +65,18 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: <Widget>[
-                                            _roundContainer('2', model.listUsers[1].name, light),
-                                            _roundContainer1(model.listUsers[0].name, light),
-                                            _roundContainer('3', model.listUsers[2].name, light)
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer('2', model.listUsers[1].name, light)
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer1(model.listUsers[0].name, light)
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer('3', model.listUsers[2].name, light)
+                                            )
                                           ],
                                         )
                                   )
@@ -157,7 +166,12 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
     stream: model.leaderboardState,
       builder: (context,snapshot){
         if(snapshot.hasError || snapshot.data == fetchState.NoData){
-          return Error(snapshot.error);
+          return Container(
+            padding: EdgeInsets.all(20.0),
+              child: Center(
+                child: Error(snapshot.error),
+              )
+          );
         }
         if(!snapshot.hasData || snapshot.data == fetchState.Busy){
           return SpinKitFoldingCube(
@@ -165,18 +179,27 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
             size: 20.0,
           );
         }
+        if(model.listUsers.length == 0){
+          return Container(
+              padding: EdgeInsets.all(20.0),
+              child: Center(
+                  child: Error("Oops! Your Leaderboard is empty at the moment \nInvite your friends to play and check again")));
+        }
         return Container(
           height: 200.0,
           child: ListView.builder(
             shrinkWrap: true,
               itemCount: model.listUsers.length,
               itemBuilder: (context,index){
-                if(index == 0){
-                  return _row('images/cup.svg', 'images/face1.png', 'images/coin2.svg',
-                      model.listUsers[index].name, model.listUsers[index].score.toString(),light);
-                }else{
-                  return _row1((index + 1).toString(), 'images/face2.png', 'images/coin2.svg', model.listUsers[index].name,
-                      model.listUsers[index].score.toString(),light);
+                if (index == 0) {
+                  return _row(
+                      'images/cup.svg', 'images/face1.png', 'images/coin2.svg',
+                      model.listUsers[index].name,
+                      model.listUsers[index].score.toString(), light);
+                } else {
+                  return _row1((index + 1).toString(), 'images/face2.png',
+                      'images/coin2.svg', model.listUsers[index].name,
+                      model.listUsers[index].score.toString(), light);
                 }
               }
           ),
@@ -187,7 +210,7 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
 
 Widget Error(String error){
   return Center(
-      child: Text(error, style: GoogleFonts.poppins(fontSize: 14))
+      child: Text(error, style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold))
   );
 }
 
