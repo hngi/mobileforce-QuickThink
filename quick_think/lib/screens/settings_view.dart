@@ -28,6 +28,12 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('username');
+  }
+
   @override
   void initState() {
     getUsername();
@@ -140,14 +146,18 @@ class _SettingsViewState extends State<SettingsView> {
                 ? Container()
                 : InkWell(
                     child: ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        onTap: () {
-                          state.logout().then((value) {
-                            if (value != null) {
-                              Get.to(LoginScreen());
-                            }
-                          });
-                        },
+
+                      contentPadding: EdgeInsets.all(0),
+                      onTap: () {
+                        // state.logout().then((value) {
+                        //   if (value != null) {
+                        //     Get.to(LoginScreen());
+                        //   }
+                        // });
+                        logout();
+                        Get.to(LoginScreen());
+                      },
+                    
                         title: Text(
                           "Log out",
                           style: GoogleFonts.poppins(
@@ -155,9 +165,9 @@ class _SettingsViewState extends State<SettingsView> {
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  letterSpacing: 2.0)),
+                                  letterSpacing: 2.0),),
                         ),
-                        leading: SvgPicture.asset('images/log-out.svg')),
+                        leading: SvgPicture.asset('images/log-out.svg'),),
                   ),
             token == null
                 ? Container()
