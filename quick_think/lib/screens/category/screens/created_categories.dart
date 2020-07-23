@@ -60,11 +60,11 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                   ),
                 ),
                 SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
+                  height: SizeConfig().yMargin(context, 2),
                 ),
                 _prompt(),
                 SizedBox(
-                  height: SizeConfig().yMargin(context, 5),
+                  height: SizeConfig().yMargin(context, 4),
                 ),
                 Container(
                     width: width,
@@ -75,7 +75,7 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                           if (snapshot.connectionState ==
                                   ConnectionState.none &&
                               snapshot.hasData == null) {
-                            //print('project snapshot data is: ${projectSnap.data}');
+                            
                             return Container();
                           }
                           return snapshot.hasData
@@ -131,7 +131,22 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                                                       .w300),
                                                         ),
                                                         onOkButtonPressed: () {
-                                                          //delete category here
+                                                          state
+                                                              .deleteCategory(
+                                                                  snapshot.data[
+                                                                          index]
+                                                                      ['name'])
+                                                              .then((value) {
+                                                            if (value != null) {
+                                                              snapshot.data
+                                                                  .removeAt(
+                                                                      index);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            }
+                                                            Navigator.pop(
+                                                                context);
+                                                          });
                                                         },
                                                       ));
                                               return res;
@@ -171,11 +186,6 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                     ))
                               : Center(child: CircularProgressIndicator());
                         }))
-                // _cards(),
-                // SizedBox(
-                //   height: SizeConfig().yMargin(context, 3),
-                // ),
-                // _cards1()
               ],
             ),
           ),
@@ -235,23 +245,24 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
             child: Padding(
               padding: const EdgeInsets.all(1.0),
               child: ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 // mainAxisSize: MainAxisSize.min,
-                title: 
-                // Column(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
+                title:
+                    // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
                     Text(
-                      '$game category',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: SizeConfig().textSize(context, 2.3),
-                      ),
-                    ),
-                  //   SizedBox(height: 5)
-                  // ],
+                  '$game category',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: SizeConfig().textSize(context, 2.3),
+                  ),
+                ),
+                //   SizedBox(height: 5)
+                // ],
                 // ),
                 subtitle: Text(
                   '>>> Slide to delete',
