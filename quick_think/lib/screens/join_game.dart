@@ -53,6 +53,7 @@ class _JoinGameState extends State<JoinGame> {
     //get the played codes
     getPlayedCodes('playedGames');
 
+//Check Internet Connectivity
     connectivity = new Connectivity();
     subscription = connectivity.onConnectivityChanged.listen(
       (ConnectivityResult connectivityResult) {
@@ -76,6 +77,13 @@ class _JoinGameState extends State<JoinGame> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+//Navigate to Page When Connectivity is back
   startTimer() async {
     return new Timer(
       Duration(milliseconds: 500),
