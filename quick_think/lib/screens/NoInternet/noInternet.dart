@@ -24,20 +24,20 @@ class _NoInternetState extends State<NoInternet> {
           ),
         ),
         SizedBox(
-          height: 20.0,
+          height: SizeConfig().yMargin(context, 10),
         ),
         Text(
           "No Connection",
           style: TextStyle(
-            fontSize: 25.0,
+            fontSize: SizeConfig().textSize(context, 3),
             fontFamily: "Sofia",
             letterSpacing: 1.1,
             fontWeight: FontWeight.w700,
             color: Theme.of(context).primaryColor,
           ),
         ),
-        SizedBox(
-          height: 15.0,
+         SizedBox(
+          height: SizeConfig().yMargin(context, 3),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 25.0, right: 25.0),
