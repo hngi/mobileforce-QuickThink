@@ -121,23 +121,26 @@ class _JoinGameState extends State<JoinGame> {
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: SizeConfig().yMargin(context, 4),
-              ),
-              _logoText(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 10),
-              ),
-              _prompt(),
-              _form(),
-              _loginBtn(),
-              _or(),
-              _createGameLink(),
-            ],
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+                  child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 4),
+                ),
+                _logoText(),
+                SizedBox(
+                  height: SizeConfig().yMargin(context, 10),
+                ),
+                _prompt(),
+                _form(),
+                _loginBtn(),
+                _or(),
+                _createGameLink(),
+              ],
+            ),
           ),
         ),
       ),
@@ -381,7 +384,7 @@ class _JoinGameState extends State<JoinGame> {
           savePlayedCodes('playedGames', playedGames);
           //testing
           getPlayedCodes('playedGames');
-          Navigator.push(
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (o) => QuizPage(

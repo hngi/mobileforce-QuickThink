@@ -144,6 +144,13 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
     super.initState();
   }
 
+
+@override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     controller.forward();

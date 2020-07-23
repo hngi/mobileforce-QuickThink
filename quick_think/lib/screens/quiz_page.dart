@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
-import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 
 class QuizPage extends StatefulWidget {
   final String gameCode;
@@ -188,7 +188,7 @@ class _QuizPageState extends State<QuizPage> {
                                 () {
                               Navigator.pop(context);
                               Navigator.of(context)
-                                  .pushReplacementNamed(JoinGame.routeName);
+                                  .pushReplacementNamed(DashboardScreen.id);
                             }, Color(0xFFFF1F2E)),
                             actionButton(height, width, 'No', context, () {
                               Navigator.pop(context);

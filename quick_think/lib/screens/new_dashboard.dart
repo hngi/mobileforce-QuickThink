@@ -202,18 +202,22 @@ class QuestionSelectionCard extends StatelessWidget {
     return Container(
       // width: SizeConfig().xMargin(context, 4),
       height: SizeConfig().yMargin(context, 13),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        color: light ? Color(0xff38208c) : Hexcolor('#4C4C4C'),
-        padding: EdgeInsets.fromLTRB(32, 20, 0, 17),
-        child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(text,
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: SizeConfig().textSize(context, 2.3),
-                    color: Colors.white))),
-        onPressed: onPressed,
+      child: InkWell(
+              onTap: (){},
+              child: RaisedButton(
+                elevation: 8.0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+          color: light ? Color(0xff38208c) : Hexcolor('#4C4C4C'),
+          padding: EdgeInsets.fromLTRB(32, 20, 0, 17),
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(text,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      fontSize: SizeConfig().textSize(context, 2.3),
+                      color: Colors.white))),
+          onPressed: onPressed,
+        ),
       ),
     );
   }
