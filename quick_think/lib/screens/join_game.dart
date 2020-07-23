@@ -88,8 +88,9 @@ class _JoinGameState extends State<JoinGame> {
     return new Timer(
       Duration(milliseconds: 500),
       () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => JoinGame()));
+        // Navigator.pushReplacement(
+        //     context, MaterialPageRoute(builder: (context) => JoinGame()));
+        Navigator.pushReplacementNamed(context, 'join-game');
       },
     );
   }
