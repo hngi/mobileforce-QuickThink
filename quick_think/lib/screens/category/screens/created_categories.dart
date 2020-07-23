@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
 import 'package:quickthink/screens/category/services/utils/animations.dart';
+import 'package:quickthink/screens/login/responsiveness/res.dart';
 import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
 
 import 'package:quickthink/utils/responsiveness.dart';
@@ -11,6 +13,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'create_question.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
+
+const List<Key> keys = [
+  Key("Network"),
+  Key("NetworkDialog"),
+  Key("Flare"),
+  Key("FlareDialog"),
+  Key("Asset"),
+  Key("AssetDialog")
+];
 
 class CreatedCategories extends StatefulHookWidget {
   static const routeName = 'created_categories';
@@ -72,26 +83,81 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                   ? ListView.builder(
                                       itemCount: snapshot.data.length,
                                       itemBuilder: (context, index) {
-                                        return FadeIn(
-                                          delay: index - 0.3,
-                                          child: _cards(
-                                              game: snapshot.data[index]
-                                                  ['name'],
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CreateQuestion(
-                                                                questionState:
-                                                                    QuestionState
-                                                                        .Adding,
-                                                                categoryName:
-                                                                    snapshot.data[
-                                                                            index]
-                                                                        [
-                                                                        'name'])));
-                                              }),
+                                        return Dismissible(
+                                          background: slideRightBackground(),
+                                          confirmDismiss: (direction) async {
+                                            if (direction ==
+                                                DismissDirection.startToEnd) {
+                                              final bool res = await showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      AssetGiffyDialog(
+                                                        key: keys[5],
+                                                        buttonOkColor:
+                                                            buttonColor,
+                                                        image: Image.asset(
+                                                          'assets/images/giphy.gif',
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                        title: Text(
+                                                          'Are you sure you want to delete this Category?',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: GoogleFonts.poppins(
+                                                              fontSize:
+                                                                  SizeConfig()
+                                                                      .textSize(
+                                                                          context,
+                                                                          3),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
+                                                        entryAnimation:
+                                                            EntryAnimation
+                                                                .BOTTOM,
+                                                        description: Text(
+                                                          'This action is permanent. Category cannot be recovered',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: GoogleFonts.poppins(
+                                                              fontSize:
+                                                                  SizeConfig()
+                                                                      .textSize(
+                                                                          context,
+                                                                          2),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300),
+                                                        ),
+                                                        onOkButtonPressed: () {
+                                                          //delete category here
+                                                        },
+                                                      ));
+                                              return res;
+                                            } else {}
+                                          },
+                                          key: Key(index.toString()),
+                                          child: FadeIn(
+                                            delay: index - 0.3,
+                                            child: _cards(
+                                                game: snapshot.data[index]
+                                                    ['name'],
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => CreateQuestion(
+                                                              questionState:
+                                                                  QuestionState
+                                                                      .Adding,
+                                                              categoryName:
+                                                                  snapshot.data[
+                                                                          index]
+                                                                      [
+                                                                      'name'])));
+                                                }),
+                                          ),
                                         );
                                       },
                                     )
@@ -118,6 +184,35 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
     );
   }
 
+  Widget slideRightBackground() {
+    return Container(
+      color: Colors.red,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            Text(
+              " Delete",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerLeft,
+      ),
+    );
+  }
+
   Widget _prompt() {
     return Text(
       'Created categories',
@@ -135,30 +230,39 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
       onTap: onTap,
       child: Card(
           color: Color(0xff38208C),
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  '$game category',
+          child: Container(
+            // height: McGyver.rsDoubleH(context, 13),
+            child: Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: ListTile(
+                contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                // mainAxisSize: MainAxisSize.min,
+                title: 
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                    Text(
+                      '$game category',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: SizeConfig().textSize(context, 2.3),
+                      ),
+                    ),
+                  //   SizedBox(height: 5)
+                  // ],
+                // ),
+                subtitle: Text(
+                  '>>> Slide to delete',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
+                    color: Colors.white24,
+                    //fontWeight: FontWeight.w600,
                     fontSize: SizeConfig().textSize(context, 2),
                   ),
                 ),
-                Spacer(),
-                // Text(
-                //   '1h ago',
-                //   style: TextStyle(
-                //     fontFamily: 'Poppins',
-                //     color: Colors.white,
-                //     //fontWeight: FontWeight.w600,
-                //     fontSize: SizeConfig().textSize(context, 2),
-                //   ),
-                // ),
-              ],
+              ),
             ),
           )),
     );
