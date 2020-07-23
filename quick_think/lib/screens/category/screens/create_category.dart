@@ -176,6 +176,7 @@ class _CreateCategoryState extends State<CreateCategory> {
     return Builder(
       builder: (BuildContext context) {
         return RaisedButton(
+          elevation: 8.0,
           padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
           onPressed: () async {
             final form = formKey.currentState;

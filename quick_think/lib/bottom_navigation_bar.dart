@@ -8,6 +8,8 @@ import 'package:quickthink/screens/settings_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
+
+  static const String id = 'dashboardboard screen';
   DashboardScreen({Key key, this.username, this.uri}) : super(key: key);
   final String username;
   final String uri;

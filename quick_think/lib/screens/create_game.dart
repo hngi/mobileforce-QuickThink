@@ -197,54 +197,57 @@ class _CreateGameState extends State<CreateGame> {
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _logoText(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 10),
-                ),
-                _prompt(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _promptUsername(),
-                _userName(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 7),
-                ),
-                // _promptCategory(),
-                _promptCategorys(),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+                  child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _logoText(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 10),
+                  ),
+                  _prompt(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 4),
+                  ),
+                  _promptUsername(),
+                  _userName(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 7),
+                  ),
+                  // _promptCategory(),
+                  _promptCategorys(),
 
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
-                ),
-                _dropDownCategories(onSelect: (String categoryChosen) {
-                  setState(() {
-                    category = categoryChosen;
-                    print(category);
-                  });
-                }),
-                // _allCategories(
-                //   onSelect: (String categoryChosen) {
-                //     setState(() {
-                //       category = categoryChosen;
-                //       print(category);
-                //     });
-                //   },
-                // ),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                //     _loginBtn(),
-                _allBtns(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
-                ),
-              ],
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 1),
+                  ),
+                  _dropDownCategories(onSelect: (String categoryChosen) {
+                    setState(() {
+                      category = categoryChosen;
+                      print(category);
+                    });
+                  }),
+                  // _allCategories(
+                  //   onSelect: (String categoryChosen) {
+                  //     setState(() {
+                  //       category = categoryChosen;
+                  //       print(category);
+                  //     });
+                  //   },
+                  // ),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 4),
+                  ),
+                  //     _loginBtn(),
+                  _allBtns(),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 1),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
