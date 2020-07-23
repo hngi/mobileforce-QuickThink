@@ -339,4 +339,41 @@ class ApiCallService with ChangeNotifier {
     }
     return null;
   }
+
+  Future<String> deleteCategory(String name) async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Map data = {"name": name};
+      String payload = json.encode(data);
+      Response response =
+          await http.post(deleteCategoryUrl, headers: headers, body: payload);
+      if (response.statusCode == 400) {
+        setState(ButtonState.Idle);
+        // final Map error = json.decode(response.body);
+        SnackBarService.instance.showSnackBarError('Some error occured');
+        return null;
+      } else if (response.statusCode == 200) {
+        // final Map list = json.decode(response.body);
+        // final Map listt = list['data'];
+        setState(ButtonState.Idle);
+        SnackBarService.instance
+            .showSnackBarSuccess('Category deleted successfully');
+
+        return 'deleted';
+      }
+      print(response.statusCode);
+      setState(ButtonState.Idle);
+      // final Map error = json.decode(response.body);
+      SnackBarService.instance.showSnackBarError('Some error occured');
+      return null;
+    }
+    return null;
+  }
 }

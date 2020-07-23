@@ -13,3 +13,5 @@ final String deleteQuestionUrl = 'http://brainteaser.pythonanywhere.com/game/del
 final String deleteAccountUrl =
     'http://brainteaser.pythonanywhere.com/user/delete';
 
+final String deleteCategoryUrl = 'http://brainteaser.pythonanywhere.com/game/delete/category';
+
