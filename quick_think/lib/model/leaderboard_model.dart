@@ -29,7 +29,7 @@ Future<List<LeaderboardList>> getLeaderboard(String gameCode) async {
       _stateController.add(fetchState.NoData);
     }
   }else{
-    _stateController.addError("Oops! We could not fetch the Leaderboard at this time. \n Please try again later");
+    _stateController.addError("Oops! We could not fetch the Leaderboard at this time. \nPlease try again later");
   }
 
 }
