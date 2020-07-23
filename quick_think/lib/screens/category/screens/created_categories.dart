@@ -60,11 +60,11 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                   ),
                 ),
                 SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
+                  height: SizeConfig().yMargin(context, 2),
                 ),
                 _prompt(),
                 SizedBox(
-                  height: SizeConfig().yMargin(context, 5),
+                  height: SizeConfig().yMargin(context, 4),
                 ),
                 Container(
                     width: width,
@@ -75,7 +75,7 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                           if (snapshot.connectionState ==
                                   ConnectionState.none &&
                               snapshot.hasData == null) {
-                            //print('project snapshot data is: ${projectSnap.data}');
+                            
                             return Container();
                           }
                           return snapshot.hasData
@@ -186,11 +186,6 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                     ))
                               : Center(child: CircularProgressIndicator());
                         }))
-                // _cards(),
-                // SizedBox(
-                //   height: SizeConfig().yMargin(context, 3),
-                // ),
-                // _cards1()
               ],
             ),
           ),

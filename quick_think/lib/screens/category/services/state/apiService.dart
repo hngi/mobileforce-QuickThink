@@ -46,17 +46,20 @@ class ApiCallService with ChangeNotifier {
       if (response.statusCode == 500) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 404) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 400) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 201) {
         final Map user = json.decode(response.body);
@@ -70,7 +73,8 @@ class ApiCallService with ChangeNotifier {
       print(response.statusCode);
       setState(ButtonState.Idle);
       final Map error = json.decode(response.body);
-      SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
+      SnackBarService.instance
+          .showSnackBarError(error['error'] ?? error['name'][0]);
       return null;
     }
     return null;
@@ -354,23 +358,23 @@ class ApiCallService with ChangeNotifier {
       String payload = json.encode(data);
       Response response =
           await http.post(deleteCategoryUrl, headers: headers, body: payload);
+      print(response.statusCode);
       if (response.statusCode == 400) {
         setState(ButtonState.Idle);
-        // final Map error = json.decode(response.body);
+
         SnackBarService.instance.showSnackBarError('Some error occured');
         return null;
-      } else if (response.statusCode == 200) {
-        // final Map list = json.decode(response.body);
-        // final Map listt = list['data'];
+      } else if (response.statusCode == 204) {
         setState(ButtonState.Idle);
+        print('here');
         SnackBarService.instance
-            .showSnackBarSuccess('Category deleted successfully');
+            .showSnackBarSuccess('$name Category deleted successfully');
 
         return 'deleted';
       }
       print(response.statusCode);
       setState(ButtonState.Idle);
-      // final Map error = json.decode(response.body);
+
       SnackBarService.instance.showSnackBarError('Some error occured');
       return null;
     }

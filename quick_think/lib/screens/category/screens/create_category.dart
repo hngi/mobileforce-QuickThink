@@ -183,13 +183,19 @@ class _CreateCategoryState extends State<CreateCategory> {
             if (form.validate()) {
               form.save();
               print(controller.text);
-              apiCallService.createCategory(controller.text).then((value) => {
-                if(value != null){
-                  Get.to(CreatedCategories()),
-                  controller.clear()
-                }
-              });
-              controller.clear();
+              apiCallService.createCategory(controller.text).then(
+                    (value) => {
+                      if (value != null)
+                        {
+                          Future.delayed(Duration(seconds: 2)).then((value) {
+                            Get.to(CreatedCategories());
+                            controller.clear();
+                          })
+                        }
+                      else
+                        {controller.clear()}
+                    },
+                  );
             }
           },
           textColor: Colors.white,
