@@ -27,6 +27,7 @@ class LoginScreen extends StatefulHookWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool obscure = true;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: 'Password',
                 controller: passwordController,
                 validator: PasswordValidator.validate,
-                obscure: true,
+                obscure: obscure,
+                suffixIcon: IconButton(
+                  icon: obscure ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                  onPressed: (){
+                    setState((){
+                      obscure = !obscure;
+                    });
+                  }
+                )
               ),
               SizedBox(height: McGyver.rsDoubleH(context, 5)),
               Align(

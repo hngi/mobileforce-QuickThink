@@ -25,6 +25,7 @@ class RegistrationScreen extends StatefulHookWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  bool obscure = true;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -97,10 +98,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               SizedBox(height: McGyver.rsDoubleH(context, 3)),
               TextFieldContainer(
-                obscure: true,
+                obscure: obscure,
                 text: 'Password',
                 controller: passwordController,
                 validator: PasswordValidator.validate,
+                suffixIcon: IconButton(
+                  splashColor: Colors.transparent,
+                  splashRadius: 1,
+                  icon: obscure ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                  onPressed: (){
+                    setState((){
+                      obscure = !obscure;
+                    });
+                  }
+                )
               ),
               SizedBox(height: McGyver.rsDoubleH(context, 5)),
               Align(

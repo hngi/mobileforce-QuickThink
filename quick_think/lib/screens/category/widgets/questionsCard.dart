@@ -199,7 +199,8 @@ class QuestionsCard extends HookWidget {
                                           Navigator.pop(context);
                                         });
                                       },
-                                    ));
+                                    )
+                                    );
                           },
                           child: Container(
                             color: Colors.black26,

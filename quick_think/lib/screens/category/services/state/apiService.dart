@@ -46,17 +46,17 @@ class ApiCallService with ChangeNotifier {
       if (response.statusCode == 500) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error']);
+        SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 404) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error']);
+        SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 400) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error']);
+        SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 201) {
         final Map user = json.decode(response.body);
@@ -70,7 +70,7 @@ class ApiCallService with ChangeNotifier {
       print(response.statusCode);
       setState(ButtonState.Idle);
       final Map error = json.decode(response.body);
-      SnackBarService.instance.showSnackBarError(error['error']);
+      SnackBarService.instance.showSnackBarError(error['error'] ?? error['name'][0]);
       return null;
     }
     return null;
