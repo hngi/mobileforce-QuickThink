@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/data/leaderbord_list.dart';
 import 'package:quickthink/model/leaderboard_model.dart';
 import 'package:quickthink/screens/join_game.dart';
@@ -47,12 +48,12 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                         Expanded(
                           flex: 2,
                           child: Container(
-                            color: light ? Color(0xff1C1046) : Hexcolor('#000000'),
+                            color: Color(0xff1C1046)/* light ? Color(0xff1C1046) : Hexcolor('#000000') */,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  _arrow(),
+                                  _arrow(context),
                                   _text(),
                                   Container(
                                     margin: EdgeInsets.only(top: 30),
@@ -107,14 +108,19 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     );
   }
 }
-Widget _arrow() {
-  return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: Icon(
-        Icons.keyboard_arrow_left,
-        color: Colors.white,
-        size: 30,
-      ));
+Widget _arrow(context) {
+  return InkWell(
+    onTap: (){
+      Navigator.of(context).pushReplacementNamed(DashboardScreen.id);
+    },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Icon(
+          Icons.keyboard_arrow_left,
+          color: Colors.white,
+          size: 30,
+        )),
+  );
 }
 
 Widget _text() {
@@ -169,6 +175,7 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
             padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Error(snapshot.error),
+                
               )
           );
         }
@@ -210,7 +217,7 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
 
 Widget Error(String error){
   return Center(
-      child: Text(error, style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold))
+      child: Text(error, style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold,color: Color(0xff1C1046)))
   );
 }
 

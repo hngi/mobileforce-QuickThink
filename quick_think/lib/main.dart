@@ -9,6 +9,7 @@ import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'screens/category/screens/create_category.dart';
 import 'screens/category/screens/create_question.dart';
+import 'bottom_navigation_bar.dart';
 import 'screens/category/screens/created_categories.dart';
 
 import 'package:quickthink/screens/help.dart';
@@ -76,12 +77,14 @@ class _MyAppState extends State<MyApp> {
         'showOnBoardScreen': (context) => OnBoardScreen(),
         'showSplashPage': (context) => SplashPage(),
         Registration.id: (context) => Registration(),
+        DashboardScreen.id: (context) => DashboardScreen(),
         JoinGame.routeName: (context) => JoinGame(),
         CreatedCategories.routeName: (context) => CreatedCategories(),
         CreateCategory.routeName: (context) => CreateCategory(),
         CreateGame.routeName: (context) => CreateGame(),
         LoginScreen.routeName: (context) => LoginScreen(),
-        RegistrationScreen.routeName: (context) => RegistrationScreen()
+        RegistrationScreen.routeName: (context) => RegistrationScreen(),
+        
       },
     );
   }
