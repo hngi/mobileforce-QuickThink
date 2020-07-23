@@ -104,7 +104,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 validator: PasswordValidator.validate,
                 suffixIcon: IconButton(
                   splashColor: Colors.transparent,
-                  splashRadius: 1,
+                  // splashRadius: 1,
                   icon: obscure ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
                   onPressed: (){
                     setState((){
