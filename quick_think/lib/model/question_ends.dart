@@ -6,10 +6,11 @@ class IQEnds {
   final username;
   final String message;
   final int totalScore;
+  final int questionNumber;
 
   final String gameCode;
 
-  IQEnds({this.message, this.username, this.totalScore, this.gameCode});
+  IQEnds({this.message, this.username, this.totalScore, this.gameCode, this.questionNumber});
 
   showEndMsg(context) {
     showDialog<void>(
@@ -37,9 +38,10 @@ class IQEnds {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (ctx) => Result(
-                          score: totalScore.toString(),
+                          score: totalScore,
                           name: username,
                           gameCode: gameCode,
+                          questionNumber: questionNumber
                         )));
               },
             ),

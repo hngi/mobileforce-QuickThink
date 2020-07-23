@@ -9,20 +9,31 @@ import 'package:share/share.dart';
 
 class Result extends StatefulWidget {
   final String name;
-  final String score;
+  final int score;
   final String gameCode;
-  Result({this.name, this.score, this.gameCode});
+  final int questionNumber;
+  Result({this.name, this.score, this.gameCode, this.questionNumber});
   @override
   _ResultState createState() => _ResultState();
 }
 
 class _ResultState extends State<Result> {
+  var percentageScore;
+
+  @override
+  void initState() {
+    print('${widget.score} and ${widget.questionNumber}');
+    percentageScore = (widget.score/widget.questionNumber)*100;
+    super.initState();
+  }
+
+
   shareResult(BuildContext context) {
     final RenderBox box = context.findRenderObject();
     // placeholder for the result
     String subject = "QuickThink App Score";
-    String result = '60%';
-    String questionTotal = '20';
+    String result = '$percentageScore%';
+    String questionTotal = widget.questionNumber.toString();
     String appName = 'QuickThink from HNG Tech Limited';
     String resultSummary =
         "Hi, I scored $result out of $questionTotal questions in $appName. Do you think you can beat me? Join me and compete";
