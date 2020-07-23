@@ -396,7 +396,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
               borderSide: BorderSide(color: Color(0xffC4C4C4)),
               borderRadius: BorderRadius.circular(5.0)),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
+              borderSide: BorderSide(color: Color.fromRGBO(24, 197, 217, 1)),
               borderRadius: BorderRadius.circular(5.0)),
         ),
       ),
@@ -436,7 +436,8 @@ class _CreateQuestionState extends State<CreateQuestion> {
                         borderSide: BorderSide(color: Color(0xffC4C4C4)),
                         borderRadius: BorderRadius.circular(5.0)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
+                        borderSide:
+                            BorderSide(color: Color.fromRGBO(24, 197, 217, 1)),
                         borderRadius: BorderRadius.circular(5.0)),
                   ),
                 ),
@@ -501,7 +502,8 @@ class _CreateQuestionState extends State<CreateQuestion> {
                       borderSide: BorderSide(color: Color(0xffC4C4C4)),
                       borderRadius: BorderRadius.circular(5.0)),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(24, 197, 217, 1)),
                       borderRadius: BorderRadius.circular(5.0)),
                 ),
               ),
@@ -565,7 +567,8 @@ class _CreateQuestionState extends State<CreateQuestion> {
                         borderSide: BorderSide(color: Color(0xffC4C4C4)),
                         borderRadius: BorderRadius.circular(5.0)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
+                        borderSide:
+                            BorderSide(color: Color.fromRGBO(24, 197, 217, 1)),
                         borderRadius: BorderRadius.circular(5.0)),
                   ),
                 ),
@@ -628,7 +631,8 @@ class _CreateQuestionState extends State<CreateQuestion> {
                       borderSide: BorderSide(color: Color(0xffC4C4C4)),
                       borderRadius: BorderRadius.circular(5.0)),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(24, 197, 217, 1)),
                       borderRadius: BorderRadius.circular(5.0)),
                 ),
               ),
@@ -687,7 +691,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
               borderSide: BorderSide(color: Color(0xffC4C4C4)),
               borderRadius: BorderRadius.circular(5.0)),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black),
+              borderSide: BorderSide(color: Color.fromRGBO(24, 197, 217, 1)),
               borderRadius: BorderRadius.circular(5.0)),
         ),
       ),

@@ -8,9 +8,9 @@ class LeaderboardModel{
 
   final StreamController<fetchState> _stateController = StreamController<fetchState>.broadcast();
 
-  List<User> listUsers;
-
   Stream<fetchState> get leaderboardState => _stateController.stream;
+
+  List<Data> listData;
 
 Future<List<LeaderboardList>> getLeaderboard(String gameCode) async {
 
@@ -22,9 +22,7 @@ Future<List<LeaderboardList>> getLeaderboard(String gameCode) async {
   if(data.statusCode == 200){
     var results = jsonDecode(data.body);
     if(results != null){
-      final List<Data> listData = LeaderboardList.fromJson(results).data;
-
-      listUsers = getUsers(listData);
+      listData = LeaderboardList.fromJson(results).data;
       
       _stateController.add(fetchState.DataRetrieved);
     }else{
@@ -35,17 +33,5 @@ Future<List<LeaderboardList>> getLeaderboard(String gameCode) async {
   }
 
 }
-
-List<User> getUsers(List<Data> data){
-  List<User> users = [];
-
-  data.forEach((element) {
-    users.add(element.user);
-  });
-
-
-  return users;
-}
-
 
 }

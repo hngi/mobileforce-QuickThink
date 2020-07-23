@@ -7,15 +7,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-
-import 'package:quickthink/model/new_questions_model.dart';
 import 'package:quickthink/model/question_model.dart';
 import 'package:quickthink/screens/create_game.dart';
-import 'package:quickthink/screens/dashboard.dart';
-
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String url = 'http://brainteaser.pythonanywhere.com/game/play';
 const String checkUrl =
@@ -33,9 +30,58 @@ class _JoinGameState extends State<JoinGame> {
   TextEditingController username = TextEditingController();
   TextEditingController gameCode = TextEditingController();
 
+  ///List to store played gameCodes
+  final List<String> playedGames = [];
+
   final _formKey = GlobalKey<FormState>();
+  SharedPreferences sharedPreferences;
 
   ProgressDialog progressDialog;
+  //List<String> gamecodes = [value];
+
+  @override
+  void initState() {
+    //get the played codes
+    getPlayedCodes('playedGames');
+    super.initState();
+  }
+
+  //Persisting the play GameCodes
+  Future<List<String>> savePlayedCodes(String key, List<String> value) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final List<String> newList = value;
+    var setList = newList.toSet();
+
+    sharedPreferences.setStringList(key, setList.toList());
+
+//    print('List Stored : $value');
+    // if (setList.length <= 10) {
+    //   for (int i = 0; i <= 10; i++) {
+    //     sharedPreferences.setStringList(key, setList.toList());
+    //   }
+    // } else {
+    //   //Trying to remove the last index in the set
+    //   var listAgain = setList.toList().remove(9);
+    //   var set = newList.toSet();
+    //   print('List Again $listAgain');
+    //   print('Set: $set');
+    //   print('List: $newList');
+    //   // sharedPreferences.setStringList(key, setList.toList());
+    // }
+    //sharedPreferences.setStringList(key, newList);
+
+    // print('List Stored : $newList');
+
+    return newList;
+  }
+
+  ///Retrieving the Persistent played GameCodes
+  Future<List<String>> getPlayedCodes(String key) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final valueStored = sharedPreferences.getStringList(key) ?? [];
+    print('List Retrieved with Play Game Codes in Join Game: $valueStored');
+    return valueStored;
+  }
 
   void _showInSnackBar(String value, color) {
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -325,7 +371,16 @@ class _JoinGameState extends State<JoinGame> {
 
       await _joiningGame(gameCode.text, username.text).then((response) {
         if (response.statusCode == 200) {
+          ///Persisting the played gameCodes to sharedprefs
+          playedGames.insert(0, gameCode.text);
+          print('Here $playedGames');
+          //   here.clear();
+
           progressDialog.hide();
+
+          savePlayedCodes('playedGames', playedGames);
+          //testing
+          getPlayedCodes('playedGames');
           Navigator.push(
               context,
               MaterialPageRoute(

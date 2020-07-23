@@ -13,6 +13,7 @@ import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'leaderboard.dart';
 
@@ -39,6 +40,9 @@ class _CreateGameState extends State<CreateGame> {
 
   Services services = new Services();
 
+  ///ist to store creted gameCodes
+  List<String> gamesCreated = [];
+
   //GetCategories getCategories = new GetCategories();
   bool light = CustomTheme.light;
 
@@ -56,6 +60,24 @@ class _CreateGameState extends State<CreateGame> {
   String gameCode;
   TextEditingController userNameController = TextEditingController();
   Future categories;
+
+  ///PErsisting the Created GameCodes
+  Future<List<String>> saveCreatesCodes(String key, List<String> value) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final List<String> newList = value;
+    var setList = newList.toSet();
+
+    sharedPreferences.setStringList(key, setList.toList());
+    return newList;
+  }
+
+  ///Retriving the persisted Created GameCodes
+  Future<List<String>> getCreatedCodes(String key) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final valueStored = sharedPreferences.getStringList(key) ?? [];
+    print('List Retrieved with Create Game Codes in Create Game: $valueStored');
+    return valueStored;
+  }
 
   Future _fetchCategory() async {
     listCategories = await services.getCategories();
@@ -98,6 +120,8 @@ class _CreateGameState extends State<CreateGame> {
 
   @override
   void initState() {
+    //get the created codes
+    getCreatedCodes('createdGames');
     userNameController.addListener(() {});
     super.initState();
     categories = _fetchCategory();
@@ -118,6 +142,12 @@ class _CreateGameState extends State<CreateGame> {
     if (response.statusCode == 200) {
       String data = response.body;
       gameCode = jsonDecode(data)['game_code'].toString();
+
+      //Persisting the Created GameCodes
+      gamesCreated.insert(0, gameCode);
+      saveCreatesCodes('createdGames', gamesCreated);
+      //testing
+      getCreatedCodes('createdGames');
       return gameCode;
     } else {
       //  throw Exception('Failed to retrieve code');

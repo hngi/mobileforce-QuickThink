@@ -20,7 +20,6 @@ class NewLeaderBoard extends StatefulWidget {
 class _NewLeaderBoardState extends State<NewLeaderBoard> {
   bool light = CustomTheme.light;
   final model = LeaderboardModel();
-  List<User> topUsers;
 
   @override
   void initState() {
@@ -57,7 +56,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                   _text(),
                                   Container(
                                     margin: EdgeInsets.only(top: 30),
-                                    child: (model.listUsers == null || model.listUsers.length == 0) ?
+                                    child: (model.listData == null || model.listData.length == 0) ?
                                     SpinKitFoldingCube(
                                       color: Colors.white,
                                       size: 20.0,
@@ -67,15 +66,15 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                           children: <Widget>[
                                             Expanded(
                                               flex: 1,
-                                                child: _roundContainer('2', model.listUsers[1].name, light)
+                                                child: _roundContainer('2', model.listData[1].userName, light)
                                             ),
                                             Expanded(
                                               flex: 1,
-                                                child: _roundContainer1(model.listUsers[0].name, light)
+                                                child: _roundContainer1(model.listData[0].userName, light)
                                             ),
                                             Expanded(
                                               flex: 1,
-                                                child: _roundContainer('3', model.listUsers[2].name, light)
+                                                child: _roundContainer('3', model.listData[2].userName, light)
                                             )
                                           ],
                                         )
@@ -94,7 +93,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                     topLeft: Radius.circular(30), topRight: Radius.circular(30)
                                 ),
                               ),
-                              child: _resultContainer(light,context,model,topUsers),
+                              child: _resultContainer(light,context,model),
                             )
                         )
                       ],
@@ -161,7 +160,7 @@ Widget _roundContainer1(String text1, light) {
       ));
 }
 
-Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,List topUsers) {
+Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model) {
   return StreamBuilder(
     stream: model.leaderboardState,
       builder: (context,snapshot){
@@ -179,7 +178,7 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
             size: 20.0,
           );
         }
-        if(model.listUsers.length == 0){
+        if(model.listData.length == 0){
           return Container(
               padding: EdgeInsets.all(20.0),
               child: Center(
@@ -189,17 +188,18 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
           height: 200.0,
           child: ListView.builder(
             shrinkWrap: true,
-              itemCount: model.listUsers.length,
+              itemCount: model.listData.length,
               itemBuilder: (context,index){
                 if (index == 0) {
+                  print(index.toString());
                   return _row(
                       'images/cup.svg', 'images/face1.png', 'images/coin2.svg',
-                      model.listUsers[index].name,
-                      model.listUsers[index].score.toString(), light);
+                      model.listData[index].userName,
+                      model.listData[index].score.toString(), light);
                 } else {
                   return _row1((index + 1).toString(), 'images/face2.png',
-                      'images/coin2.svg', model.listUsers[index].name,
-                      model.listUsers[index].score.toString(), light);
+                      'images/coin2.svg', model.listData[index].userName,
+                      model.listData[index].score.toString(), light);
                 }
               }
           ),

@@ -192,6 +192,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
                 IQEnds(
                         totalScore: questionFunctions.totalScore,
                         username: _userName,
+                        questionNumber: questionFunctions.numberOfQuestions() ,
                         message:
                             'Oops! You have run out of time, proceed to your result.',
                         gameCode: widget.gameCode)
@@ -387,7 +388,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
         left: width * .064,
         child: Text(
           'Question ' +
-              questionFunctions.currentQuestion().toString() +
+              (questionFunctions.currentQuestion() + 1).toString() +
               ' of ' +
               questionFunctions.numberOfQuestions().toString(),
           style: GoogleFonts.poppins(
@@ -462,10 +463,11 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
         resetTimer = true;
         isPicked = [false, false, false, false];
         if (questionFunctions.isFinished() == true) {
-          print('_userName: $_userName');
+          print('_userName: $_userName ${questionFunctions.numberOfQuestions()}');
           IQEnds(
                   totalScore: questionFunctions.totalScore,
                   username: _userName,
+                  questionNumber: questionFunctions.numberOfQuestions() ,
                   message:
                       'You have successfully completed the test proceed for the result',
                   gameCode: widget.gameCode)
@@ -487,6 +489,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
           IQEnds(
                   totalScore: questionFunctions.totalScore,
                   username: _userName,
+                  questionNumber: questionFunctions.numberOfQuestions(),
                   message:
                       'You have successfully completed the test proceed for the result',
                   gameCode: widget.gameCode)
