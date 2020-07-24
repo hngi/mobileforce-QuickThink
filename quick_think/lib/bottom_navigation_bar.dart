@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quickthink/screens/board_screen.dart';
 import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/new_dashboard.dart';
 import 'package:quickthink/screens/new_leaderboard.dart';
@@ -63,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final widgetOptions = [
       new DashBoard(uri: uri),
-      new NewLeaderBoard(),
+      new BoardScreen(),
       new SettingsView(),
     ];
     return new Scaffold(

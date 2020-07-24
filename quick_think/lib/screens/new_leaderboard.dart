@@ -7,6 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/data/leaderbord_list.dart';
 import 'package:quickthink/model/leaderboard_model.dart';
+import 'package:quickthink/screens/board_screen.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/theme/theme.dart';
@@ -54,7 +55,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   _arrow(context),
-                                  _text(),
+                                  _text(widget.gameCode),
                                   Container(
                                     margin: EdgeInsets.only(top: 30),
                                     child: (model.listData == null || model.listData.length == 0) ?
@@ -111,7 +112,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
 Widget _arrow(context) {
   return InkWell(
     onTap: (){
-      Navigator.of(context).pushReplacementNamed(DashboardScreen.id);
+      Navigator.of(context).pop();
     },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -123,13 +124,38 @@ Widget _arrow(context) {
   );
 }
 
-Widget _text() {
+Widget _text(String gameCode) {
   return Container(
-      padding: EdgeInsets.only(left: 20),
-      child: Text(
-        'Leaderboard',
-        style: GoogleFonts.poppins(
-            fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+      padding: EdgeInsets.only(left: 20,right: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Text(
+              'Leaderboard',
+              style: GoogleFonts.poppins(
+                  fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              width: 100.0,
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              decoration: BoxDecoration(
+                color: Hexcolor("#18C5D9"),
+                borderRadius: BorderRadius.circular(7.0)
+              ),
+              child: Text(
+                "Code: $gameCode",
+                style: GoogleFonts.poppins(
+                    fontSize: 22, color: Colors.white, fontWeight: FontWeight.w400),
+              ),
+            ),
+          )
+        ],
       ));
 }
 
@@ -175,7 +201,6 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
             padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Error(snapshot.error),
-                
               )
           );
         }
@@ -198,7 +223,6 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
               itemCount: model.listData.length,
               itemBuilder: (context,index){
                 if (index == 0) {
-                  print(index.toString());
                   return _row(
                       'images/cup.svg', 'images/face1.png', 'images/coin2.svg',
                       model.listData[index].userName,
