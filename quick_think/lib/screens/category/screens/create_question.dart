@@ -133,49 +133,52 @@ class _CreateQuestionState extends State<CreateQuestion> {
         backgroundColor: Color(0xFF1C1046),
         body: !_connection
             ? changed
-                ? Center(
-                    child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig().xMargin(context, 10)),
-                    child: Card(
-                        color: Color(0xFF1C1046),
-                        child: Container(
-                          height: SizeConfig().yMargin(context, 20),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Wrap(
-                                alignment: WrapAlignment.center,
-                                runSpacing: 10,
-                                spacing: 10,
-                                children: [
-                                  RaisedButton(
-                                    color: buttonColor,
-                                    onPressed: () {
-                                      Get.to(ViewQuestions());
-                                    },
-                                    child: Text('View All Questions'),
-                                  ),
-                                  // Spacer(),
-                                  RaisedButton(
-                                    color: buttonColor,
-                                    onPressed: () {
-                                      setState(() {
-                                        changed = false;
-                                      });
-                                    },
-                                    child: Text('New Question'),
-                                  ),
-                                  RaisedButton(
-                                    color: buttonColor,
-                                    onPressed: () {
-                                      Get.to(DashboardScreen());
-                                    },
-                                    child: Text('DashBoard'),
-                                  ),
-                                ]),
-                          ),
-                        )),
-                  ))
+                ? GestureDetector(
+                    onTap: () => FocusScope.of(context).unfocus(),
+                    child: Center(
+                        child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig().xMargin(context, 10)),
+                      child: Card(
+                          color: Color(0xFF1C1046),
+                          child: Container(
+                            height: SizeConfig().yMargin(context, 20),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  runSpacing: 10,
+                                  spacing: 10,
+                                  children: [
+                                    RaisedButton(
+                                      color: buttonColor,
+                                      onPressed: () {
+                                        Get.to(ViewQuestions());
+                                      },
+                                      child: Text('View All Questions'),
+                                    ),
+                                    // Spacer(),
+                                    RaisedButton(
+                                      color: buttonColor,
+                                      onPressed: () {
+                                        setState(() {
+                                          changed = false;
+                                        });
+                                      },
+                                      child: Text('New Question'),
+                                    ),
+                                    RaisedButton(
+                                      color: buttonColor,
+                                      onPressed: () {
+                                        Get.to(DashboardScreen());
+                                      },
+                                      child: Text('DashBoard'),
+                                    ),
+                                  ]),
+                            ),
+                          )),
+                    )),
+                  )
                 : SafeArea(
                     child: Padding(
                       padding:
