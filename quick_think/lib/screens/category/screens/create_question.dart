@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -14,6 +17,7 @@ import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
 import 'package:quickthink/screens/login/services/utils/validators.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 import 'created_categories.dart';
 
 //import 'package:quickthink/utils/quizTimer.dart';
@@ -34,8 +38,35 @@ class CreateQuestion extends StatefulHookWidget {
 }
 
 class _CreateQuestionState extends State<CreateQuestion> {
+  //Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
   @override
   void initState() {
+    //Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
     if (widget.questionState == QuestionState.Editing) {
       categoryController.text = widget.question['category'];
       questionController.text = widget.question['question'];
@@ -56,12 +87,23 @@ class _CreateQuestionState extends State<CreateQuestion> {
     super.initState();
   }
 
+  //Navigate to Page When Connectivity is back
+  startTimer() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        Navigator.pushReplacementNamed(context, 'created_categories');
+      },
+    );
+  }
+
   var style = GoogleFonts.poppins(
     color: Color(0xFF1C1046),
     fontSize: 14,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w600,
   );
+
   TextEditingController categoryController = TextEditingController();
   TextEditingController questionController = TextEditingController();
   TextEditingController option1Controller = TextEditingController();
@@ -74,6 +116,12 @@ class _CreateQuestionState extends State<CreateQuestion> {
   bool changed = false;
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = useProvider(apiState);
     double width = MediaQuery.of(context).size.width;
@@ -83,73 +131,79 @@ class _CreateQuestionState extends State<CreateQuestion> {
 
     return Scaffold(
         backgroundColor: Color(0xFF1C1046),
-        body: changed
-            ? Center(
-                child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig().xMargin(context, 10)),
-                child: Card(
-                    color: Color(0xFF1C1046),
-                    child: Container(
-                      height: SizeConfig().yMargin(context, 20),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Wrap(
-                            alignment: WrapAlignment.center,
-                            runSpacing: 10,
-                            spacing: 10,
-                            children: [
-                              RaisedButton(
-                                color: buttonColor,
-                                onPressed: () {
-                                  Get.to(ViewQuestions());
-                                },
-                                child: Text('View All Questions'),
-                              ),
-                              // Spacer(),
-                              RaisedButton(
-                                color: buttonColor,
-                                onPressed: () {
-                                  setState(() {
-                                    changed = false;
-                                  });
-                                },
-                                child: Text('New Question'),
-                              ),
-                              RaisedButton(
-                                color: buttonColor,
-                                onPressed: () {
-                                  Get.to(DashboardScreen());
-                                },
-                                child: Text('DashBoard'),
-                              ),
-                            ]),
-                      ),
+        body: !_connection
+            ? changed
+                ? GestureDetector(
+                    onTap: () => FocusScope.of(context).unfocus(),
+                    child: Center(
+                        child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig().xMargin(context, 10)),
+                      child: Card(
+                          color: Color(0xFF1C1046),
+                          child: Container(
+                            height: SizeConfig().yMargin(context, 20),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  runSpacing: 10,
+                                  spacing: 10,
+                                  children: [
+                                    RaisedButton(
+                                      color: buttonColor,
+                                      onPressed: () {
+                                        Get.to(ViewQuestions());
+                                      },
+                                      child: Text('View All Questions'),
+                                    ),
+                                    // Spacer(),
+                                    RaisedButton(
+                                      color: buttonColor,
+                                      onPressed: () {
+                                        setState(() {
+                                          changed = false;
+                                        });
+                                      },
+                                      child: Text('New Question'),
+                                    ),
+                                    RaisedButton(
+                                      color: buttonColor,
+                                      onPressed: () {
+                                        Get.to(DashboardScreen());
+                                      },
+                                      child: Text('DashBoard'),
+                                    ),
+                                  ]),
+                            ),
+                          )),
                     )),
-              ))
-            : SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: IconButton(
-                            color: buttonColor,
-                            icon: Icon(Icons.arrow_back),
-                            onPressed: () => Get.back(),
-                          ),
+                  )
+                : SafeArea(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, right: 20, top: 15),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: IconButton(
+                                color: buttonColor,
+                                icon: Icon(Icons.arrow_back),
+                                onPressed: () => Get.back(),
+                              ),
+                            ),
+                            _textTitle(height, width),
+                            SizedBox(height: height * 0.02),
+                            _box(height, width, heightBox, widthBox, state),
+                          ],
                         ),
-                        _textTitle(height, width),
-                        SizedBox(height: height * 0.02),
-                        _box(height, width, heightBox, widthBox, state),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ));
+                  )
+            : NoInternet());
   }
 
   Widget _box(
@@ -222,9 +276,9 @@ class _CreateQuestionState extends State<CreateQuestion> {
               alignment: Alignment.bottomRight,
               child: apiCallService.buttonState == ButtonState.Pressed
                   ? SpinKitThreeBounce(
-                    size: 30,
-                    color: buttonColor,
-                  )
+                      size: 30,
+                      color: buttonColor,
+                    )
                   : _nextButton(
                       height, width, heightBox, widthBox, apiCallService),
             )

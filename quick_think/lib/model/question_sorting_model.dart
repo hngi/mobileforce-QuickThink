@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
 import 'package:quickthink/model/question_ends.dart';
 import 'package:quickthink/model/question_model.dart';
+import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickthink/utils/quizTimer.dart';
 
@@ -55,10 +56,13 @@ class _QuickThinkState extends State<QuickThink> {
 
             if (questionData.length == 0) {
               return Center(
-                  child: Text(
-                'There is no question created for this game code yet',
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                'There is no question created for this game code yet.',
                 style: TextStyle(color: Colors.white, fontSize: 24.0),
-              ));
+              ),
+                  ));
             }
 
             return CustomQuestionView(
@@ -110,7 +114,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
 
   String _userName;
 
-  AnimationController controller;
+
 
   List<bool> isPicked = [false, false, false, false];
 
@@ -138,27 +142,20 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
 
     //quickThink = QuickThink(difficultyLevel: widget.difficultyLevel);
 
-    controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
-
+  
     super.initState();
   }
 
 
 @override
   void dispose() {
-    controller.dispose();
+    
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    controller.forward();
-
-    controller.addListener(() {
-      setState(() {});
-    });
-
+  
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
@@ -191,8 +188,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
               }); */
 
                 resetTimer = true;
-                controller.reset();
-                controller.forward();
+                
 
                 questionFunctions.nextQuestion();
               } else {
@@ -407,41 +403,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
         ));
   }
 
-  // Widget _nextButton(height, width, heightBox, widthBox) {
-  //   return Positioned(
-  //     top: heightBox * .89,
-  //     left: widthBox * .58,
-  //     right: widthBox * .0,
-  //     bottom: heightBox * .0,
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(5.0),
-  //         color: Color(0xFF18C5D9),
-  //       ),
-  //       height: height * .069,
-  //       width: width * .368,
-  //       child: FlatButton(
-  //         child: Text(
-  //           'Next',
-  //           style: style.copyWith(
-  //             fontWeight: FontWeight.bold,
-  //             color: Color(0xFFFFFFFF),
-  //             fontSize: 16,
-  //             letterSpacing: 0.5,
-  //           ),
-  //         ),
-  //         onPressed: () {
-  //           print('getUserPickedAnswer:$userAnswer');
 
-  //           if (userAnswer.isNotEmpty && userAnswer != null) {
-  //             checkAnswer(userAnswer);
-  //             isPicked = [false, false, false, false];
-  //           }
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
 
   bool isCorrect(String userResponse) {
     stopTimer = true;
@@ -460,8 +422,7 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
 
 
     setState(() {
-      controller.reset();
-      controller.forward();
+      
       userResponse = option;
 
       if (userResponse == correctAnswer) {
@@ -514,16 +475,19 @@ class _CustomQuestionViewState extends State<CustomQuestionView>
       top: heightBox * .076,
       left: widthBox * .11,
       right: widthBox * .13,
-      child: Text(
-        questionFunctions.getQuestionText(),
-        style: GoogleFonts.poppins(
-          color: Color(0xFF38208C).withOpacity(controller.value),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          fontStyle: FontStyle.normal,
-          // fontWeight: FontWeight.w500,
+      child: FadeIn(
+        delay: 0.1,
+              child: Text(
+          questionFunctions.getQuestionText(),
+          style: GoogleFonts.poppins(
+            color: Color(0xFF38208C),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.normal,
+            // fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.justify,
         ),
-        textAlign: TextAlign.justify,
       ),
     );
   }
@@ -620,7 +584,7 @@ class QuestionFunctions {
   bool stopTimer = false;
 
   int count = 0;
-  AnimationController controller;
+  
   List<bool> isPicked = [false, false, false, false];
 
   QuestionFunctions(List<QuestionModel> questionBank) {
