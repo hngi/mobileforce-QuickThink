@@ -119,7 +119,7 @@ class _ViewQuestionsState extends State<ViewQuestions> {
                                           var data = snapshot.data[index];
                                           var newd = snapshot.data;
                                           return FadeIn(
-                                            delay: index - 0.3,
+                                            delay: index - 0.5,
                                             child: QuestionsCard(
                                                 questions: data,
                                                 number: index,
