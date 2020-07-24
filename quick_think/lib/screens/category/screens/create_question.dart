@@ -311,11 +311,17 @@ class _CreateQuestionState extends State<CreateQuestion> {
           ),
         ),
         onPressed: () {
+         
           if (widget.questionState == QuestionState.Adding) {
             final form = formKey.currentState;
+            
             if (form.validate()) {
               if (correctAnswer != null) {
                 form.save();
+                // print(option1Controller.text);
+                // print(option2Controller.text);
+                // print(option3Controller.text);
+                // print(option4Controller.text);
                 state
                     .createQuestion(Questions(
                         category: categoryController.text,
