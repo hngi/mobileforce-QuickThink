@@ -804,7 +804,6 @@ class _CreateGameState extends State<CreateGame> {
                           Clipboard.setData(new ClipboardData(text: hintText));
                           shareCode(context);
                           //Share Code here
-                          //Flutter Toast saying has been copied to clipboard
                         },
                         child: Text(
                           "Share game code",

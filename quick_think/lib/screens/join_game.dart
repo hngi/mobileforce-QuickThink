@@ -469,6 +469,7 @@ class _JoinGameState extends State<JoinGame> {
                 borderRadius: BorderRadius.circular(5.0)),
             child: Container(
               height: height * .4,
+              padding: EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
