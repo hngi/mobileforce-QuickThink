@@ -228,7 +228,7 @@ Widget _row(String index,String gameCode, BuildContext context){
                   color: Colors.white
               )),
             ),
-            SizedBox(width: 140),
+            SizedBox(width: 110),
             Expanded(
               flex: 3,
               child: RaisedButton(
