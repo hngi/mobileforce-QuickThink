@@ -30,68 +30,71 @@ class _CreateCategoryState extends State<CreateCategory> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(
-            left: SizeConfig().xMargin(context, 5.0),
-            right: SizeConfig().xMargin(context, 5.0),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 2),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    color: buttonColor,
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () => Get.back(),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+                  child: Container(
+            padding: EdgeInsets.only(
+              left: SizeConfig().xMargin(context, 5.0),
+              right: SizeConfig().xMargin(context, 5.0),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 2),
                   ),
-                ),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _prompt(),
-                _form(controller),
-                state.buttonState == ButtonState.Idle
-                    ? _loginBtn(state, controller)
-                    : SpinKitThreeBounce(
-                        color: buttonColor,
-                        size: 30,
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      color: buttonColor,
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => Get.back(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig().yMargin(context, 4),
+                  ),
+                  _prompt(),
+                  _form(controller),
+                  state.buttonState == ButtonState.Idle
+                      ? _loginBtn(state, controller)
+                      : SpinKitThreeBounce(
+                          color: buttonColor,
+                          size: 30,
+                        ),
+                  SizedBox(height: SizeConfig().yMargin(context, 3)),
+                  Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(CreatedCategories());
+                      },
+                      child: Text(
+                        'View Categories',
+                        style: GoogleFonts.poppins(
+                            color: buttonColor,
+                            fontSize: SizeConfig().textSize(context, 2.6)),
                       ),
-                SizedBox(height: SizeConfig().yMargin(context, 3)),
-                Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.to(CreatedCategories());
-                    },
-                    child: Text(
-                      'View Categories',
-                      style: GoogleFonts.poppins(
-                          color: buttonColor,
-                          fontSize: SizeConfig().textSize(context, 2.6)),
                     ),
                   ),
-                ),
-                SizedBox(height: SizeConfig().yMargin(context, 3)),
-                Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.to(ViewQuestions());
-                    },
-                    child: Text(
-                      'View Questions',
-                      style: GoogleFonts.poppins(
-                          color: buttonColor,
-                          fontSize: SizeConfig().textSize(context, 2.6)),
+                  SizedBox(height: SizeConfig().yMargin(context, 3)),
+                  Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(ViewQuestions());
+                      },
+                      child: Text(
+                        'View Questions',
+                        style: GoogleFonts.poppins(
+                            color: buttonColor,
+                            fontSize: SizeConfig().textSize(context, 2.6)),
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
