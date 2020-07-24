@@ -213,31 +213,40 @@ Widget _row(String index,String gameCode, BuildContext context){
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(index, style: GoogleFonts.poppins(
-                fontSize: 20,
-                color: Colors.white
-            )),
-            SizedBox(width: 20),
-            Text(gameCode, style: GoogleFonts.poppins(
-                fontSize: 20,
-                color: Colors.white
-            )),
-            SizedBox(width: 140),
-            RaisedButton(
-                onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (o) =>
-                              NewLeaderBoard(gameCode: gameCode)));
-                },
-              color: Hexcolor('#18C5D9'),
-              child: Text(
-                "View",
-                style: GoogleFonts.poppins(
+            Expanded(
+              flex: 1,
+              child: Text(index, style: GoogleFonts.poppins(
                   fontSize: 20,
                   color: Colors.white
-              ))
+              )),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              flex: 2,
+              child: Text(gameCode, style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.white
+              )),
+            ),
+            SizedBox(width: 110),
+            Expanded(
+              flex: 3,
+              child: RaisedButton(
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (o) =>
+                                NewLeaderBoard(gameCode: gameCode)));
+                  },
+                  color: Hexcolor('#18C5D9'),
+                  child: Text(
+                      "View",
+                      style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          color: Colors.white
+                      ))
+              ),
             )
           ],
         ),
