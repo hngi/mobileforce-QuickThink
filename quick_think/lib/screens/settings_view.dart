@@ -207,7 +207,7 @@ class _SettingsViewState extends State<SettingsView> {
                         //   }
                         // });
                         logout();
-                        Get.to(LoginScreen());
+                        Get.off(LoginScreen());
                       },
                       title: Text(
                         "Log out",
@@ -231,7 +231,7 @@ class _SettingsViewState extends State<SettingsView> {
                       state.deleteAccount().then((value) {
                         if (value != null) {
                           Future.delayed(Duration(seconds: 3))
-                              .then((value) => Get.to(LoginScreen()));
+                              .then((value) => Get.off(LoginScreen()));
                         }
                       });
                     },

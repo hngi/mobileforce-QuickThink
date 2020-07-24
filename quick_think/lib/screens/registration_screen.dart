@@ -85,6 +85,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
     final state = useProvider(auth);
+
     return _connection
         ? NoInternet()
         : Scaffold(
@@ -204,5 +205,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
           );
+
   }
 }

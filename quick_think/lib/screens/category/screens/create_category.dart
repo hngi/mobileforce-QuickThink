@@ -149,6 +149,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                     ],
                   ),
                 ),
+
               ),
             ),
           );
