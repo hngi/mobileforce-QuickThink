@@ -90,121 +90,123 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ? NoInternet()
         : Scaffold(
             backgroundColor: backgroundColor,
-            body: SingleChildScrollView(
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: McGyver.rsDoubleW(context, 30),
-                        height: McGyver.rsDoubleH(context, 20),
-                        decoration: BoxDecoration(
-                            // color: Colors.red,
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('assets/app_name_vector.png'))),
-                      ),
-                    ),
-                    SizedBox(height: McGyver.rsDoubleH(context, 2)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: McGyver.rsDoubleW(context, 9)),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Hey there!',
-                          style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: SizeConfig().textSize(context, 3)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: McGyver.rsDoubleH(context, 2)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: McGyver.rsDoubleW(context, 9)),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Sign up to play cool games',
-                          style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              //fontWeight: FontWeight.w600,
-                              fontSize: SizeConfig().textSize(context, 2)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: McGyver.rsDoubleH(context, 5)),
-                    TextFieldContainer(
-                      obscure: false,
-                      text: 'Name',
-                      controller: usernameController,
-                      validator: UsernameValidator.validate,
-                    ),
-                    SizedBox(height: McGyver.rsDoubleH(context, 3)),
-                    TextFieldContainer(
-                      obscure: false,
-                      text: 'Email',
-                      controller: emailController,
-                      validator: EmailValidator.validate,
-                    ),
-                    SizedBox(height: McGyver.rsDoubleH(context, 3)),
-                    TextFieldContainer(
-                        obscure: obscure,
-                        text: 'Password',
-                        controller: passwordController,
-                        validator: PasswordValidator.validate,
-                        suffixIcon: IconButton(
-                            splashColor: Colors.transparent,
-                            // splashRadius: 1,
-                            icon: obscure
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                            onPressed: () {
-                              setState(() {
-                                obscure = !obscure;
-                              });
-                            })),
-                    SizedBox(height: McGyver.rsDoubleH(context, 5)),
-                    Align(
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Align(
                         alignment: Alignment.center,
-                        child: state.buttonState == ButtonState.Pressed
-                            ? SpinKitThreeBounce(
-                                color: buttonColor,
-                                size: 30,
-                              )
-                            : SignUpButton(
-                                onPressed: () {
-                                  final form = formKey.currentState;
-                                  if (form.validate()) {
-                                    form.save();
-                                    state
-                                        .signup(
-                                      usernameController.text,
-                                      emailController.text,
-                                      passwordController.text,
-                                    )
-                                        .then((value) {
-                                      if (value != null) {
-                                        Future.delayed(Duration(seconds: 2))
-                                            .then((value) =>
-                                                Get.to(LoginScreen()));
-                                      }
-                                    });
-                                  }
-                                },
-                              )),
-                    SizedBox(height: McGyver.rsDoubleH(context, 3)),
-                    Quest2()
-                  ],
+                        child: Container(
+                          width: McGyver.rsDoubleW(context, 30),
+                          height: McGyver.rsDoubleH(context, 20),
+                          decoration: BoxDecoration(
+                              // color: Colors.red,
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/app_name_vector.png'))),
+                        ),
+                      ),
+                      SizedBox(height: McGyver.rsDoubleH(context, 2)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: McGyver.rsDoubleW(context, 9)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Hey there!',
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: SizeConfig().textSize(context, 3)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: McGyver.rsDoubleH(context, 2)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: McGyver.rsDoubleW(context, 9)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Sign up to play cool games',
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                //fontWeight: FontWeight.w600,
+                                fontSize: SizeConfig().textSize(context, 2)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: McGyver.rsDoubleH(context, 5)),
+                      TextFieldContainer(
+                        obscure: false,
+                        text: 'Name',
+                        controller: usernameController,
+                        validator: UsernameValidator.validate,
+                      ),
+                      SizedBox(height: McGyver.rsDoubleH(context, 3)),
+                      TextFieldContainer(
+                        obscure: false,
+                        text: 'Email',
+                        controller: emailController,
+                        validator: EmailValidator.validate,
+                      ),
+                      SizedBox(height: McGyver.rsDoubleH(context, 3)),
+                      TextFieldContainer(
+                          obscure: obscure,
+                          text: 'Password',
+                          controller: passwordController,
+                          validator: PasswordValidator.validate,
+                          suffixIcon: IconButton(
+                              splashColor: Colors.transparent,
+                              // splashRadius: 1,
+                              icon: obscure
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
+                              onPressed: () {
+                                setState(() {
+                                  obscure = !obscure;
+                                });
+                              })),
+                      SizedBox(height: McGyver.rsDoubleH(context, 5)),
+                      Align(
+                          alignment: Alignment.center,
+                          child: state.buttonState == ButtonState.Pressed
+                              ? SpinKitThreeBounce(
+                                  color: buttonColor,
+                                  size: 30,
+                                )
+                              : SignUpButton(
+                                  onPressed: () {
+                                    final form = formKey.currentState;
+                                    if (form.validate()) {
+                                      form.save();
+                                      state
+                                          .signup(
+                                        usernameController.text,
+                                        emailController.text,
+                                        passwordController.text,
+                                      )
+                                          .then((value) {
+                                        if (value != null) {
+                                          Future.delayed(Duration(seconds: 2))
+                                              .then((value) =>
+                                                  Get.to(LoginScreen()));
+                                        }
+                                      });
+                                    }
+                                  },
+                                )),
+                      SizedBox(height: McGyver.rsDoubleH(context, 3)),
+                      Quest2()
+                    ],
+                  ),
                 ),
               ),
             ),
           );
-
   }
 }
