@@ -8,10 +8,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/config.dart';
-import 'package:quickthink/registration.dart';
-import 'package:quickthink/screens/NoInternet/noInternet.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 import 'package:quickthink/utils/responsiveness.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -93,33 +92,95 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     final state = useProvider(apiState);
-    return _connection
-        ? NoInternet()
-        : Scaffold(
-            backgroundColor: Theme.of(context).primaryColor,
-            appBar: AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              elevation: 0,
-              title: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
-                child: Text(
-                  "Settings",
+    return
+        // _connection
+        //  ? NoInternet()
+        //:
+        Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+          child: Text(
+            "Settings",
+            style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2.0)),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "App Theme",
+              style: GoogleFonts.poppins(
+                  textStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 2.0)),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            InkWell(
+              child: ListTile(
+                contentPadding: EdgeInsets.all(0),
+                onTap: currentTheme.darkTheme,
+                title: Text(
+                  "Dark Theme",
                   style: GoogleFonts.poppins(
                       textStyle: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                           letterSpacing: 2.0)),
+                ),
+                leading: Icon(
+                  FlutterIcons.moon_fea,
+                  color: Colors.white,
                 ),
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "App Theme",
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
+              child: Divider(
+                height: 5.0,
+                color: Colors.white70,
+              ),
+            ),
+            InkWell(
+              child: ListTile(
+                contentPadding: EdgeInsets.all(0),
+                onTap: currentTheme.lightTheme,
+                title: Text(
+                  "Light Theme",
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 2.0)),
+                ),
+                leading: Icon(
+                  FlutterIcons.sun_fea,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(height: SizeConfig().yMargin(context, 8)),
+            token == null 
+                ? Container()
+                : Text(
+                    "Account",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                             color: Colors.white,
@@ -127,127 +188,67 @@ class _SettingsViewState extends State<SettingsView> {
                             fontWeight: FontWeight.w600,
                             letterSpacing: 2.0)),
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  InkWell(
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
+            //   child: Divider(
+            //     height: 5.0,
+            //     color: Colors.white70,
+            //   ),
+            // ),
+            token == null
+                ? Container()
+                : InkWell(
                     child: ListTile(
                       contentPadding: EdgeInsets.all(0),
-                      onTap: currentTheme.darkTheme,
+                      onTap: () {
+                        // state.logout().then((value) {
+                        //   if (value != null) {
+                        //     Get.to(LoginScreen());
+                        //   }
+                        // });
+                        logout();
+                        Get.to(LoginScreen());
+                      },
                       title: Text(
-                        "Dark Theme",
+                        "Log out",
                         style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 2.0)),
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0),
+                        ),
                       ),
-                      leading: Icon(
-                        FlutterIcons.moon_fea,
-                        color: Colors.white,
-                      ),
+                      leading: SvgPicture.asset('images/log-out.svg'),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
-                    child: Divider(
-                      height: 5.0,
-                      color: Colors.white70,
-                    ),
-                  ),
-                  InkWell(
+            token == null
+                ? Container()
+                : InkWell(
                     child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      onTap: currentTheme.lightTheme,
-                      title: Text(
-                        "Light Theme",
-                        style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 2.0)),
-                      ),
-                      leading: Icon(
-                        FlutterIcons.sun_fea,
-                        color: Colors.white,
-                      ),
+                    contentPadding: EdgeInsets.all(0),
+                    onTap: () {
+                      state.deleteAccount().then((value) {
+                        if (value != null) {
+                          Future.delayed(Duration(seconds: 3))
+                              .then((value) => Get.to(LoginScreen()));
+                        }
+                      });
+                    },
+                    title: Text(
+                      "Delete account",
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0)),
                     ),
-                  ),
-                  SizedBox(height: SizeConfig().yMargin(context, 8)),
-                  token == null
-                      ? Container()
-                      : Text(
-                          "Account",
-                          style: GoogleFonts.poppins(
-                              textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 2.0)),
-                        ),
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
-                  //   child: Divider(
-                  //     height: 5.0,
-                  //     color: Colors.white70,
-                  //   ),
-                  // ),
-                  token == null
-                      ? Container()
-                      : InkWell(
-                          child: ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            onTap: () {
-                              // state.logout().then((value) {
-                              //   if (value != null) {
-                              //     Get.to(LoginScreen());
-                              //   }
-                              // });
-                              logout();
-                              Get.to(LoginScreen());
-                            },
-                            title: Text(
-                              "Log out",
-                              style: GoogleFonts.poppins(
-                                textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 2.0),
-                              ),
-                            ),
-                            leading: SvgPicture.asset('images/log-out.svg'),
-                          ),
-                        ),
-                  token == null
-                      ? Container()
-                      : InkWell(
-                          child: ListTile(
-                          contentPadding: EdgeInsets.all(0),
-                          onTap: () {
-                            state.deleteAccount().then((value) {
-                              if (value != null) {
-                                Future.delayed(Duration(seconds: 3))
-                                    .then((value) => Get.to(LoginScreen()));
-                              }
-                            });
-                          },
-                          title: Text(
-                            "Delete account",
-                            style: GoogleFonts.poppins(
-                                textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 2.0)),
-                          ),
-                          leading: SvgPicture.asset('images/trash-2.svg'),
-                        )),
-                ],
-              ),
-            ),
-          );
+                    leading: SvgPicture.asset('images/trash-2.svg'),
+                  )),
+          ],
+        ),
+      ),
+    );
   }
 }

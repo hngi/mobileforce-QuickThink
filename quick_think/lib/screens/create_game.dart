@@ -9,21 +9,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/categories.dart';
-import 'package:quickthink/screens/NoInternet/noInternet.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// TODO: Visual feedback for when a selected
-// TODO: Tell user when category isn't selected... category validation 
-// TODO: Change colours of modal fonts and line from black
-// TODO: Center progress loading text //
-// TODO: Change progress loading colour from black //Done
-// TODO: Visual feedback for copy code
 
 const String fetchGameCode_Api = 'http://brainteaser.pythonanywhere.com/game';
 
@@ -98,7 +91,9 @@ class _CreateGameState extends State<CreateGame> {
     _dropDownMenuItems = buildDropMenuItems(getListCategories);
     _selectedCategory = _dropDownMenuItems[0].value;
     setState(() {
+      if (!mounted) return;
       isCategoryLoading = false;
+      
     });
   }
 
@@ -172,7 +167,7 @@ class _CreateGameState extends State<CreateGame> {
       () {
         // Navigator.pushReplacement(
         //     context, MaterialPageRoute(builder: (context) => CreateGame()));
-        Navigator.pushReplacementNamed(context, 'create-game');
+        Navigator.pushReplacementNamed(context, 'create_game');
       },
     );
   }

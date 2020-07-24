@@ -10,11 +10,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/question_model.dart';
-import 'package:quickthink/screens/NoInternet/noInternet.dart';
 import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String url = 'http://brainteaser.pythonanywhere.com/game/play';
