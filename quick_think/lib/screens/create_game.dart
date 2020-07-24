@@ -18,10 +18,8 @@ import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'leaderboard.dart';
-
 // TODO: Visual feedback for when a selected
-// TODO: Tell user when category isn't selected... category validation
+// TODO: Tell user when category isn't selected... category validation 
 // TODO: Change colours of modal fonts and line from black
 // TODO: Center progress loading text //
 // TODO: Change progress loading colour from black //Done
