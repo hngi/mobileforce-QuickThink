@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/board_screen.dart';
-
+import 'package:quickthink/screens/category/screens/viewQuestions.dart';
 import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/screens/settings_view.dart';
 import 'screens/category/screens/create_category.dart';
 import 'screens/category/screens/create_question.dart';
 import 'bottom_navigation_bar.dart';
@@ -86,7 +87,8 @@ class _MyAppState extends State<MyApp> {
         CreateGame.routeName: (context) => CreateGame(),
         LoginScreen.routeName: (context) => LoginScreen(),
         RegistrationScreen.routeName: (context) => RegistrationScreen(),
-        
+        SettingsView.routeName: (context) => SettingsView(),
+        ViewQuestions.routeName: (context) =>ViewQuestions(),
       },
     );
   }

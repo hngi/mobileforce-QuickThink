@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -12,6 +14,7 @@ import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String url = 'http://brainteaser.pythonanywhere.com/game/play';
@@ -39,11 +42,57 @@ class _JoinGameState extends State<JoinGame> {
   ProgressDialog progressDialog;
   //List<String> gamecodes = [value];
 
+//Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
   @override
   void initState() {
     //get the played codes
     getPlayedCodes('playedGames');
+
+//Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+//Navigate to Page When Connectivity is back
+  startTimer() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        // Navigator.pushReplacement(
+        //     context, MaterialPageRoute(builder: (context) => JoinGame()));
+        Navigator.pushReplacementNamed(context, 'join-game');
+      },
+    );
   }
 
   //Persisting the play GameCodes
@@ -117,34 +166,36 @@ class _JoinGameState extends State<JoinGame> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-                  child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
+    return _connection
+        ? NoInternet()
+        : Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Theme.of(context).primaryColor,
+            body: SafeArea(
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 4),
+                      ),
+                      _logoText(),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 10),
+                      ),
+                      _prompt(),
+                      _form(),
+                      _loginBtn(),
+                      _or(),
+                      _createGameLink(),
+                    ],
+                  ),
                 ),
-                _logoText(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 10),
-                ),
-                _prompt(),
-                _form(),
-                _loginBtn(),
-                _or(),
-                _createGameLink(),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   Widget _or() {
