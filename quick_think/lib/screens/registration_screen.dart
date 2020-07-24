@@ -268,8 +268,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Quest2()
             ],
           ),
-        ),
-      ),
-    );
+        )
+
   }
-}
