@@ -505,17 +505,21 @@ class _JoinGameState extends State<JoinGame> {
                   ),
                   Container(
                     child: SingleChildScrollView(
-                      child: Text(
-                        error,
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 22.0,
-                            letterSpacing: 1.0,
-                            color: Hexcolor('#1C1046')),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          error,
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 22.0,
+                              letterSpacing: 1.0,
+                              color: Hexcolor('#1C1046')),
+                              textAlign: TextAlign.start,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 50.0),
+                  SizedBox(height: 30.0),
                   RaisedButton(
                     padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
                     textColor: Colors.white,
