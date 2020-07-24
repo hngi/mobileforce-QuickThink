@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,21 +8,29 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/config.dart';
-import 'package:quickthink/registration.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 import 'package:quickthink/utils/responsiveness.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'login/view/login.dart';
 
 class SettingsView extends StatefulHookWidget with WidgetsBindingObserver {
+  static const routeName = 'settings_view';
   @override
   _SettingsViewState createState() => _SettingsViewState();
 }
 
 class _SettingsViewState extends State<SettingsView> {
   String token;
+
+  //Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
   Future<void> getUsername() async {
     final prefs = await SharedPreferences.getInstance();
     String user = prefs.getString('token') ?? null;
@@ -36,14 +47,56 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   void initState() {
+    //Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
     getUsername();
     super.initState();
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+
+    super.dispose();
+  }
+
+//Navigate to Page When Connectivity is back
+  startTimer() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        Navigator.pushReplacementNamed(context, 'settings_view');
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = useProvider(apiState);
-    return Scaffold(
+    return
+        // _connection
+        //  ? NoInternet()
+        //:
+        Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -124,7 +177,7 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             ),
             SizedBox(height: SizeConfig().yMargin(context, 8)),
-            token == null
+            token == null 
                 ? Container()
                 : Text(
                     "Account",
@@ -146,7 +199,6 @@ class _SettingsViewState extends State<SettingsView> {
                 ? Container()
                 : InkWell(
                     child: ListTile(
-
                       contentPadding: EdgeInsets.all(0),
                       onTap: () {
                         // state.logout().then((value) {
@@ -157,17 +209,18 @@ class _SettingsViewState extends State<SettingsView> {
                         logout();
                         Get.off(LoginScreen());
                       },
-                    
-                        title: Text(
-                          "Log out",
-                          style: GoogleFonts.poppins(
-                              textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 2.0),),
+                      title: Text(
+                        "Log out",
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0),
                         ),
-                        leading: SvgPicture.asset('images/log-out.svg'),),
+                      ),
+                      leading: SvgPicture.asset('images/log-out.svg'),
+                    ),
                   ),
             token == null
                 ? Container()

@@ -1,14 +1,16 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/new_dashboard.dart';
 import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 //import 'package:quickthink/screens/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
-
   static const String id = 'dashboardboard screen';
   DashboardScreen({Key key, this.username, this.uri}) : super(key: key);
   final String username;
@@ -24,16 +26,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _page = 0;
   String userName, uri;
 
+  //Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
   @override
   void initState() {
+//Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
+
     super.initState();
     this._dataFunction();
     _pageController = new PageController();
   }
 
+  startTimer() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        Navigator.pushReplacementNamed(context, 'dashboardboard screen');
+      },
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
+    subscription.cancel();
     _pageController.dispose();
   }
 
@@ -66,24 +106,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
       new NewLeaderBoard(),
       new SettingsView(),
     ];
-    return new Scaffold(
-      body: Center(
-        child: widgetOptions.elementAt(_lastSelected),
-      ),
-      bottomNavigationBar: FABBottomAppBar(
-        color: Colors.white,
-        backgroundColor: Theme.of(context).primaryColor,
-        selectedColor: Color(0xff18C5D9),
-        onTabSelected: _selectedTab,
-        items: [
-          FABBottomAppBarItem(imageData: 'images/home.svg', text: 'Home'),
-          FABBottomAppBarItem(
-              imageData: 'images/leader.svg', text: 'Leaderboard'),
-          FABBottomAppBarItem(
-              imageData: 'images/settings.svg', text: 'Settings'),
-        ],
-      ),
-    );
+    return _connection
+        ? NoInternet()
+        : new Scaffold(
+            body: Center(
+              child: widgetOptions.elementAt(_lastSelected),
+            ),
+            bottomNavigationBar: FABBottomAppBar(
+              color: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              selectedColor: Color(0xff18C5D9),
+              onTabSelected: _selectedTab,
+              items: [
+                FABBottomAppBarItem(imageData: 'images/home.svg', text: 'Home'),
+                FABBottomAppBarItem(
+                    imageData: 'images/leader.svg', text: 'Leaderboard'),
+                FABBottomAppBarItem(
+                    imageData: 'images/settings.svg', text: 'Settings'),
+              ],
+            ),
+          );
   }
 }
 
