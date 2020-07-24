@@ -36,18 +36,25 @@ class QuestionsCard extends HookWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print(questions['id']);
+    // print(questions['options']);
     final state = useProvider(apiState);
+    double size = (questions['question'].length +
+            questions['options'][0].length +
+            questions['options'][1].length +
+            questions['options'][2].length +
+            questions['options'][3].length) /
+        3;
     return Container(
       // color: Colors.white,
       width: McGyver.rsDoubleW(context, 20),
-      height: McGyver.rsDoubleH(context, 45),
+      height: McGyver.rsDoubleH(context, 45) + (size * 1.2),
       child: Card(
         elevation: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -101,13 +108,18 @@ class QuestionsCard extends HookWidget {
                 ],
               ),
               SizedBox(height: McGyver.rsDoubleH(context, 3)),
-              Text(
-                questions['question'],
-                style: GoogleFonts.poppins(
-                    fontSize: SizeConfig().textSize(context, 2.1),
-                    fontWeight: FontWeight.w400),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  questions['question'],
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                      fontSize: SizeConfig().textSize(context, 2.1),
+                      fontWeight: FontWeight.w400),
+                ),
               ),
-              SizedBox(height: McGyver.rsDoubleH(context, 2)),
+              // SizedBox(height: McGyver.rsDoubleH(context, 0)),
               Text(
                 'Answer choices',
                 style: GoogleFonts.poppins(
@@ -117,9 +129,10 @@ class QuestionsCard extends HookWidget {
               ),
               SizedBox(height: McGyver.rsDoubleH(context, 2)),
               Expanded(
-                child: Container(
+                flex: 2,
+                child: SizedBox.expand(
                   // color: Colors.blue,
-                  height: McGyver.rsDoubleH(context, 14),
+                  // height: McGyver.rsDoubleH(context, 20),
                   child: ListView.builder(
                       itemCount: questions['options'].length,
                       itemBuilder: (context, index) {
@@ -153,6 +166,7 @@ class QuestionsCard extends HookWidget {
                       }),
                 ),
               ),
+              SizedBox(height: 10),
               Row(
                 children: [
                   state.buttonState == ButtonState.Pressed
@@ -175,32 +189,32 @@ class QuestionsCard extends HookWidget {
                                         'Are you sure you want to delete this question?',
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
-                                          fontSize: SizeConfig().textSize(context, 3),
-                                          fontWeight: FontWeight.w500
-                                        ),
+                                            fontSize: SizeConfig()
+                                                .textSize(context, 3),
+                                            fontWeight: FontWeight.w500),
                                       ),
-                                      
-                                      entryAnimation:
-                                          EntryAnimation.BOTTOM,
+                                      entryAnimation: EntryAnimation.BOTTOM,
                                       description: Text(
                                         'This action is permanent. Question cannot be recovered',
                                         textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
-                                          fontSize: SizeConfig().textSize(context, 2),
-                                          fontWeight: FontWeight.w300
-                                        ),
+                                            fontSize: SizeConfig()
+                                                .textSize(context, 2),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                       onOkButtonPressed: () {
-                                        state.deleteQuestion(questions['id'], questions['category']).then((value){
-                                          if(value != null){
+                                        state
+                                            .deleteQuestion(questions['id'],
+                                                questions['category'])
+                                            .then((value) {
+                                          if (value != null) {
                                             list.removeAt(number);
                                             Navigator.pop(context);
                                           }
                                           Navigator.pop(context);
                                         });
                                       },
-                                    )
-                                    );
+                                    ));
                           },
                           child: Container(
                             color: Colors.black26,
