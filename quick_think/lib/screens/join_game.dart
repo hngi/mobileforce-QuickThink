@@ -14,12 +14,9 @@ import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/utils/urls.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const String url = 'http://brainteaser.pythonanywhere.com/game/play';
-const String checkUrl =
-    'http://brainteaser.pythonanywhere.com/game/user/play/check';
 
 class JoinGame extends StatefulWidget {
   static const routeName = 'join-game';
@@ -514,7 +511,7 @@ class _JoinGameState extends State<JoinGame> {
                               fontSize: 22.0,
                               letterSpacing: 1.0,
                               color: Hexcolor('#1C1046')),
-                              textAlign: TextAlign.start,
+                          textAlign: TextAlign.start,
                         ),
                       ),
                     ),
@@ -558,7 +555,7 @@ class _JoinGameState extends State<JoinGame> {
       progressDialog.show();
     });
     http.Response response = await http.post(
-      url,
+      playGameUrl,
       headers: {'Accept': 'application/json'},
       body: {"game_code": code, "user_name": user},
     );
