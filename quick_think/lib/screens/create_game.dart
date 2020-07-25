@@ -132,7 +132,7 @@ class _CreateGameState extends State<CreateGame> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+            //startTimer();
             _connection = false;
           });
         } else {

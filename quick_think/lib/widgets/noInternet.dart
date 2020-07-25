@@ -20,9 +20,6 @@ class _NoInternetState extends State<NoInternet> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 150.0,
-              ),
               Container(
                   height: 270.0,
                   child: SvgPicture.asset('assets/images/noInternet.svg')

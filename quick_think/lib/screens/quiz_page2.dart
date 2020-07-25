@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
 import 'package:quickthink/utils/responsiveness.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 
 class QuizPage2 extends StatefulWidget {
   final List<QuestionModel> questionData;
@@ -29,8 +31,35 @@ class _QuizPage2State extends State<QuizPage2> {
   bool stopTimer = false;
   String userAnswer;
 
+  //Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
   @override
   void initState() {
+    //Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            //   startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
     _questionBank = widget.questionData;
     questionFunctions = new QuestionFunctions(_questionBank);
     // TODO: implement initState
@@ -43,7 +72,9 @@ class _QuizPage2State extends State<QuizPage2> {
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
-    return Scaffold(
+    return 
+    _connection ?NoInternet():
+    Scaffold(
         backgroundColor: Color(0xFF1C1046),
         body: SafeArea(
           child: Padding(

@@ -39,7 +39,7 @@ class _ViewQuestionsState extends State<ViewQuestions> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+            //  startTimer();
             _connection = false;
           });
         } else {

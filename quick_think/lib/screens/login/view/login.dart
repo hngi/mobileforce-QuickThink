@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+            //    startTimer();
             _connection = false;
           });
         } else {
