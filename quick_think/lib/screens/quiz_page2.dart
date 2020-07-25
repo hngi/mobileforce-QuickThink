@@ -1,4 +1,7 @@
 import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -12,6 +15,7 @@ import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/utils/quizTimer.dart';
 import 'package:quickthink/utils/responsiveness.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizPage2 extends StatefulWidget {
@@ -123,8 +127,35 @@ class _QuizPage2State extends State<QuizPage2> {
     return optionColor;
   }
 
+  //Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
   @override
   void initState() {
+    //Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            //   startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
     _questionBank = widget.questionData;
     questionFunctions = QuestionFunctions(_questionBank);
     getUserName();
@@ -137,39 +168,41 @@ class _QuizPage2State extends State<QuizPage2> {
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
-    return Scaffold(
-        backgroundColor: Color(0xFF1C1046),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                        color: Colors.white,
-                        icon: Icon(
-                          Icons.arrow_back_ios,
-                        ),
-                        onPressed: () => exitAlert(context)),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return _connection
+        ? NoInternet()
+        : Scaffold(
+            backgroundColor: Color(0xFF1C1046),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      _progress(height, width),
-                      _timer(),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                            color: Colors.white,
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                            ),
+                            onPressed: () => exitAlert(context)),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _progress(height, width),
+                          _timer(),
+                        ],
+                      ),
+                      SizedBox(height: height * 0.05),
+                      _box(height, width, heightBox, widthBox)
                     ],
                   ),
-                  SizedBox(height: height * 0.05),
-                  _box(height, width, heightBox, widthBox)
-                ],
+                ),
               ),
-            ),
-          ),
-        ));
+            ));
   }
 
   Widget _box(height, width, heightBox, widthBox) {

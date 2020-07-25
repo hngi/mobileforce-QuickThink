@@ -65,7 +65,7 @@ class _JoinGameState extends State<JoinGame> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+            //startTimer();
             _connection = false;
           });
         } else {
