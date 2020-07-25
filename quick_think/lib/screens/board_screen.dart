@@ -57,32 +57,34 @@ class _BoardScreenState extends State<BoardScreen> {
                               flex: 1,
                                 child: Container(
                                   padding: EdgeInsets.all(25.0),
-                                  child: Container(
-                                    height: 400,
-                                    width: 400,
-                                    color: Hexcolor("#38208C"),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            "Games Played",
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 22,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold
+                                  child: Center(
+                                    child: Container(
+                                      height: 400,
+                                      width: MediaQuery.of(context).size.width * .9,
+                                      color: Hexcolor("#38208C"),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              "Games Played",
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 22,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold
+                                              )
+                                            ),
+                                            SizedBox(height: 5),
+                                            Divider(height: 2,color: Colors.white),
+                                            SizedBox(height: 5),
+                                            Expanded(
+                                              flex: 2,
+                                                child: resultPlayedPrefs(context,model)
                                             )
-                                          ),
-                                          SizedBox(height: 5),
-                                          Divider(height: 2,color: Colors.white),
-                                          SizedBox(height: 5),
-                                          Expanded(
-                                            flex: 2,
-                                              child: resultPlayedPrefs(context,model)
-                                          )
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -93,31 +95,33 @@ class _BoardScreenState extends State<BoardScreen> {
                               child: SingleChildScrollView(
                                 child: Container(
                                   padding: EdgeInsets.all(25.0),
-                                  child: Container(
-                                    height: 400,
-                                    width: 400,
-                                    color: Hexcolor("#38208C"),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                              "Games Created",
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 22,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold
-                                              )
-                                          ),
-                                          SizedBox(height: 5),
-                                          Divider(height: 2,color: Colors.white),
-                                          SizedBox(height: 5),
-                                          Expanded(
-                                              flex: 2,
-                                              child: resultCreatedPrefs(context,model))
-                                        ],
+                                  child: Center(
+                                    child: Container(
+                                      height: 400,
+                                      width: MediaQuery.of(context).size.width * .9,
+                                      color: Hexcolor("#38208C"),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                                "Games Created",
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 22,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold
+                                                )
+                                            ),
+                                            SizedBox(height: 5),
+                                            Divider(height: 2,color: Colors.white),
+                                            SizedBox(height: 5),
+                                            Expanded(
+                                                flex: 2,
+                                                child: resultCreatedPrefs(context,model))
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -236,7 +240,6 @@ Widget _row(String index,String gameCode, BuildContext context){
                   color: Colors.white
               )),
             ),
-            //SizedBox(width: 20),
             Expanded(
               flex: 2,
               child: Text(gameCode, style: GoogleFonts.poppins(
@@ -244,7 +247,6 @@ Widget _row(String index,String gameCode, BuildContext context){
                   color: Colors.white
               )),
             ),
-            //SizedBox(width: 80),
             Expanded(
               flex: 3,
               child: Container(
