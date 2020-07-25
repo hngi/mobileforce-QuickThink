@@ -23,7 +23,13 @@ class BoardModel{
     print('List Retrieved with Play Game Codes in Join Game: $valueStored');
 
     if(valueStored != null || valueStored.length != 0){
-      createdGames = valueStored;
+      if(valueStored.length > 15){
+        for(var i = 0; i < 15; i++){
+          createdGames.add(valueStored[i]);
+        }
+      }else {
+        createdGames = valueStored;
+      }
       _createdStateController.add(fetchState.DataRetrieved);
     }else{
       _createdStateController.add(fetchState.NoData);

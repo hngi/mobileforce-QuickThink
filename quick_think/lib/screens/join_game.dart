@@ -100,29 +100,8 @@ class _JoinGameState extends State<JoinGame> {
   Future<List<String>> savePlayedCodes(String key, List<String> value) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final List<String> newList = value;
-    //var setList = newList.toSet();
     List<String> setList = LinkedHashSet<String>.from(newList).toList();
-
     sharedPreferences.setStringList(key, setList);
-
-//    print('List Stored : $value');
-    // if (setList.length <= 10) {
-    //   for (int i = 0; i <= 10; i++) {
-    //     sharedPreferences.setStringList(key, setList.toList());
-    //   }
-    // } else {
-    //   //Trying to remove the last index in the set
-    //   var listAgain = setList.toList().remove(9);
-    //   var set = newList.toSet();
-    //   print('List Again $listAgain');
-    //   print('Set: $set');
-    //   print('List: $newList');
-    //   // sharedPreferences.setStringList(key, setList.toList());
-    // }
-    //sharedPreferences.setStringList(key, newList);
-
-    // print('List Stored : $newList');
-
     return newList;
   }
 
@@ -430,13 +409,8 @@ class _JoinGameState extends State<JoinGame> {
           ///Persisting the played gameCodes to sharedprefs
           playedGames.insert(0, gameCode.text);
           print('Here $playedGames');
-          //   here.clear();
-
           progressDialog.hide();
-
           savePlayedCodes('playedGames', playedGames);
-          //testing
-          getPlayedCodes('playedGames');
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
