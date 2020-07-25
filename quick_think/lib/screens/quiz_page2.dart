@@ -35,6 +35,7 @@ class _QuizPage2State extends State<QuizPage2> {
   String _userName;
   bool correct = true;
   Color optionColor;
+  List<Color> optionColors = List();
 
   getUserName() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -63,15 +64,7 @@ class _QuizPage2State extends State<QuizPage2> {
     });
   }
 
-  bool isCorrect(String userResponse) {
-    // stopTimer = true;
-    String correctAnswer = questionFunctions.getCorrectAnswer();
-    if (userResponse == correctAnswer) {
-      return correct;
-    } else {
-      return !correct;
-    }
-  }
+  bool isCorrect;
 
   void checkAnswer(String option) {
     String correctAnswer = questionFunctions.getCorrectAnswer();
@@ -346,24 +339,28 @@ class _QuizPage2State extends State<QuizPage2> {
     bool _isSelected = false;
 
     for (var i = 0; i < questionFunctions.getOptions().length; i++) {
-      //isPicked.add(false);
+      optionColors.add(Colors.white);
       option.add(
         InkWell(
-          onTap: () async {
-            // isPicked = [false, false, false, false];
-            Future.delayed(Duration(milliseconds: 500), () {
-              setState(() {
-                // isCorrect(userAnswer) ? optionColor = Color(0xFF86EC88) : optionColor = Color(0xFFFF4D55);
-                _isSelected = !_isSelected;
-                isPicked[i] = _isSelected;
-                userAnswer = questionFunctions.getOptions()[i];
-                // print(isPicked);
-                if (userAnswer.isNotEmpty && userAnswer != null) {
-                  checkAnswer(userAnswer);
-                  count++;
-                  isPicked = [false, false, false, false];
-                }
-                optionColor = Colors.white;
+          onTap: () {
+           
+            setState(() {
+              userAnswer = questionFunctions.getOptions()[i];
+              userAnswer == questionFunctions.getCorrectAnswer()
+                  ? isCorrect = true
+                  : isCorrect = false;
+              _isSelected = !_isSelected;
+              isPicked[i] = _isSelected;
+              optionColors[i] = optionColorFunc(isPicked[i], isCorrect);
+
+              Future.delayed(Duration(milliseconds: 500), () {
+                setState(() {
+                  if (userAnswer.isNotEmpty && userAnswer != null) {
+                    isPicked = [false, false, false, false];
+                    checkAnswer(userAnswer);
+                  }
+                  optionColors[i] = Colors.white;
+                });
               });
             });
           },
@@ -375,14 +372,15 @@ class _QuizPage2State extends State<QuizPage2> {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: optionColor,
+                      color: optionColors[i] ?? Colors.white,
                       border: Border.all(color: Colors.black26)),
                   height: heightBox * .128,
                   width: widthBox * .77,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 3.0),
                       child: Text(
                         questionFunctions.getOptions()[i],
                         style: GoogleFonts.poppins(
@@ -400,7 +398,17 @@ class _QuizPage2State extends State<QuizPage2> {
         ),
       );
     }
-
     return option;
+  }
+
+  Color optionColorFunc(bool isPicked, bool userResponse) {
+    if (isPicked) {
+      if (isCorrect) {
+        optionColor = Color(0xFF86EC88);
+      } else {
+        optionColor = Color(0xFFFF4D55);
+      }
+    }
+    return optionColor;
   }
 }
