@@ -15,11 +15,10 @@ import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/utils/urls.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const String fetchGameCode_Api = 'http://brainteaser.pythonanywhere.com/game';
 
 class CreateGame extends StatefulWidget {
   static const routeName = 'create_game';
@@ -93,7 +92,6 @@ class _CreateGameState extends State<CreateGame> {
     setState(() {
       if (!mounted) return;
       isCategoryLoading = false;
-      
     });
   }
 
@@ -174,7 +172,7 @@ class _CreateGameState extends State<CreateGame> {
 
   Future<String> getCode(context, username) async {
     http.Response response = await http.post(
-      fetchGameCode_Api,
+      fetchGameCodeApi,
       headers: {'Accept': 'application/json'},
       body: {
         "user_name": userName,
