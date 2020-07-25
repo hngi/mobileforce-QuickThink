@@ -40,6 +40,7 @@ class _QuizPage2State extends State<QuizPage2> {
   getUserName() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     _userName = pref.getString('Username');
+    print('widget.userName: ${widget.userName}');
     if (_userName == null) {
       _userName = widget.userName;
     }
@@ -116,7 +117,7 @@ class _QuizPage2State extends State<QuizPage2> {
   void initState() {
     _questionBank = widget.questionData;
     questionFunctions = QuestionFunctions(_questionBank);
-    // TODO: implement initState
+    getUserName();
     super.initState();
   }
 
@@ -134,6 +135,7 @@ class _QuizPage2State extends State<QuizPage2> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Align(
                     alignment: Alignment.topLeft,
@@ -152,7 +154,7 @@ class _QuizPage2State extends State<QuizPage2> {
                     ],
                   ),
                   SizedBox(height: height * 0.05),
-                  _box(height, width, heightBox, widthBox),
+                  _box(height, width, heightBox, widthBox)
                 ],
               ),
             ),
@@ -161,34 +163,36 @@ class _QuizPage2State extends State<QuizPage2> {
   }
 
   Widget _box(height, width, heightBox, widthBox) {
-    return Container(
-      width: width,
-      height: heightBox * 1.1,
-      padding: EdgeInsets.all(SizeConfig().xMargin(context, 10)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: height * 0.015,
-          ),
-          Flexible(flex: 1, child: _question()),
-          SizedBox(
-            height: height * 0.07,
-          ),
-          Flexible(
-            flex: 5,
-            child: Column(
+    return Center(
+      child: Container(
+        alignment: Alignment.center,
+        width: width,
+        //margin: EdgeInsets.all(SizeConfig().xMargin(context, 15)),
+        //height: heightBox * 1.1,
+        padding: EdgeInsets.all(SizeConfig().xMargin(context, 8)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: SizeConfig().xMargin(context, 0.5),
+            ),
+            _question(),
+            SizedBox(
+              height: SizeConfig().xMargin(context, 0.5),
+            ),
+            Column(
               children: _options(),
             ),
-          ),
-          SizedBox(
-            height: height * 0.015,
-          ),
-        ],
+            SizedBox(
+              height: height * 0.015,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -196,16 +200,18 @@ class _QuizPage2State extends State<QuizPage2> {
   Widget _question() {
     return FadeIn(
       delay: 0.1,
-      child: Text(
-        questionFunctions.getQuestionText(),
-        style: GoogleFonts.poppins(
-          color: Color(0xFF38208C),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          fontStyle: FontStyle.normal,
-          // fontWeight: FontWeight.w500,
+      child: Container(
+        child: Text(
+          questionFunctions.getQuestionText(),
+          style: GoogleFonts.poppins(
+            color: Color(0xFF38208C),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.normal,
+            // fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.justify,
         ),
-        textAlign: TextAlign.justify,
       ),
     );
   }
@@ -343,7 +349,6 @@ class _QuizPage2State extends State<QuizPage2> {
       option.add(
         InkWell(
           onTap: () {
-           
             setState(() {
               userAnswer = questionFunctions.getOptions()[i];
               userAnswer == questionFunctions.getCorrectAnswer()
