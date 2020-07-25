@@ -17,7 +17,10 @@ class IQEnds {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return WillPopScope(
+    onWillPop: (){
+      return;
+    }, child:AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primaryVariant,
           title: Text(
             'Hi $username',
@@ -46,7 +49,7 @@ class IQEnds {
               },
             ),
           ],
-        );
+        ));
       },
     );
   }
