@@ -36,6 +36,7 @@ class _QuizPage2State extends State<QuizPage2> {
   bool correct = true;
   Color optionColor;
   List<Color> optionColors = List();
+  bool isCorrect;
 
   getUserName() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -64,8 +65,6 @@ class _QuizPage2State extends State<QuizPage2> {
       }
     });
   }
-
-  bool isCorrect;
 
   void checkAnswer(String option) {
     String correctAnswer = questionFunctions.getCorrectAnswer();
@@ -111,6 +110,17 @@ class _QuizPage2State extends State<QuizPage2> {
             .showEndMsg(context);
       }
     }
+  }
+
+  Color optionColorFunc(bool isPicked, bool isCorrectAnswer) {
+    if (isPicked) {
+      if (isCorrectAnswer) {
+        optionColor = Color(0xFF86EC88);
+      } else {
+        optionColor = Color(0xFFFF4D55);
+      }
+    }
+    return optionColor;
   }
 
   @override
@@ -404,16 +414,5 @@ class _QuizPage2State extends State<QuizPage2> {
       );
     }
     return option;
-  }
-
-  Color optionColorFunc(bool isPicked, bool userResponse) {
-    if (isPicked) {
-      if (isCorrect) {
-        optionColor = Color(0xFF86EC88);
-      } else {
-        optionColor = Color(0xFFFF4D55);
-      }
-    }
-    return optionColor;
   }
 }
