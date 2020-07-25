@@ -8,6 +8,6 @@ Color textFieldColor = Color(0xff574E76);
 
 Color buttonColor = Color(0xff18C5D9);
 
-String loginUrl = 'http://brainteaser.pythonanywhere.com/user/login';
+String loginUrl = 'https://brainteaser.pythonanywhere.com/user/login';
 
-String regUrl = 'http://brainteaser.pythonanywhere.com/user/registration';
+String regUrl = 'https://brainteaser.pythonanywhere.com/user/registration';
