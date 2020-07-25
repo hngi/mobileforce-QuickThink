@@ -54,13 +54,13 @@ class _TimerQuizState extends State<TimerQuiz> with TickerProviderStateMixin {
     
     nextQuestion = widget.nextQ;
     endQuiz = widget.endQ;
-    if (nextQuestion) {
+    if (endQuiz == false ) {
       controller.reset();
       controller.reverse(from: 10).whenComplete(() => widget.callBackFunc());
       nextQuestion = false;
     }
-    if (endQuiz) {
-      controller.dispose();
+    else{
+      controller.stop();
     }
 
     return AnimatedBuilder(
