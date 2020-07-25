@@ -44,6 +44,81 @@ class _QuizPage2State extends State<QuizPage2> {
     }
   }
 
+  void timerZero() {
+    setState(() {
+      if (!questionFunctions.isFinished()) {
+        resetTimer = true;
+        questionFunctions.nextQuestion();
+      } else if (questionFunctions.isFinished()) {
+        stopTimer = true;
+        IQEnds(
+                totalScore: questionFunctions.totalScore,
+                username: _userName,
+                questionNumber: questionFunctions.numberOfQuestions(),
+                message:
+                    'Oops! You have run out of time, proceed to your result.',
+                gameCode: widget.gameCode)
+            .showEndMsg(context);
+      }
+    });
+  }
+
+  bool isCorrect(String userResponse) {
+    // stopTimer = true;
+    String correctAnswer = questionFunctions.getCorrectAnswer();
+    if (userResponse == correctAnswer) {
+      return correct;
+    } else {
+      return !correct;
+    }
+  }
+
+  void checkAnswer(String option) {
+    String correctAnswer = questionFunctions.getCorrectAnswer();
+    questionFunctions.response = option;
+    if (!questionFunctions.isFinished()) {
+      if (questionFunctions.response == correctAnswer) {
+        widget.model.updateScore(widget.model.userGameID);
+        isPicked = [false, false, false, false];
+        resetTimer = true;
+        questionFunctions.nextQuestion();
+        // resetTimer = false;
+      } else {
+        isPicked = [false, false, false, false];
+        resetTimer = true;
+        questionFunctions.nextQuestion();
+        // resetTimer = false;
+      }
+    } else if (questionFunctions.isFinished()) {
+      stopTimer = true;
+      if (questionFunctions.response == correctAnswer) {
+        widget.model.updateScore(widget.model.userGameID);
+        isPicked = [false, false, false, false];
+
+        // stopTimer
+        IQEnds(
+                totalScore: questionFunctions.totalScore,
+                username: _userName,
+                questionNumber: questionFunctions.numberOfQuestions(),
+                message:
+                    'You have successfully completed the test proceed for the result',
+                gameCode: widget.gameCode)
+            .showEndMsg(context);
+      } else {
+        isPicked = [false, false, false, false];
+
+        IQEnds(
+                totalScore: questionFunctions.totalScore,
+                username: _userName,
+                questionNumber: questionFunctions.numberOfQuestions(),
+                message:
+                    'You have successfully completed the test proceed for the result',
+                gameCode: widget.gameCode)
+            .showEndMsg(context);
+      }
+    }
+  }
+
   @override
   void initState() {
     _questionBank = widget.questionData;
@@ -238,11 +313,11 @@ class _QuizPage2State extends State<QuizPage2> {
       child: TimerQuiz(
         endQ: stopTimer,
         nextQ: resetTimer,
-        callBackFunc: (){}/*timerZero () {
+        callBackFunc: () {
           setState(() {
             timerZero();
           });
-        } */,
+        },
       ),
     );
   }
@@ -327,85 +402,5 @@ class _QuizPage2State extends State<QuizPage2> {
     }
 
     return option;
-  }
-
-  bool isCorrect(String userResponse) {
-    // stopTimer = true;
-    String correctAnswer = questionFunctions.getCorrectAnswer();
-    if (userResponse == correctAnswer) {
-      return correct;
-    } else {
-      return !correct;
-    }
-  }
-
-  void checkAnswer(String option) {
-    String correctAnswer = questionFunctions.getCorrectAnswer();
-    questionFunctions.response = option;
-    if (!questionFunctions.isFinished()) {
-      if (questionFunctions.response == correctAnswer) {
-        widget.model.updateScore(widget.model.userGameID);
-        isPicked = [false, false, false, false];
-        resetTimer = true;
-        questionFunctions.nextQuestion();
-        // resetTimer = false;
-      } else {
-        isPicked = [false, false, false, false];
-        resetTimer = true;
-        questionFunctions.nextQuestion();
-        // resetTimer = false;
-      }
-    } else if (questionFunctions.isFinished()) {
-      resetTimer = false;
-      if (questionFunctions.response == correctAnswer) {
-        
-        stopTimer = true;
-        widget.model.updateScore(widget.model.userGameID);
-        isPicked = [false, false, false, false];
-        stopTimer = false;
-        // stopTimer
-        IQEnds(
-                totalScore: questionFunctions.totalScore,
-                username: _userName,
-                questionNumber: questionFunctions.numberOfQuestions(),
-                message:
-                    'You have successfully completed the test proceed for the result',
-                gameCode: widget.gameCode)
-            .showEndMsg(context);
-      } else {
-        isPicked = [false, false, false, false];
-        stopTimer = true;
-        IQEnds(
-                totalScore: questionFunctions.totalScore,
-                username: _userName,
-                questionNumber: questionFunctions.numberOfQuestions(),
-                message:
-                    'You have successfully completed the test proceed for the result',
-                gameCode: widget.gameCode)
-            .showEndMsg(context);
-        stopTimer = false;
-      }
-    }
-    
-    
-  }
-
-  void timerZero() {
-   setState(() {
-      if (questionFunctions.isFinished()) {
-      resetTimer = true;
-      questionFunctions.nextQuestion();
-    } else if (questionFunctions.isFinished()) {
-      stopTimer = true;
-      IQEnds(
-              totalScore: questionFunctions.totalScore,
-              username: _userName,
-              questionNumber: questionFunctions.numberOfQuestions(),
-              message:
-                  'Oops! You have run out of time, proceed to your result.',
-              gameCode: widget.gameCode)
-          .showEndMsg(context);
-    }
-   });
   }
 }
