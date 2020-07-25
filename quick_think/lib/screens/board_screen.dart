@@ -56,7 +56,7 @@ class _BoardScreenState extends State<BoardScreen> {
                             Expanded(
                               flex: 1,
                                 child: Container(
-                                  padding: EdgeInsets.all(35.0),
+                                  padding: EdgeInsets.all(25.0),
                                   child: Container(
                                     height: 400,
                                     width: 400,
@@ -68,9 +68,9 @@ class _BoardScreenState extends State<BoardScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            "Games I Played",
+                                            "Games Played",
                                             style: GoogleFonts.poppins(
-                                                fontSize: 28,
+                                                fontSize: 22,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold
                                             )
@@ -92,7 +92,7 @@ class _BoardScreenState extends State<BoardScreen> {
                               flex: 1,
                               child: SingleChildScrollView(
                                 child: Container(
-                                  padding: EdgeInsets.all(35.0),
+                                  padding: EdgeInsets.all(25.0),
                                   child: Container(
                                     height: 400,
                                     width: 400,
@@ -104,9 +104,9 @@ class _BoardScreenState extends State<BoardScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                              "Games I Created",
+                                              "Games Created",
                                               style: GoogleFonts.poppins(
-                                                  fontSize: 28,
+                                                  fontSize: 22,
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold
                                               )
@@ -232,7 +232,7 @@ Widget _row(String index,String gameCode, BuildContext context){
             Expanded(
               flex: 1,
               child: Text(index, style: GoogleFonts.poppins(
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.white
               )),
             ),
@@ -240,7 +240,7 @@ Widget _row(String index,String gameCode, BuildContext context){
             Expanded(
               flex: 2,
               child: Text(gameCode, style: GoogleFonts.poppins(
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.white
               )),
             ),
