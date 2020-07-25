@@ -104,6 +104,7 @@ class _ResultState extends State<Result> {
                     SvgPicture.asset(
                       "assets/images/congrats.svg",
                     ),
+                    // update
                     Center(
                       child: Text(
                         "Congrats ${widget.name}!!",
@@ -157,7 +158,7 @@ class _ResultState extends State<Result> {
                       elevation: 30.0,
                       child: ListTile(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (o) => NewLeaderBoard(

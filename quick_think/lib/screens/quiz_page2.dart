@@ -1,19 +1,22 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
+import 'package:quickthink/model/question_ends.dart';
 import 'package:quickthink/model/question_model.dart';
-import 'package:quickthink/model/question_sorting_model.dart';
+import 'package:quickthink/model/question_functions.dart';
 import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:quickthink/screens/help.dart';
-import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
+import 'package:quickthink/utils/quizTimer.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/widgets/noInternet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizPage2 extends StatefulWidget {
   final List<QuestionModel> questionData;
@@ -29,7 +32,100 @@ class _QuizPage2State extends State<QuizPage2> {
   QuestionFunctions questionFunctions;
   List<QuestionModel> _questionBank;
   bool stopTimer = false;
+  bool resetTimer = false;
   String userAnswer;
+  int count = 0;
+  List<bool> isPicked = [false, false, false, false];
+  String _userName;
+  bool correct = true;
+  Color optionColor;
+  List<Color> optionColors = List();
+  bool isCorrect;
+
+  getUserName() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _userName = pref.getString('Username');
+    print('widget.userName: ${widget.userName}');
+    if (_userName == null) {
+      _userName = widget.userName;
+    }
+  }
+
+  void timerZero() {
+    setState(() {
+      if (!questionFunctions.isFinished()) {
+        resetTimer = true;
+        questionFunctions.nextQuestion();
+      } else if (questionFunctions.isFinished()) {
+        stopTimer = true;
+        IQEnds(
+                totalScore: questionFunctions.totalScore,
+                username: _userName,
+                questionNumber: questionFunctions.numberOfQuestions(),
+                message:
+                    'Oops! You have run out of time, proceed to your result.',
+                gameCode: widget.gameCode)
+            .showEndMsg(context);
+      }
+    });
+  }
+
+  void checkAnswer(String option) {
+    String correctAnswer = questionFunctions.getCorrectAnswer();
+    questionFunctions.response = option;
+    if (!questionFunctions.isFinished()) {
+      if (questionFunctions.response == correctAnswer) {
+        widget.model.updateScore(widget.model.userGameID);
+        isPicked = [false, false, false, false];
+        resetTimer = true;
+        questionFunctions.nextQuestion();
+        // resetTimer = false;
+      } else {
+        isPicked = [false, false, false, false];
+        resetTimer = true;
+        questionFunctions.nextQuestion();
+        // resetTimer = false;
+      }
+    } else if (questionFunctions.isFinished()) {
+      stopTimer = true;
+      if (questionFunctions.response == correctAnswer) {
+        widget.model.updateScore(widget.model.userGameID);
+        isPicked = [false, false, false, false];
+
+        // stopTimer
+        IQEnds(
+                totalScore: questionFunctions.totalScore,
+                username: _userName,
+                questionNumber: questionFunctions.numberOfQuestions(),
+                message:
+                    'You have successfully completed the test proceed for the result',
+                gameCode: widget.gameCode)
+            .showEndMsg(context);
+      } else {
+        isPicked = [false, false, false, false];
+
+        IQEnds(
+                totalScore: questionFunctions.totalScore,
+                username: _userName,
+                questionNumber: questionFunctions.numberOfQuestions(),
+                message:
+                    'You have successfully completed the test proceed for the result',
+                gameCode: widget.gameCode)
+            .showEndMsg(context);
+      }
+    }
+  }
+
+  Color optionColorFunc(bool isPicked, bool isCorrectAnswer) {
+    if (isPicked) {
+      if (isCorrectAnswer) {
+        optionColor = Color(0xFF86EC88);
+      } else {
+        optionColor = Color(0xFFFF4D55);
+      }
+    }
+    return optionColor;
+  }
 
   //Check Internet Connectivity
   var _connectionStatus = 'Unknown';
@@ -61,8 +157,8 @@ class _QuizPage2State extends State<QuizPage2> {
       },
     );
     _questionBank = widget.questionData;
-    questionFunctions = new QuestionFunctions(_questionBank);
-    // TODO: implement initState
+    questionFunctions = QuestionFunctions(_questionBank);
+    getUserName();
     super.initState();
   }
 
@@ -72,60 +168,74 @@ class _QuizPage2State extends State<QuizPage2> {
     double height = MediaQuery.of(context).size.height;
     var heightBox = height * .618;
     var widthBox = width * .872;
-    return 
-    _connection ?NoInternet():
-    Scaffold(
-        backgroundColor: Color(0xFF1C1046),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                        color: Colors.white,
-                        icon: Icon(
-                          Icons.arrow_back_ios,
-                        ),
-                        onPressed: () => exitAlert(context)),
+    return _connection
+        ? NoInternet()
+        : Scaffold(
+            backgroundColor: Color(0xFF1C1046),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                            color: Colors.white,
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                            ),
+                            onPressed: () => exitAlert(context)),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _progress(height, width),
+                          _timer(),
+                        ],
+                      ),
+                      SizedBox(height: height * 0.05),
+                      _box(height, width, heightBox, widthBox)
+                    ],
                   ),
-                  _progress(height, width),
-                  SizedBox(height: height * 0.05),
-                  _box(height, width, heightBox, widthBox),
-                ],
+                ),
               ),
-            ),
-          ),
-        ));
+            ));
   }
 
   Widget _box(height, width, heightBox, widthBox) {
-    return Container(
-      width: width,
-      height: heightBox * 1.1,
-      padding: EdgeInsets.all(SizeConfig().xMargin(context, 10)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: height * 0.015,
-          ),
-          Flexible(flex: 1, child: _question()),
-          SizedBox(
-            height: height * 0.07,
-          ),
-          // Flexible(flex: 1, child: _options()),
-          SizedBox(
-            height: height * 0.015,
-          ),
-        ],
+    return Center(
+      child: Container(
+        alignment: Alignment.center,
+        width: width,
+        //margin: EdgeInsets.all(SizeConfig().xMargin(context, 15)),
+        //height: heightBox * 1.1,
+        padding: EdgeInsets.all(SizeConfig().xMargin(context, 8)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: SizeConfig().xMargin(context, 0.5),
+            ),
+            _question(),
+            SizedBox(
+              height: SizeConfig().xMargin(context, 0.5),
+            ),
+            Column(
+              children: _options(),
+            ),
+            SizedBox(
+              height: height * 0.015,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -133,16 +243,18 @@ class _QuizPage2State extends State<QuizPage2> {
   Widget _question() {
     return FadeIn(
       delay: 0.1,
-      child: Text(
-        'questionFunctions.getQuestionText()',
-        style: GoogleFonts.poppins(
-          color: Color(0xFF38208C),
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          fontStyle: FontStyle.normal,
-          // fontWeight: FontWeight.w500,
+      child: Container(
+        child: Text(
+          questionFunctions.getQuestionText(),
+          style: GoogleFonts.poppins(
+            color: Color(0xFF38208C),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.normal,
+            // fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.justify,
         ),
-        textAlign: TextAlign.justify,
       ),
     );
   }
@@ -236,13 +348,28 @@ class _QuizPage2State extends State<QuizPage2> {
     );
   }
 
+  Widget _timer() {
+    return FlatButton(
+      color: Color(0xFF574E76),
+      onPressed: () {},
+      child: TimerQuiz(
+        endQ: stopTimer,
+        nextQ: resetTimer,
+        callBackFunc: () {
+          setState(() {
+            timerZero();
+          });
+        },
+      ),
+    );
+  }
+
   Widget _progress(height, width) {
     return Text(
       'Question ' +
-          //(questionFunctions.currentQuestion() + 1).toString() +
+          (questionFunctions.currentQuestion() + 1).toString() +
           ' of ' +
-          '',
-      // questionFunctions.numberOfQuestions().toString(),
+          questionFunctions.numberOfQuestions().toString(),
       style: GoogleFonts.poppins(
         color: Color(0xFFFFFFFF),
         fontSize: 16,
@@ -261,50 +388,54 @@ class _QuizPage2State extends State<QuizPage2> {
     bool _isSelected = false;
 
     for (var i = 0; i < questionFunctions.getOptions().length; i++) {
-      //isPicked.add(false);
+      optionColors.add(Colors.white);
       option.add(
         InkWell(
           onTap: () {
-            // isPicked = [false, false, false, false];
-            // setState(() {
-            //   _isSelected = !_isSelected;
-            //   isPicked[i] = _isSelected;
-            //   userAnswer = questionFunctions.getOptions()[i];
-            //   print(isPicked);
-            // });
+            setState(() {
+              userAnswer = questionFunctions.getOptions()[i];
+              userAnswer == questionFunctions.getCorrectAnswer()
+                  ? isCorrect = true
+                  : isCorrect = false;
+              _isSelected = !_isSelected;
+              isPicked[i] = _isSelected;
+              optionColors[i] = optionColorFunc(isPicked[i], isCorrect);
 
-            // Timer(Duration(milliseconds: 100), () {
-            //   print('getUserPickedAnswer:$userAnswer');
-
-            //   if (userAnswer.isNotEmpty && userAnswer != null) {
-            //     checkAnswer(userAnswer);
-            //     count++;
-            //     isPicked = [false, false, false, false];
-            //   }
-            // });
+              Future.delayed(Duration(milliseconds: 500), () {
+                setState(() {
+                  if (userAnswer.isNotEmpty && userAnswer != null) {
+                    isPicked = [false, false, false, false];
+                    checkAnswer(userAnswer);
+                  }
+                  optionColors[i] = Colors.white;
+                });
+              });
+            });
           },
           child: Column(
             children: <Widget>[
               SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: questionFunctions.colorPickedAnswer()[i]
-                    //     ? isCorrect(userAnswer) ? Colors.green : Colors.red
-                    //     : Colors.white,
-                    border: Border.all(color: Colors.black26)),
-                height: heightBox * .128,
-                width: widthBox * .77,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Text(
-                      questionFunctions.getOptions()[i],
-                      style: GoogleFonts.poppins(
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
+              FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: optionColors[i] ?? Colors.white,
+                      border: Border.all(color: Colors.black26)),
+                  height: heightBox * .128,
+                  width: widthBox * .77,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 3.0),
+                      child: Text(
+                        questionFunctions.getOptions()[i],
+                        style: GoogleFonts.poppins(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -315,123 +446,6 @@ class _QuizPage2State extends State<QuizPage2> {
         ),
       );
     }
-
     return option;
   }
-
-  bool isCorrect(String userResponse) {
-    stopTimer = true;
-    bool correct = true;
-    String correctAnswer = questionFunctions.getCorrectAnswer();
-    if (userResponse == correctAnswer) {
-      return correct;
-    } else {
-      return correct = false;
-    }
-  }
-}
-
-class QuestionFunctions {
-  int _correctResponse = 0;
-  int _wrongResponse = 0;
-  int _questionNumber = 0;
-  String response = "";
-  int totalQuestions = 0;
-  int _totalScore = 0;
-  List<QuestionModel> _questionBank;
-  String userResponse;
-  String userPickedAnswer;
-  bool resetTimer = false;
-  bool stopTimer = false;
-
-  int count = 0;
-
-  List<bool> isPicked = [false, false, false, false];
-
-  QuestionFunctions(List<QuestionModel> questionBank) {
-    _questionBank = questionBank;
-    //_questionNumber = _questionBank.length;
-    //print('_questionBank:$_questionBank');
-  }
-
-  void nextQuestion() {
-    if (_questionNumber < _questionBank.length - 1) {
-      _questionNumber++;
-    }
-  }
-
-  String getQuestionText() {
-    //print('_questionBank1:$_questionBank');
-    print('_questionBanknum:${_questionBank[_questionNumber].question}');
-    return _questionBank[_questionNumber].question;
-  }
-
-  List<String> getOptions() {
-    //print((_questionBank[_questionNumber].incorrectAnswers));
-    List options = _questionBank[_questionNumber].incorrectAnswers;
-    print(options);
-    return options;
-  }
-
-  String getCorrectAnswer() {
-    print(_questionBank[_questionNumber].correctAnswer);
-    return _questionBank[_questionNumber].correctAnswer;
-  }
-
-  bool isFinished() {
-    print(_questionBank.length);
-
-    if (_questionNumber >= _questionBank.length - 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void reset() {
-    _questionNumber = 0;
-    _correctResponse = 0;
-    _wrongResponse = 0;
-    resetTimer = false;
-    stopTimer = false;
-  }
-
-  int numberOfQuestions() {
-    return totalQuestions = _questionBank.length;
-  }
-
-  int currentQuestion() {
-    return _questionNumber;
-  }
-
-  void incrementScore() {
-    _correctResponse += 1;
-  }
-
-  void decrementScore() {
-    _wrongResponse += 1;
-  }
-
-  get correctResponse {
-    return _correctResponse;
-  }
-
-  get wrongResponse {
-    return _wrongResponse;
-  }
-
-  get totalScore {
-    int total = correctResponse;
-    return _totalScore = total;
-  }
-
-  List<bool> colorPickedAnswer() {
-    return isPicked;
-  }
-
-  get getColorPickedAnswer {
-    return isPicked;
-  }
-
-  void timeOutTimer() {}
 }

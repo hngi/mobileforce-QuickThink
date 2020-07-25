@@ -112,7 +112,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
       child: Center(
         child: Image.asset(
           'assets/images/phone_icon.png',
-          fit: BoxFit.fitHeight,
+          fit: BoxFit.none,
         ),
       ),
     );
@@ -188,5 +188,4 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
       },
     );
   }
-
 }

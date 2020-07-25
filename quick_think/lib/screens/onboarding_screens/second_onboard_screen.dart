@@ -77,7 +77,7 @@ class _SecondOnBoardScreenState extends State<SecondOnBoardScreen> {
         image: AssetImage(
           'assets/images/mark_icon.png',
         ),
-        fit: BoxFit.fitHeight,
+        fit: BoxFit.none,
       )),
     );
   }

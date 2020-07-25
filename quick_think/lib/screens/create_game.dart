@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:flushbar/flushbar.dart';
@@ -14,11 +15,10 @@ import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/utils/urls.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const String fetchGameCode_Api = 'http://brainteaser.pythonanywhere.com/game';
 
 class CreateGame extends StatefulWidget {
   static const routeName = 'create_game';
@@ -65,9 +65,8 @@ class _CreateGameState extends State<CreateGame> {
   Future<List<String>> saveCreatesCodes(String key, List<String> value) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final List<String> newList = value;
-    var setList = newList.toSet();
-
-    sharedPreferences.setStringList(key, setList.toList());
+    List<String> setList = LinkedHashSet<String>.from(newList).toList();
+    sharedPreferences.setStringList(key, setList);
     return newList;
   }
 
@@ -76,7 +75,7 @@ class _CreateGameState extends State<CreateGame> {
     final sharedPreferences = await SharedPreferences.getInstance();
     final valueStored = sharedPreferences.getStringList(key) ?? [];
     print('List Retrieved with Create Game Codes in Create Game: $valueStored');
-    return valueStored;
+    gamesCreated = valueStored;
   }
 
   Future _fetchCategory() async {
@@ -93,7 +92,6 @@ class _CreateGameState extends State<CreateGame> {
     setState(() {
       if (!mounted) return;
       isCategoryLoading = false;
-      
     });
   }
 
@@ -174,7 +172,7 @@ class _CreateGameState extends State<CreateGame> {
 
   Future<String> getCode(context, username) async {
     http.Response response = await http.post(
-      fetchGameCode_Api,
+      fetchGameCodeApi,
       headers: {'Accept': 'application/json'},
       body: {
         "user_name": userName,
@@ -189,8 +187,6 @@ class _CreateGameState extends State<CreateGame> {
       //Persisting the Created GameCodes
       gamesCreated.insert(0, gameCode);
       saveCreatesCodes('createdGames', gamesCreated);
-      //testing
-      getCreatedCodes('createdGames');
       return gameCode;
     } else {
       //  throw Exception('Failed to retrieve code');

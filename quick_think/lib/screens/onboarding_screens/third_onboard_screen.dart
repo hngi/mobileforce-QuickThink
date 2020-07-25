@@ -74,7 +74,7 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
         image: AssetImage(
           'assets/images/social_media_icon.png',
         ),
-        fit: BoxFit.fitHeight,
+        fit: BoxFit.none,
       )),
     );
   }

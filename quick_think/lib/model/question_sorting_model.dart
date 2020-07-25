@@ -8,6 +8,7 @@ import 'package:quickthink/model/question_model.dart';
 import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quickthink/utils/quizTimer.dart';
+import 'package:quickthink/screens/quiz_page2.dart';
 
 class QuickThink extends StatefulWidget {
   final String gameCode;
@@ -38,6 +39,7 @@ class _QuickThinkState extends State<QuickThink> {
 
   @override
   Widget build(BuildContext context) {
+    
     return FutureBuilder<List<QuestionModel>>(
         future: fq,
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
@@ -65,7 +67,7 @@ class _QuickThinkState extends State<QuickThink> {
                   ));
             }
 
-            return CustomQuestionView(
+            return /* CustomQuestionView */QuizPage2(
                 questionData: questionData,
                 userName: widget.userName,
                 gameCode: widget.gameCode,
