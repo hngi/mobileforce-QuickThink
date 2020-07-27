@@ -195,7 +195,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         if (value != null) {
                                           Future.delayed(Duration(seconds: 2))
                                               .then((value) =>
-                                                  Get.to(LoginScreen()));
+                                                  Get.off(LoginScreen()));
                                         }
                                       });
                                     }

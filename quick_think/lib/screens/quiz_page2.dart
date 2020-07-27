@@ -1,17 +1,12 @@
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/data/FetchedQuestions.dart';
 import 'package:quickthink/model/question_ends.dart';
 import 'package:quickthink/model/question_model.dart';
 import 'package:quickthink/model/question_functions.dart';
-import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:quickthink/screens/help.dart';
 import 'package:quickthink/utils/quizTimer.dart';
 import 'package:quickthink/utils/responsiveness.dart';
@@ -28,7 +23,8 @@ class QuizPage2 extends StatefulWidget {
   _QuizPage2State createState() => _QuizPage2State();
 }
 
-class _QuizPage2State extends State<QuizPage2> {
+class _QuizPage2State extends State<QuizPage2>
+    with SingleTickerProviderStateMixin {
   QuestionFunctions questionFunctions;
   List<QuestionModel> _questionBank;
   bool stopTimer = false;
@@ -41,6 +37,9 @@ class _QuizPage2State extends State<QuizPage2> {
   Color optionColor;
   List<Color> optionColors = List();
   bool isCorrect;
+
+  AnimationController _controller;
+  Animation<Offset> _offsetAnimation;
 
   getUserName() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -56,6 +55,8 @@ class _QuizPage2State extends State<QuizPage2> {
       if (!questionFunctions.isFinished()) {
         resetTimer = true;
         questionFunctions.nextQuestion();
+        _controller.forward(from: 0.0);
+        _controller.reverse(from: 1.0);
       } else if (questionFunctions.isFinished()) {
         stopTimer = true;
         IQEnds(
@@ -76,6 +77,7 @@ class _QuizPage2State extends State<QuizPage2> {
     if (!questionFunctions.isFinished()) {
       if (questionFunctions.response == correctAnswer) {
         widget.model.updateScore(widget.model.userGameID);
+        questionFunctions.incrementScore();
         isPicked = [false, false, false, false];
         resetTimer = true;
         questionFunctions.nextQuestion();
@@ -86,12 +88,15 @@ class _QuizPage2State extends State<QuizPage2> {
         questionFunctions.nextQuestion();
         // resetTimer = false;
       }
+      _controller.reset();
+      _controller.forward(from: 0.0);
+      _controller.reverse(from: 1.0);
     } else if (questionFunctions.isFinished()) {
       stopTimer = true;
       if (questionFunctions.response == correctAnswer) {
         widget.model.updateScore(widget.model.userGameID);
         isPicked = [false, false, false, false];
-
+        questionFunctions.incrementScore();
         // stopTimer
         IQEnds(
                 totalScore: questionFunctions.totalScore,
@@ -159,7 +164,37 @@ class _QuizPage2State extends State<QuizPage2> {
     _questionBank = widget.questionData;
     questionFunctions = QuestionFunctions(_questionBank);
     getUserName();
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..addListener(() => setState(() {}));
+
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset(0.1, 0.0),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInBack,
+    ));
+
+    _controller.forward();
+    _offsetAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      }
+    });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (!_controller.isDismissed) {
+      _controller.dispose();
+    }
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -241,8 +276,8 @@ class _QuizPage2State extends State<QuizPage2> {
   }
 
   Widget _question() {
-    return FadeIn(
-      delay: 0.1,
+    return SlideTransition(
+      position: _offsetAnimation,
       child: Container(
         child: Text(
           questionFunctions.getQuestionText(),
