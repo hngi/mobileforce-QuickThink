@@ -153,7 +153,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
                                     RaisedButton(
                                       color: buttonColor,
                                       onPressed: () {
-                                        Get.to(ViewQuestions());
+                                        Get.off(ViewQuestions());
                                       },
                                       child: Text('View All Questions'),
                                     ),
@@ -170,7 +170,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
                                     RaisedButton(
                                       color: buttonColor,
                                       onPressed: () {
-                                        Get.to(DashboardScreen());
+                                        Get.off(DashboardScreen());
                                       },
                                       child: Text('DashBoard'),
                                     ),
