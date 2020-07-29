@@ -50,7 +50,7 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+           // startTimer();
             _connection = false;
           });
         } else {

@@ -23,25 +23,24 @@ class IQEnds {
       context: context,
       builder: (BuildContext context) {
         return WillPopScope(
-          onWillPop: () {},
-          child: AlertDialog(
-            backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-            title: Text(
-              'Hi $username',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            content: Text(message,
-                style: TextStyle(color: Colors.white, fontSize: 16)),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  'Proceed',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                  ),
-                ),
+    onWillPop: (){
+      return;
+    }, child:AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+          title: Text(
+            'Hi $username',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: Text(message,
+              style: TextStyle(color: Colors.white, fontSize: 16)),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Proceed',
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                )),
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -49,12 +48,12 @@ class IQEnds {
                           score: totalScore,
                           name: username,
                           gameCode: gameCode,
-                          questionNumber: questionNumber)));
-                },
-              ),
-            ],
-          ),
-        );
+                          questionNumber: questionNumber
+                        )));
+              },
+            ),
+          ],
+        ));
       },
     );
   }

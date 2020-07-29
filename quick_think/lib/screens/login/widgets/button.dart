@@ -12,7 +12,7 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: McGyver.rsDoubleW(context, 85),
+      width: McGyver.rsDoubleW(context, 75),
       child: MaterialButton(
           child: Text(
             'Login',
@@ -37,7 +37,7 @@ class SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: McGyver.rsDoubleW(context, 85),
+      width: McGyver.rsDoubleW(context, 75),
       child: MaterialButton(
           child: Text(
             'Create Account',

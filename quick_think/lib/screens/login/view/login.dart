@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+            //    startTimer();
             _connection = false;
           });
         } else {
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         if (value != null) {
                                           Future.delayed(Duration(seconds: 3))
                                               .then((value) =>
-                                                  Get.to(DashboardScreen()));
+                                                  Get.offAll(DashboardScreen()));
                                         }
                                       });
                                     }

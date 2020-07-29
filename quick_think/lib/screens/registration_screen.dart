@@ -1,3 +1,4 @@
+
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
@@ -49,7 +50,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+         //   startTimer();
             _connection = false;
           });
         } else {
@@ -194,7 +195,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         if (value != null) {
                                           Future.delayed(Duration(seconds: 2))
                                               .then((value) =>
-                                                  Get.to(LoginScreen()));
+                                                  Get.off(LoginScreen()));
                                         }
                                       });
                                     }
@@ -210,3 +211,4 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           );
   }
 }
+

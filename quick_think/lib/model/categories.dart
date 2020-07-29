@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:quickthink/utils/urls.dart';
 
 class Categories {
   String name;
@@ -19,24 +20,23 @@ class Categories {
 class Services {
   Future<List<Categories>> getCategories() async {
     Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      };
-      String url = 'http://brainteaser.pythonanywhere.com/game/category';
-      http.Response response = await http.get(
-        url,
-        headers: headers,
-      );
-      if (response.statusCode == 200) {
-        List<Categories> _categories = [];
-        List apiData = jsonDecode(response.body)['data'];
-      
-        _categories =
-          apiData.map((item) => Categories.fromMap(item)).toList();
-      
-        return _categories;
-      } else {
-        throw Exception('Failed to retrieve code');
-      }
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    http.Response response = await http.get(
+      fetchCategoriesUrl,
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      List<Categories> _categories = [];
+      List apiData = jsonDecode(response.body)['data'];
+
+      _categories = apiData.map((item) => Categories.fromMap(item)).toList();
+
+      return _categories;
+    } else {
+      throw Exception('Failed to retrieve code');
+    }
   }
 }

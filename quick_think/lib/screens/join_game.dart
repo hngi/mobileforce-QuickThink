@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
@@ -14,12 +15,13 @@ import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/utils/urls.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String url = 'http://brainteaser.pythonanywhere.com/game/play';
+const String url = 'https://brainteaser.pythonanywhere.com/game/play';
 const String checkUrl =
-    'http://brainteaser.pythonanywhere.com/game/user/play/check';
+    'https://brainteaser.pythonanywhere.com/game/user/play/check';
 
 class JoinGame extends StatefulWidget {
   static const routeName = 'join-game';
@@ -34,7 +36,7 @@ class _JoinGameState extends State<JoinGame> {
   TextEditingController gameCode = TextEditingController();
 
   ///List to store played gameCodes
-  final List<String> playedGames = [];
+  List<String> playedGames = [];
 
   final _formKey = GlobalKey<FormState>();
   SharedPreferences sharedPreferences;
@@ -63,7 +65,7 @@ class _JoinGameState extends State<JoinGame> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+            //startTimer();
             _connection = false;
           });
         } else {
@@ -99,28 +101,8 @@ class _JoinGameState extends State<JoinGame> {
   Future<List<String>> savePlayedCodes(String key, List<String> value) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final List<String> newList = value;
-    var setList = newList.toSet();
-
-    sharedPreferences.setStringList(key, setList.toList());
-
-//    print('List Stored : $value');
-    // if (setList.length <= 10) {
-    //   for (int i = 0; i <= 10; i++) {
-    //     sharedPreferences.setStringList(key, setList.toList());
-    //   }
-    // } else {
-    //   //Trying to remove the last index in the set
-    //   var listAgain = setList.toList().remove(9);
-    //   var set = newList.toSet();
-    //   print('List Again $listAgain');
-    //   print('Set: $set');
-    //   print('List: $newList');
-    //   // sharedPreferences.setStringList(key, setList.toList());
-    // }
-    //sharedPreferences.setStringList(key, newList);
-
-    // print('List Stored : $newList');
-
+    List<String> setList = LinkedHashSet<String>.from(newList).toList();
+    sharedPreferences.setStringList(key, setList);
     return newList;
   }
 
@@ -129,7 +111,7 @@ class _JoinGameState extends State<JoinGame> {
     final sharedPreferences = await SharedPreferences.getInstance();
     final valueStored = sharedPreferences.getStringList(key) ?? [];
     print('List Retrieved with Play Game Codes in Join Game: $valueStored');
-    return valueStored;
+    playedGames = valueStored;
   }
 
   void _showInSnackBar(String value, color) {
@@ -428,13 +410,8 @@ class _JoinGameState extends State<JoinGame> {
           ///Persisting the played gameCodes to sharedprefs
           playedGames.insert(0, gameCode.text);
           print('Here $playedGames');
-          //   here.clear();
-
           progressDialog.hide();
-
           savePlayedCodes('playedGames', playedGames);
-          //testing
-          getPlayedCodes('playedGames');
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -514,7 +491,7 @@ class _JoinGameState extends State<JoinGame> {
                               fontSize: 22.0,
                               letterSpacing: 1.0,
                               color: Hexcolor('#1C1046')),
-                              textAlign: TextAlign.start,
+                          textAlign: TextAlign.start,
                         ),
                       ),
                     ),
@@ -558,7 +535,7 @@ class _JoinGameState extends State<JoinGame> {
       progressDialog.show();
     });
     http.Response response = await http.post(
-      url,
+      playGameUrl,
       headers: {'Accept': 'application/json'},
       body: {"game_code": code, "user_name": user},
     );

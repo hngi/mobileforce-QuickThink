@@ -56,7 +56,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-            startTimer();
+         //   startTimer();
             _connection = false;
           });
         } else {
