@@ -14,6 +14,7 @@ import 'package:quickthink/utils/responsiveness.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 
+import 'create_category.dart';
 import 'create_question.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 
@@ -88,168 +89,169 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
     final state = useProvider(apiState);
     return _connection
         ? NoInternet()
-        : Scaffold(
-            backgroundColor: Theme.of(context).primaryColor,
-            body: SafeArea(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: SizeConfig().xMargin(context, 5.0),
-                  right: SizeConfig().xMargin(context, 5.0),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      SizedBox(
-                        height: SizeConfig().yMargin(context, 2),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: IconButton(
-                          color: buttonColor,
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () => Get.back(),
+        : WillPopScope(
+            onWillPop: () => Get.off(CreateCategory()),
+            child: Scaffold(
+              backgroundColor: Theme.of(context).primaryColor,
+              body: SafeArea(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: SizeConfig().xMargin(context, 5.0),
+                    right: SizeConfig().xMargin(context, 5.0),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SizedBox(height: 3),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: IconButton(
+                            color: buttonColor,
+                            icon: Icon(Icons.arrow_back),
+                            onPressed: () => Get.off(CreateCategory()),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: SizeConfig().yMargin(context, 2),
-                      ),
-                      _prompt(),
-                      SizedBox(
-                        height: SizeConfig().yMargin(context, 4),
-                      ),
-                      Container(
-                          width: width,
-                          height: height,
-                          child: FutureBuilder(
-                              future: state.getUserCategory(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                        ConnectionState.none &&
-                                    snapshot.hasData == null) {
-                                  return Container();
-                                }
-                                return snapshot.hasData
-                                    ? snapshot.data.isNotEmpty
-                                        ? ListView.builder(
-                                            itemCount: snapshot.data.length,
-                                            itemBuilder: (context, index) {
-                                              return Dismissible(
-                                                background:
-                                                    slideRightBackground(),
-                                                confirmDismiss:
-                                                    (direction) async {
-                                                  if (direction ==
-                                                      DismissDirection
-                                                          .startToEnd) {
-                                                    final bool res =
-                                                        await showDialog(
-                                                            context: context,
-                                                            builder: (_) =>
-                                                                AssetGiffyDialog(
-                                                                  key: keys[5],
-                                                                  buttonOkColor:
-                                                                      buttonColor,
-                                                                  image: Image
-                                                                      .asset(
-                                                                    'assets/images/giphy.gif',
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  ),
-                                                                  title: Text(
-                                                                    'Are you sure you want to delete this Category?',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: GoogleFonts.poppins(
-                                                                        fontSize: SizeConfig().textSize(
-                                                                            context,
-                                                                            3),
-                                                                        fontWeight:
-                                                                            FontWeight.w500),
-                                                                  ),
-                                                                  entryAnimation:
-                                                                      EntryAnimation
-                                                                          .BOTTOM,
-                                                                  description:
-                                                                      Text(
-                                                                    'This action is permanent. Category cannot be recovered',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: GoogleFonts.poppins(
-                                                                        fontSize: SizeConfig().textSize(
-                                                                            context,
-                                                                            2),
-                                                                        fontWeight:
-                                                                            FontWeight.w300),
-                                                                  ),
-                                                                  onOkButtonPressed:
-                                                                      () {
-                                                                    state
-                                                                        .deleteCategory(snapshot.data[index]
-                                                                            [
-                                                                            'name'])
-                                                                        .then(
-                                                                            (value) {
-                                                                      if (value !=
-                                                                          null) {
-                                                                        snapshot
-                                                                            .data
-                                                                            .removeAt(index);
+                        // SizedBox(
+                        //   height: SizeConfig().yMargin(context, 2),
+                        // ),
+                        _prompt(),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 1),
+                        ),
+                        Container(
+                            width: width,
+                            height: height,
+                            child: FutureBuilder(
+                                future: state.getUserCategory(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.none &&
+                                      snapshot.hasData == null) {
+                                    return Container();
+                                  }
+                                  return snapshot.hasData
+                                      ? snapshot.data.isNotEmpty
+                                          ? ListView.builder(
+                                              itemCount: snapshot.data.length,
+                                              itemBuilder: (context, index) {
+                                                return Dismissible(
+                                                  background:
+                                                      slideRightBackground(),
+                                                  confirmDismiss:
+                                                      (direction) async {
+                                                    if (direction ==
+                                                        DismissDirection
+                                                            .startToEnd) {
+                                                      final bool res =
+                                                          await showDialog(
+                                                              context: context,
+                                                              builder: (_) =>
+                                                                  AssetGiffyDialog(
+                                                                    key:
+                                                                        keys[5],
+                                                                    buttonOkColor:
+                                                                        buttonColor,
+                                                                    image: Image
+                                                                        .asset(
+                                                                      'assets/images/giphy.gif',
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                    title: Text(
+                                                                      'Are you sure you want to delete this Category?',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: GoogleFonts.poppins(
+                                                                          fontSize: SizeConfig().textSize(
+                                                                              context,
+                                                                              3),
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                    ),
+                                                                    entryAnimation:
+                                                                        EntryAnimation
+                                                                            .BOTTOM,
+                                                                    description:
+                                                                        Text(
+                                                                      'This action is permanent. Category cannot be recovered',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: GoogleFonts.poppins(
+                                                                          fontSize: SizeConfig().textSize(
+                                                                              context,
+                                                                              2),
+                                                                          fontWeight:
+                                                                              FontWeight.w300),
+                                                                    ),
+                                                                    onOkButtonPressed:
+                                                                        () {
+                                                                      state
+                                                                          .deleteCategory(snapshot.data[index]
+                                                                              [
+                                                                              'name'])
+                                                                          .then(
+                                                                              (value) {
+                                                                        if (value !=
+                                                                            null) {
+                                                                          snapshot
+                                                                              .data
+                                                                              .removeAt(index);
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        } else {
+                                                                          print(
+                                                                              value);
+
+                                                                          SnackBarService
+                                                                              .instance
+                                                                              .showSnackBarError("Cannot delete the category .Some players have played the game");
+                                                                        }
                                                                         Navigator.pop(
                                                                             context);
-                                                                      } else {
-                                                                        print(
-                                                                            value);
-
-                                                                        SnackBarService
-                                                                            .instance
-                                                                            .showSnackBarError("Cannot delete the category .Some players have played the game");
-                                                                      }
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    });
-                                                                  },
-                                                                ));
-                                                    return res;
-                                                  } else {}
-                                                },
-                                                key: Key(index.toString()),
-                                                child: FadeIn(
-                                                  delay: index - 0.3,
-                                                  child: _cards(
-                                                      game: snapshot.data[index]
-                                                          ['name'],
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) => CreateQuestion(
-                                                                    questionState:
-                                                                        QuestionState
-                                                                            .Adding,
-                                                                    categoryName:
-                                                                        snapshot.data[index]
-                                                                            [
-                                                                            'name'])));
-                                                      }),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        : Center(
-                                            child: Text(
-                                            'No created category',
-                                            style: GoogleFonts.poppins(
-                                                color: buttonColor,
-                                                fontSize: SizeConfig()
-                                                    .textSize(context, 2.8)),
-                                          ))
-                                    : Center(
-                                        child: CircularProgressIndicator());
-                              }))
-                    ],
+                                                                      });
+                                                                    },
+                                                                  ));
+                                                      return res;
+                                                    } else {}
+                                                  },
+                                                  key: Key(index.toString()),
+                                                  child: FadeIn(
+                                                    delay: index - 0.3,
+                                                    child: _cards(
+                                                        game:
+                                                            snapshot.data[index]
+                                                                ['name'],
+                                                        onTap: () {
+                                                          Get.off(CreateQuestion(
+                                                              questionState:
+                                                                  QuestionState
+                                                                      .Adding,
+                                                              categoryName:
+                                                                  snapshot.data[
+                                                                          index]
+                                                                      [
+                                                                      'name']));
+                                                        }),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Center(
+                                              child: Text(
+                                              'No created category',
+                                              style: GoogleFonts.poppins(
+                                                  color: buttonColor,
+                                                  fontSize: SizeConfig()
+                                                      .textSize(context, 2.8)),
+                                            ))
+                                      : Center(
+                                          child: CircularProgressIndicator());
+                                }))
+                      ],
+                    ),
                   ),
                 ),
               ),
