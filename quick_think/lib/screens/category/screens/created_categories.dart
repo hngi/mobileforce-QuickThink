@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/screens/category/services/utils/animations.dart';
 import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
+import 'package:quickthink/screens/login/services/utils/snackbar.dart';
 
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -50,7 +51,7 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-           // startTimer();
+            // startTimer();
             _connection = false;
           });
         } else {
@@ -198,6 +199,13 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                                                                             .removeAt(index);
                                                                         Navigator.pop(
                                                                             context);
+                                                                      } else {
+                                                                        print(
+                                                                            value);
+
+                                                                        SnackBarService
+                                                                            .instance
+                                                                            .showSnackBarError("Cannot delete the category .Some players have played the game");
                                                                       }
                                                                       Navigator.pop(
                                                                           context);

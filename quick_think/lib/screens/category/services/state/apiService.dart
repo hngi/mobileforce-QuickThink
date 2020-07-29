@@ -311,6 +311,7 @@ class ApiCallService with ChangeNotifier {
     setState(ButtonState.Pressed);
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    
     if (token != null) {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -348,6 +349,8 @@ class ApiCallService with ChangeNotifier {
     setState(ButtonState.Pressed);
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    print(name);
+    print(token);
     if (token != null) {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -361,8 +364,8 @@ class ApiCallService with ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode == 400) {
         setState(ButtonState.Idle);
-
-        SnackBarService.instance.showSnackBarError('Some error occured');
+        final Map error = json.decode(response.body);
+        SnackBarService.instance.showSnackBarError(error['error']);
         return null;
       } else if (response.statusCode == 204) {
         setState(ButtonState.Idle);
@@ -374,8 +377,8 @@ class ApiCallService with ChangeNotifier {
       }
       print(response.statusCode);
       setState(ButtonState.Idle);
-
-      SnackBarService.instance.showSnackBarError('Some error occured');
+      final Map error = json.decode(response.body);
+      SnackBarService.instance.showSnackBarError(error['error']);
       return null;
     }
     return null;
