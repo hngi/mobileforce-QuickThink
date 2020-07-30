@@ -45,15 +45,21 @@ class ApiCallService with ChangeNotifier {
           await http.post(categoryUrl, headers: headers, body: payload);
       if (response.statusCode == 500) {
         setState(ButtonState.Idle);
-        SnackBarService.instance.showSnackBarError('Server Error. Try again');
+        final Map error = json.decode(response.body);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 404) {
         setState(ButtonState.Idle);
-        SnackBarService.instance.showSnackBarError('Category already exists');
+        final Map error = json.decode(response.body);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 400) {
         setState(ButtonState.Idle);
-        SnackBarService.instance.showSnackBarError('Category already exists');
+        final Map error = json.decode(response.body);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
       } else if (response.statusCode == 201) {
         final Map user = json.decode(response.body);
@@ -66,44 +72,52 @@ class ApiCallService with ChangeNotifier {
       }
       print(response.statusCode);
       setState(ButtonState.Idle);
-      SnackBarService.instance.showSnackBarError('Server Error. Try again');
+      final Map error = json.decode(response.body);
+      SnackBarService.instance
+          .showSnackBarError(error['error'] ?? error['name'][0]);
       return null;
     }
     return null;
   }
 
   Future<List> getUserCategory() async {
-    final prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token');
-    if (token != null) {
-      Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
-      };
-      Response response = await http.get(getUsersCategory, headers: headers);
-      if (response.statusCode == 200) {
-        final Map list = json.decode(response.body);
-        final List listt = list['data'];
-        List<CategoryGame> _list = [];
-        for (var i = 0; i < listt.length; i++) {
-          _list.add(CategoryGame(
-              game: listt[i]['name'], userID: listt[i]['user'].toString()));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token');
+      if (token != null) {
+        Map<String, String> headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        };
+        Response response = await http.get(getUsersCategory, headers: headers);
+        if (response.statusCode == 200) {
+          final Map list = json.decode(response.body);
+          final List listt = list['data'];
+          List<CategoryGame> _list = [];
+          for (var i = 0; i < listt.length; i++) {
+            _list.add(CategoryGame(
+                game: listt[i]['name'], userID: listt[i]['user'].toString()));
+          }
+          return listt;
+        } else {
+          print(response.statusCode);
+          // SnackBarService.instance.showSnackBarError('Server Error. Try again');
+          return null;
         }
-        return listt;
-      } else {
-        print(response.statusCode);
-        // SnackBarService.instance.showSnackBarError('Server Error. Try again');
-        return null;
       }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
     }
-    return null;
   }
 
   Future<String> createQuestion(Questions questions) async {
     setState(ButtonState.Pressed);
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    print(token);
     if (token != null) {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -121,22 +135,29 @@ class ApiCallService with ChangeNotifier {
       String payload = json.encode(data);
       Response response =
           await http.post(questionUrl, headers: headers, body: payload);
+      print(response.statusCode);
       if (response.statusCode == 400) {
         setState(ButtonState.Idle);
-        SnackBarService.instance.showSnackBarError('Enter Valid Category');
+        final Map user = json.decode(response.body);
+        String error = user['error'];
+        SnackBarService.instance
+            .showSnackBarError(error ?? 'Some error occured');
         return null;
       } else if (response.statusCode == 200) {
         final Map list = json.decode(response.body);
+        print(list);
         final Map listt = list['data'];
+        setState(ButtonState.Idle);
         SnackBarService.instance
             .showSnackBarSuccess('Question created successfully');
-        setState(ButtonState.Idle);
 
         return listt['id'];
       }
       print(response.statusCode);
       setState(ButtonState.Idle);
-      SnackBarService.instance.showSnackBarError('Server Error. Try again');
+      final Map user = json.decode(response.body);
+      String error = user['error'];
+      SnackBarService.instance.showSnackBarError(error);
       return null;
     }
     return null;
@@ -147,18 +168,50 @@ class ApiCallService with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     if (token != null) {
+      // Map<String, String> headers = {
+      //   'Content-Type': 'application/json',
+      //   'Accept': 'application/json',
+      //   'Authorization': 'Bearer $token'
+      // };
+      // Response response = await http.post(logoutUrl, headers: headers);
+      // if (response.statusCode == 200) {
+      setState(ButtonState.Idle);
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString('token', null);
+      pref.setString('username', null);
+      // final Map list = json.decode(response.body);
+      // final listt = list['data'];
+      return 'logged out';
+      // } else {
+      //   print(response.statusCode);
+      //   setState(ButtonState.Idle);
+      //   SnackBarService.instance.showSnackBarError('Server Error. Try again');
+      //   return null;
+      // }
+    }
+    return null;
+  }
+
+  Future<String> deleteAccount() async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token'
       };
-      Response response = await http.post(logoutUrl, headers: headers);
+      Response response = await http.post(deleteAccountUrl, headers: headers);
       if (response.statusCode == 200) {
         setState(ButtonState.Idle);
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('token', null);
         pref.setString('username', null);
         final Map list = json.decode(response.body);
+        print(list);
+        SnackBarService.instance
+            .showSnackBarSuccess('Account Deleted succesfully');
         final listt = list['data'];
         return listt;
       } else {
@@ -167,6 +220,166 @@ class ApiCallService with ChangeNotifier {
         SnackBarService.instance.showSnackBarError('Server Error. Try again');
         return null;
       }
+    }
+    return null;
+  }
+
+  Future<List> getUserQuestions() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token');
+      if (token != null) {
+        Map<String, String> headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        };
+        Response response = await http.get(getUsersQuestions, headers: headers);
+        if (response.statusCode == 200) {
+          final Map list = json.decode(response.body);
+          final List listt = list['data'];
+          List<Questions> _list = [];
+          for (var i = 0; i < listt.length; i++) {
+            _list.add(Questions(
+              id: listt[i]['id'],
+              question: listt[i]['question'],
+              category: listt[i]['category'],
+              answer: listt[i]['answer'],
+              options: listt[i]['options'],
+            ));
+          }
+          return listt;
+        } else {
+          print(response.statusCode);
+          // SnackBarService.instance.showSnackBarError('Server Error. Try again');
+          return null;
+        }
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<String> editQuestion(Questions questions) async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Map data = {
+        "Question": {
+          "id": questions.id,
+          "category": questions.category,
+          "question": questions.question,
+          "answer": questions.answer,
+          "options": questions.options,
+        },
+      };
+      String payload = json.encode(data);
+      Response response =
+          await http.put(editQuestionsUrl, headers: headers, body: payload);
+      if (response.statusCode == 400) {
+        setState(ButtonState.Idle);
+        final Map error = json.decode(response.body);
+        SnackBarService.instance.showSnackBarError(error['error']);
+        return null;
+      } else if (response.statusCode == 200) {
+        final Map list = json.decode(response.body);
+        final Map listt = list['data'];
+        SnackBarService.instance
+            .showSnackBarSuccess('Question updated successfully');
+        setState(ButtonState.Idle);
+
+        return listt['id'];
+      }
+      print(response.statusCode);
+      final Map error = json.decode(response.body);
+      setState(ButtonState.Idle);
+      SnackBarService.instance.showSnackBarError(error['error']);
+      return null;
+    }
+    return null;
+  }
+
+  Future<String> deleteQuestion(String id, String name) async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Map data = {"name": name, "id": id};
+      String payload = json.encode(data);
+      Response response =
+          await http.post(deleteQuestionUrl, headers: headers, body: payload);
+      if (response.statusCode == 400) {
+        setState(ButtonState.Idle);
+        // final Map error = json.decode(response.body);
+        SnackBarService.instance.showSnackBarError('Some error occured');
+        return null;
+      } else if (response.statusCode == 204) {
+        // final Map list = json.decode(response.body);
+        // final Map listt = list['data'];
+        setState(ButtonState.Idle);
+        SnackBarService.instance
+            .showSnackBarSuccess('Question deleted successfully');
+
+        return 'deleted';
+      }
+      print(response.statusCode);
+      setState(ButtonState.Idle);
+      // final Map error = json.decode(response.body);
+      SnackBarService.instance.showSnackBarError('Some error occured');
+      return null;
+    }
+    return null;
+  }
+
+  Future<String> deleteCategory(String name) async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    print(name);
+    print(token);
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Map data = {"name": name};
+      String payload = json.encode(data);
+      Response response =
+          await http.post(deleteCategoryUrl, headers: headers, body: payload);
+      print(response.statusCode);
+      if (response.statusCode == 400) {
+        setState(ButtonState.Idle);
+        final Map error = json.decode(response.body);
+        SnackBarService.instance.showSnackBarError(error['error']);
+        return null;
+      } else if (response.statusCode == 204) {
+        setState(ButtonState.Idle);
+        print('here');
+        SnackBarService.instance
+            .showSnackBarSuccess('$name Category deleted successfully');
+
+        return 'deleted';
+      }
+      print(response.statusCode);
+      setState(ButtonState.Idle);
+      final Map error = json.decode(response.body);
+      SnackBarService.instance.showSnackBarError(error['error']);
+      return null;
     }
     return null;
   }

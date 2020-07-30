@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,21 +11,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:quickthink/model/categories.dart';
 import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/theme/theme.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/utils/urls.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:share/share.dart';
-
-import 'leaderboard.dart';
-
-// TODO: Visual feedback for when a selected
-// TODO: Tell user when category isn't selected... category validation
-// TODO: Change colours of modal fonts and line from black
-// TODO: Center progress loading text //
-// TODO: Change progress loading colour from black //Done
-// TODO: Visual feedback for copy code
-
-const String fetchGameCode_Api = 'http://mohammedadel.pythonanywhere.com/game';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateGame extends StatefulWidget {
   static const routeName = 'create_game';
@@ -37,6 +33,9 @@ class _CreateGameState extends State<CreateGame> {
   Categories _selectedCategory;
 
   Services services = new Services();
+
+  ///ist to store creted gameCodes
+  List<String> gamesCreated = [];
 
   //GetCategories getCategories = new GetCategories();
   bool light = CustomTheme.light;
@@ -56,6 +55,29 @@ class _CreateGameState extends State<CreateGame> {
   TextEditingController userNameController = TextEditingController();
   Future categories;
 
+  //Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
+  ///Persisting the Created GameCodes
+  Future<List<String>> saveCreatesCodes(String key, List<String> value) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final List<String> newList = value;
+    List<String> setList = LinkedHashSet<String>.from(newList).toList();
+    sharedPreferences.setStringList(key, setList);
+    return newList;
+  }
+
+  ///Retriving the persisted Created GameCodes
+  Future<List<String>> getCreatedCodes(String key) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final valueStored = sharedPreferences.getStringList(key) ?? [];
+    print('List Retrieved with Create Game Codes in Create Game: $valueStored');
+    gamesCreated = valueStored;
+  }
+
   Future _fetchCategory() async {
     listCategories = await services.getCategories();
   }
@@ -68,6 +90,7 @@ class _CreateGameState extends State<CreateGame> {
     _dropDownMenuItems = buildDropMenuItems(getListCategories);
     _selectedCategory = _dropDownMenuItems[0].value;
     setState(() {
+      if (!mounted) return;
       isCategoryLoading = false;
     });
   }
@@ -97,6 +120,30 @@ class _CreateGameState extends State<CreateGame> {
 
   @override
   void initState() {
+//Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            //startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
+
+    //get the created codes
+    getCreatedCodes('createdGames');
     userNameController.addListener(() {});
     super.initState();
     categories = _fetchCategory();
@@ -104,19 +151,48 @@ class _CreateGameState extends State<CreateGame> {
     _fetchCat();
   }
 
+  @override
+  void dispose() {
+    subscription.cancel();
+    userNameController.dispose();
+    super.dispose();
+  }
+
+//Navigate to Page When Connectivity is back
+  startTimer() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        // Navigator.pushReplacement(
+        //     context, MaterialPageRoute(builder: (context) => CreateGame()));
+        Navigator.pushReplacementNamed(context, 'create_game');
+      },
+    );
+  }
+
   Future<String> getCode(context, username) async {
     http.Response response = await http.post(
-      fetchGameCode_Api,
+      fetchGameCodeApi,
       headers: {'Accept': 'application/json'},
-      body: {"user_name": userName, "category": '${_selectedCategory.name}'},
+      body: {
+        "user_name": userName,
+        "category": '${_selectedCategory.name.toString()}'
+      },
     );
 
     if (response.statusCode == 200) {
       String data = response.body;
       gameCode = jsonDecode(data)['game_code'].toString();
+
+      //Persisting the Created GameCodes
+      gamesCreated.insert(0, gameCode);
+      saveCreatesCodes('createdGames', gamesCreated);
       return gameCode;
     } else {
-      throw Exception('Failed to retrieve code');
+      //  throw Exception('Failed to retrieve code');
+      print('Status Code: ${response.statusCode}');
+      print('Respinse From API: ${response.body}');
+      return null;
     }
   }
 
@@ -131,12 +207,6 @@ class _CreateGameState extends State<CreateGame> {
     Share.share(summary,
         subject: subject,
         sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
-  }
-
-  @override
-  void dispose() {
-    userNameController.dispose();
-    super.dispose();
   }
 
   @override
@@ -157,63 +227,68 @@ class _CreateGameState extends State<CreateGame> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _logoText(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 10),
-                ),
-                _prompt(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _promptUsername(),
-                _userName(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 7),
-                ),
-                // _promptCategory(),
-                _promptCategorys(),
+    return _connection
+        ? NoInternet()
+        : Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Theme.of(context).primaryColor,
+            body: SafeArea(
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        _logoText(),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 10),
+                        ),
+                        _prompt(),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 4),
+                        ),
+                        _promptUsername(),
+                        _userName(),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 7),
+                        ),
+                        // _promptCategory(),
+                        _promptCategorys(),
 
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 1),
+                        ),
+                        _dropDownCategories(onSelect: (String categoryChosen) {
+                          setState(() {
+                            category = categoryChosen;
+                            print(category);
+                          });
+                        }),
+                        // _allCategories(
+                        //   onSelect: (String categoryChosen) {
+                        //     setState(() {
+                        //       category = categoryChosen;
+                        //       print(category);
+                        //     });
+                        //   },
+                        // ),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 4),
+                        ),
+                        //     _loginBtn(),
+                        _allBtns(),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 1),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                _dropDownCategories(onSelect: (String categoryChosen) {
-                  setState(() {
-                    category = categoryChosen;
-                    print(category);
-                  });
-                }),
-                // _allCategories(
-                //   onSelect: (String categoryChosen) {
-                //     setState(() {
-                //       category = categoryChosen;
-                //       print(category);
-                //     });
-                //   },
-                // ),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                //     _loginBtn(),
-                _allBtns(),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 1),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   Widget _prompt() {
@@ -640,9 +715,20 @@ class _CreateGameState extends State<CreateGame> {
     );
   }
 
+  void _showInSnackBar(String value, color) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(value),
+      backgroundColor: color,
+      duration: new Duration(seconds: 3),
+    ));
+  }
+
   void onPressed() async {
     var form = _formKey.currentState;
-    if (form.validate() && category != null) {
+    if (form.validate()) {
+      if (_selectedCategory.name.toString() == null) {
+        _showInSnackBar('Choose Category from dropdown', Colors.red);
+      }
       form.save();
       setState(() {
         progressDialog.show();
@@ -656,6 +742,7 @@ class _CreateGameState extends State<CreateGame> {
       //showQuizCodeBottomSheet(context);
       alertDialog(context);
     }
+
     userNameController.clear();
     category = null;
   }
@@ -713,7 +800,6 @@ class _CreateGameState extends State<CreateGame> {
                           Clipboard.setData(new ClipboardData(text: hintText));
                           shareCode(context);
                           //Share Code here
-                          //Flutter Toast saying has been copied to clipboard
                         },
                         child: Text(
                           "Share game code",
@@ -738,8 +824,8 @@ class _CreateGameState extends State<CreateGame> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LeaderBoard(),
-                              ));
+                                  builder: (o) =>
+                                      NewLeaderBoard(gameCode: gameCode)));
                           //Flutter Toast
                         },
                         child: Text(

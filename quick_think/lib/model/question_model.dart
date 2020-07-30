@@ -28,7 +28,7 @@ class QuestionModel {
         difficulty: json['difficulty'],
         question: json['question'],
         correctAnswer: json['answer'],
-        incorrectAnswers: json['options'] = json['options'].cast<String>()..shuffle(),
+        incorrectAnswers: List<String>.from(json["options"].map((x) => x))..shuffle(),//json['options'] = json['options'].cast<String>()..shuffle(),
         options: (json['options']
             .cast<String>())
             .add(json['answer']));

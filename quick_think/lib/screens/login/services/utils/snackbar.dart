@@ -17,6 +17,7 @@ class SnackBarService {
     Get.snackbar(
       'Error',
       'Message',
+      colorText: Colors.white,
       duration: Duration(seconds: 3),
       messageText: Text(
         _message,
@@ -31,6 +32,7 @@ class SnackBarService {
     Get.snackbar(
       'Success',
       'Message',
+      colorText: Colors.white,
       duration: Duration(seconds: 2),
       messageText: Text(
         _message,

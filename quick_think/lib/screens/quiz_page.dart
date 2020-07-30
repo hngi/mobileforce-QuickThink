@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickthink/model/question_sorting_model.dart';
-import 'package:quickthink/utils/quizTimer.dart';
-import 'package:quickthink/screens/join_game.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 
 class QuizPage extends StatefulWidget {
   final String gameCode;
@@ -20,15 +19,10 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  int _quizMark = 0;
-  int _quizDuration = 0;
-  int _marks = 0;
-  bool _correctAnswer;
-
+ 
   String userResponse;
   String userAnswer;
-  String _difficultyLevel;
-  String _numberOfQuestion;
+ 
 
   QuickThink _quickThink;
 
@@ -93,7 +87,7 @@ class _QuizPageState extends State<QuizPage> {
     var widthBox = width * .872;
     return WillPopScope(
     onWillPop: () {
-      exitAlert(context);
+     return exitAlert(context);
     },
     child:Scaffold(
         backgroundColor: Color(0xFF1C1046),
@@ -110,20 +104,20 @@ class _QuizPageState extends State<QuizPage> {
         )));
   }
 
-  Widget _container(double height, double width) {
-    return Positioned(
-        top: height * 0.21,
-        left: width * .064,
-        child: Container(
-          width: width * .872,
-          color: Color(0xFF18C5D9),
-          child: Container(
-            width: width * .104,
-            color: Color(0xFF574E76),
-            height: 5,
-          ),
-        ));
-  }
+  // Widget _container(double height, double width) {
+  //   return Positioned(
+  //       top: height * 0.21,
+  //       left: width * .064,
+  //       child: Container(
+  //         width: width * .872,
+  //         color: Color(0xFF18C5D9),
+  //         child: Container(
+  //           width: width * .104,
+  //           color: Color(0xFF574E76),
+  //           height: 5,
+  //         ),
+  //       ));
+  // }
 
   Widget _backIcon(height, width) {
     return Positioned(
@@ -194,7 +188,7 @@ class _QuizPageState extends State<QuizPage> {
                                 () {
                               Navigator.pop(context);
                               Navigator.of(context)
-                                  .pushReplacementNamed(JoinGame.routeName);
+                                  .pushReplacementNamed(DashboardScreen.id);
                             }, Color(0xFFFF1F2E)),
                             actionButton(height, width, 'No', context, () {
                               Navigator.pop(context);

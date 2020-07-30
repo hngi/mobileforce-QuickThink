@@ -4,8 +4,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/data/leaderbord_list.dart';
 import 'package:quickthink/model/leaderboard_model.dart';
+import 'package:quickthink/screens/board_screen.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/theme/theme.dart';
@@ -20,7 +22,6 @@ class NewLeaderBoard extends StatefulWidget {
 class _NewLeaderBoardState extends State<NewLeaderBoard> {
   bool light = CustomTheme.light;
   final model = LeaderboardModel();
-  List<User> topUsers;
 
   @override
   void initState() {
@@ -48,16 +49,16 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                         Expanded(
                           flex: 2,
                           child: Container(
-                            color: light ? Color(0xff1C1046) : Hexcolor('#000000'),
+                            color: Color(0xff1C1046)/* light ? Color(0xff1C1046) : Hexcolor('#000000') */,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  _arrow(),
-                                  _text(),
+                                  _arrow(context),
+                                  _text(widget.gameCode),
                                   Container(
                                     margin: EdgeInsets.only(top: 30),
-                                    child: (model.listUsers == null) ?
+                                    child: (model.listData == null || model.listData.length == 0) ?
                                     SpinKitFoldingCube(
                                       color: Colors.white,
                                       size: 20.0,
@@ -65,9 +66,18 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: <Widget>[
-                                            _roundContainer('2', model.listUsers[1].name, light),
-                                            _roundContainer1(model.listUsers[0].name, light),
-                                            _roundContainer('3', model.listUsers[2].name, light)
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer('2', model.listData[1].userName, light)
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer1(model.listData[0].userName, light)
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                                child: _roundContainer('3', model.listData[2].userName, light)
+                                            )
                                           ],
                                         )
                                   )
@@ -85,7 +95,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                     topLeft: Radius.circular(30), topRight: Radius.circular(30)
                                 ),
                               ),
-                              child: _resultContainer(light,context,model,topUsers),
+                              child: _resultContainer(light,context,model),
                             )
                         )
                       ],
@@ -99,23 +109,53 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     );
   }
 }
-Widget _arrow() {
-  return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: Icon(
-        Icons.keyboard_arrow_left,
-        color: Colors.white,
-        size: 30,
-      ));
+Widget _arrow(context) {
+  return InkWell(
+    onTap: (){
+      Navigator.of(context).pop();
+    },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Icon(
+          Icons.keyboard_arrow_left,
+          color: Colors.white,
+          size: 30,
+        )),
+  );
 }
 
-Widget _text() {
+Widget _text(String gameCode) {
   return Container(
-      padding: EdgeInsets.only(left: 20),
-      child: Text(
-        'Leaderboard',
-        style: GoogleFonts.poppins(
-            fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+      padding: EdgeInsets.only(left: 20,right: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Text(
+              'Leaderboard',
+              style: GoogleFonts.poppins(
+                  fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              width: 100.0,
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              decoration: BoxDecoration(
+                color: Hexcolor("#18C5D9"),
+                borderRadius: BorderRadius.circular(7.0)
+              ),
+              child: Text(
+                "Code: $gameCode",
+                style: GoogleFonts.poppins(
+                    fontSize: 22, color: Colors.white, fontWeight: FontWeight.w400),
+              ),
+            ),
+          )
+        ],
       ));
 }
 
@@ -152,12 +192,17 @@ Widget _roundContainer1(String text1, light) {
       ));
 }
 
-Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,List topUsers) {
+Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model) {
   return StreamBuilder(
     stream: model.leaderboardState,
       builder: (context,snapshot){
         if(snapshot.hasError || snapshot.data == fetchState.NoData){
-          return Error(snapshot.error);
+          return Container(
+            padding: EdgeInsets.all(20.0),
+              child: Center(
+                child: Error(snapshot.error),
+              )
+          );
         }
         if(!snapshot.hasData || snapshot.data == fetchState.Busy){
           return SpinKitFoldingCube(
@@ -165,18 +210,27 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
             size: 20.0,
           );
         }
+        if(model.listData.length == 0){
+          return Container(
+              padding: EdgeInsets.all(20.0),
+              child: Center(
+                  child: Error("Oops! Your Leaderboard is empty at the moment \nInvite your friends to play and check again")));
+        }
         return Container(
           height: 200.0,
           child: ListView.builder(
             shrinkWrap: true,
-              itemCount: model.listUsers.length,
+              itemCount: model.listData.length,
               itemBuilder: (context,index){
-                if(index == 0){
-                  return _row('images/cup.svg', 'images/face1.png', 'images/coin2.svg',
-                      model.listUsers[index].name, model.listUsers[index].score.toString(),light);
-                }else{
-                  return _row1((index + 1).toString(), 'images/face2.png', 'images/coin2.svg', model.listUsers[index].name,
-                      model.listUsers[index].score.toString(),light);
+                if (index == 0) {
+                  return _row(
+                      'images/cup.svg', 'images/face1.png', 'images/coin2.svg',
+                      model.listData[index].userName,
+                      model.listData[index].score.toString(), light);
+                } else {
+                  return _row1((index + 1).toString(), 'images/face2.png',
+                      'images/coin2.svg', model.listData[index].userName,
+                      model.listData[index].score.toString(), light);
                 }
               }
           ),
@@ -187,7 +241,7 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model,
 
 Widget Error(String error){
   return Center(
-      child: Text(error, style: GoogleFonts.poppins(fontSize: 14))
+      child: Text(error, style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold,color: Color(0xff1C1046)))
   );
 }
 

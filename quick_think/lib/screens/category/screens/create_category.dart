@@ -1,15 +1,21 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/screens/category/screens/created_categories.dart';
+import 'package:quickthink/screens/category/screens/viewQuestions.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 import 'package:quickthink/screens/login/services/enum/enum.dart';
 import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
 
 import 'package:quickthink/utils/responsiveness.dart';
+import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'create_question.dart';
@@ -22,65 +28,139 @@ class CreateCategory extends StatefulHookWidget {
 
 class _CreateCategoryState extends State<CreateCategory> {
   final formKey = GlobalKey<FormState>();
+
+  //Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
+  @override
+  void initState() {
+//Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+           // startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+//Navigate to Page When Connectivity is back
+  startTimer() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        Navigator.pushReplacementNamed(context, 'create_category');
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = useProvider(apiState);
     final controller = useTextEditingController();
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(
-            left: SizeConfig().xMargin(context, 5.0),
-            right: SizeConfig().xMargin(context, 5.0),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 2),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    color: buttonColor,
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () => Get.back(),
-                  ),
-                ),
-                SizedBox(
-                  height: SizeConfig().yMargin(context, 4),
-                ),
-                _prompt(),
-                _form(controller),
-                state.buttonState == ButtonState.Idle
-                    ? _loginBtn(state, controller)
-                    : SpinKitThreeBounce(
-                        color: buttonColor,
-                        size: 30,
+    return _connection
+        ? NoInternet()
+        : WillPopScope(
+          onWillPop: () => Get.off(DashboardScreen()),
+                  child: Scaffold(
+              backgroundColor: Theme.of(context).primaryColor,
+              body: SafeArea(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: SizeConfig().xMargin(context, 5.0),
+                      right: SizeConfig().xMargin(context, 5.0),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          SizedBox(
+                            height: SizeConfig().yMargin(context, 2),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: IconButton(
+                              color: buttonColor,
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () => Get.off(DashboardScreen()),
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig().yMargin(context, 4),
+                          ),
+                          _prompt(),
+                          _form(controller),
+                          state.buttonState == ButtonState.Idle
+                              ? _loginBtn(state, controller)
+                              : SpinKitThreeBounce(
+                                  color: buttonColor,
+                                  size: 30,
+                                ),
+                          SizedBox(height: SizeConfig().yMargin(context, 3)),
+                          Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.off(CreatedCategories());
+                              },
+                              child: Text(
+                                'View Categories',
+                                style: GoogleFonts.poppins(
+                                    color: buttonColor,
+                                    fontSize:
+                                        SizeConfig().textSize(context, 2.6)),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: SizeConfig().yMargin(context, 3)),
+                          Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.off(ViewQuestions());
+                              },
+                              child: Text(
+                                'View Questions',
+                                style: GoogleFonts.poppins(
+                                    color: buttonColor,
+                                    fontSize:
+                                        SizeConfig().textSize(context, 2.6)),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                SizedBox(height: SizeConfig().yMargin(context, 3)),
-                Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.to(CreatedCategories());
-                    },
-                    child: Text(
-                      'View Categories',
-                      style: GoogleFonts.poppins(
-                          color: buttonColor,
-                          fontSize: SizeConfig().textSize(context, 2.6)),
                     ),
                   ),
-                )
-              ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+        );
   }
 
   Widget _prompt() {
@@ -160,14 +240,26 @@ class _CreateCategoryState extends State<CreateCategory> {
     return Builder(
       builder: (BuildContext context) {
         return RaisedButton(
+          elevation: 8.0,
           padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
           onPressed: () async {
             final form = formKey.currentState;
             if (form.validate()) {
               form.save();
               print(controller.text);
-              apiCallService.createCategory(controller.text);
-              controller.clear();
+              apiCallService.createCategory(controller.text).then(
+                    (value) => {
+                      if (value != null)
+                        {
+                          Future.delayed(Duration(seconds: 2)).then((value) {
+                            Get.off(CreatedCategories());
+                            controller.clear();
+                          })
+                        }
+                      else
+                        {controller.clear()}
+                    },
+                  );
             }
           },
           textColor: Colors.white,

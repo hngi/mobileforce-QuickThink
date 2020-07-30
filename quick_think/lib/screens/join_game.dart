@@ -1,20 +1,27 @@
+import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-
-import 'package:quickthink/model/new_questions_model.dart';
 import 'package:quickthink/model/question_model.dart';
 import 'package:quickthink/screens/create_game.dart';
-import 'package:quickthink/screens/dashboard.dart';
-
 import 'package:quickthink/screens/quiz_page.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:http/http.dart' as http;
+import 'package:quickthink/utils/urls.dart';
+import 'package:quickthink/widgets/noInternet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-const String url = 'http://mohammedadel.pythonanywhere.com/game/play';
+const String url = 'https://brainteaser.pythonanywhere.com/game/play';
+const String checkUrl =
+    'https://brainteaser.pythonanywhere.com/game/user/play/check';
 
 class JoinGame extends StatefulWidget {
   static const routeName = 'join-game';
@@ -28,9 +35,84 @@ class _JoinGameState extends State<JoinGame> {
   TextEditingController username = TextEditingController();
   TextEditingController gameCode = TextEditingController();
 
+  ///List to store played gameCodes
+  List<String> playedGames = [];
+
   final _formKey = GlobalKey<FormState>();
+  SharedPreferences sharedPreferences;
 
   ProgressDialog progressDialog;
+  //List<String> gamecodes = [value];
+
+//Check Internet Connectivity
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
+  bool _connection = false;
+
+  @override
+  void initState() {
+    //get the played codes
+    getPlayedCodes('playedGames');
+
+//Check Internet Connectivity
+    connectivity = new Connectivity();
+    subscription = connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult connectivityResult) {
+        _connectionStatus = connectivityResult.toString();
+        print(_connectionStatus);
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          if (!mounted) return;
+          setState(() {
+            //startTimer();
+            _connection = false;
+          });
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _connection = true;
+          });
+        }
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+//Navigate to Page When Connectivity is back
+  startTimer() async {
+    return new Timer(
+      Duration(milliseconds: 500),
+      () {
+        // Navigator.pushReplacement(
+        //     context, MaterialPageRoute(builder: (context) => JoinGame()));
+        Navigator.pushReplacementNamed(context, 'join-game');
+      },
+    );
+  }
+
+  //Persisting the play GameCodes
+  Future<List<String>> savePlayedCodes(String key, List<String> value) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final List<String> newList = value;
+    List<String> setList = LinkedHashSet<String>.from(newList).toList();
+    sharedPreferences.setStringList(key, setList);
+    return newList;
+  }
+
+  ///Retrieving the Persistent played GameCodes
+  Future<List<String>> getPlayedCodes(String key) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final valueStored = sharedPreferences.getStringList(key) ?? [];
+    print('List Retrieved with Play Game Codes in Join Game: $valueStored');
+    playedGames = valueStored;
+  }
 
   void _showInSnackBar(String value, color) {
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -66,31 +148,36 @@ class _JoinGameState extends State<JoinGame> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: SizeConfig().yMargin(context, 4),
+    return _connection
+        ? NoInternet()
+        : Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Theme.of(context).primaryColor,
+            body: SafeArea(
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 4),
+                      ),
+                      _logoText(),
+                      SizedBox(
+                        height: SizeConfig().yMargin(context, 10),
+                      ),
+                      _prompt(),
+                      _form(),
+                      _loginBtn(),
+                      _or(),
+                      _createGameLink(),
+                    ],
+                  ),
+                ),
               ),
-              _logoText(),
-              SizedBox(
-                height: SizeConfig().yMargin(context, 10),
-              ),
-              _prompt(),
-              _form(),
-              _loginBtn(),
-              _or(),
-              _createGameLink(),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget _or() {
@@ -122,15 +209,16 @@ class _JoinGameState extends State<JoinGame> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => CreateGame()));
         },
-        child: Text('Create a game',
-            style: GoogleFonts.poppins(
-              fontSize: SizeConfig().textSize(context, 3),
-              color: Colors.white,
-              fontWeight: FontWeight.w400,
-              fontStyle: FontStyle.normal,
-              decoration: TextDecoration.underline,
-            ),
+        child: Text(
+          'Create a game',
+          style: GoogleFonts.poppins(
+            fontSize: SizeConfig().textSize(context, 3),
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+            decoration: TextDecoration.underline,
           ),
+        ),
       ),
     );
   }
@@ -311,29 +399,143 @@ class _JoinGameState extends State<JoinGame> {
       form.save();
       print(gameCode.text + username.text);
 
-      
-    /* List<Question> responseFromFunction = await _joinGame(gameCode.text, username.text);
+      /* List<Question> responseFromFunction = await _joinGame(gameCode.text, username.text);
       if (responseFromFunction != null) {
        
       } */
-       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (o) => QuizPage(
-                    gameCode: gameCode.text,
-                    userName: username.text,
-                  )));
+      progressDialog.show();
+
+      await _joiningGame(gameCode.text, username.text).then((response) {
+        if (response.statusCode == 200) {
+          ///Persisting the played gameCodes to sharedprefs
+          playedGames.insert(0, gameCode.text);
+          print('Here $playedGames');
+          progressDialog.hide();
+          savePlayedCodes('playedGames', playedGames);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (o) => QuizPage(
+                        gameCode: gameCode.text,
+                        userName: username.text,
+                      )));
+        } else if (response.statusCode == 400) {
+          progressDialog.hide();
+          setState(() {
+            showError(json.decode(response.body)['error']);
+          });
+        } else {
+          progressDialog.hide();
+          setState(() {
+            showError("Oops! Cannot join game at this time \n Try again later");
+          });
+        }
+      });
     }
   }
- 
+
+  Future showError(String error) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            child: Container(
+              height: height * .4,
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(top: 20.0, bottom: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 50.0),
+                          child: Icon(
+                            FlutterIcons.alert_circle_mco,
+                            color: Hexcolor('#FF1F2E'),
+                            size: 36.0,
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "Wait a Minute!",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 24.0,
+                                color: Hexcolor('#1C1046')),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          error,
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 22.0,
+                              letterSpacing: 1.0,
+                              color: Hexcolor('#1C1046')),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30.0),
+                  RaisedButton(
+                    padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    color: Hexcolor('#18C5D9'),
+                    child: Text('Join new game',
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20.0,
+                            color: Colors.white)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future<http.Response> _joiningGame(code, user) async {
+    http.Response response = await http.post(
+      checkUrl,
+      headers: {'Accept': 'application/json'},
+      body: {"game_code": code, "user_name": user},
+    );
+
+    return response;
+  }
 
   Future<List<QuestionModel>> _joinGame(code, user) async {
-
     setState(() {
       progressDialog.show();
     });
     http.Response response = await http.post(
-      url,
+      playGameUrl,
       headers: {'Accept': 'application/json'},
       body: {"game_code": code, "user_name": user},
     );
@@ -346,7 +548,6 @@ class _JoinGameState extends State<JoinGame> {
       print(decodedQuestions);
       setState(() {
         progressDialog.hide();
-        
       });
 
       return decodedQuestions
@@ -364,10 +565,9 @@ class _JoinGameState extends State<JoinGame> {
         progressDialog.hide();
       });
 
-      _showInSnackBar(jsonDecode(data)['error, invalid credentials'], Colors.red);
+      _showInSnackBar(
+          jsonDecode(data)['error, invalid credentials'], Colors.red);
       return List();
-
     }
-    
   }
 }
