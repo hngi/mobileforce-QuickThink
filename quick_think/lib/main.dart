@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'config.dart';
 import 'registration.dart';
 import 'theme/theme.dart';
+import 'package:flutter/services.dart';
 
 int onBoardCount;
 void main() async {
@@ -26,8 +27,11 @@ void main() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   onBoardCount = pref.getInt("first");
   await pref.setInt("first", 1);
-
-  runApp(ProviderScope(child: MyApp()));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    .then((_) {
+      runApp(ProviderScope(child: MyApp()));
+    });
+  
 
   // runApp(DevicePreview(
   //   enabled: !kReleaseMode,

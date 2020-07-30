@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/screens/category/screens/created_categories.dart';
 import 'package:quickthink/screens/category/screens/viewQuestions.dart';
 import 'package:quickthink/screens/category/services/state/apiService.dart';
@@ -82,81 +83,84 @@ class _CreateCategoryState extends State<CreateCategory> {
     final controller = useTextEditingController();
     return _connection
         ? NoInternet()
-        : Scaffold(
-            backgroundColor: Theme.of(context).primaryColor,
-            body: SafeArea(
-              child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Container(
-                  padding: EdgeInsets.only(
-                    left: SizeConfig().xMargin(context, 5.0),
-                    right: SizeConfig().xMargin(context, 5.0),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        SizedBox(
-                          height: SizeConfig().yMargin(context, 2),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: IconButton(
-                            color: buttonColor,
-                            icon: Icon(Icons.arrow_back),
-                            onPressed: () => Get.back(),
+        : WillPopScope(
+          onWillPop: () => Get.off(DashboardScreen()),
+                  child: Scaffold(
+              backgroundColor: Theme.of(context).primaryColor,
+              body: SafeArea(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: SizeConfig().xMargin(context, 5.0),
+                      right: SizeConfig().xMargin(context, 5.0),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          SizedBox(
+                            height: SizeConfig().yMargin(context, 2),
                           ),
-                        ),
-                        SizedBox(
-                          height: SizeConfig().yMargin(context, 4),
-                        ),
-                        _prompt(),
-                        _form(controller),
-                        state.buttonState == ButtonState.Idle
-                            ? _loginBtn(state, controller)
-                            : SpinKitThreeBounce(
-                                color: buttonColor,
-                                size: 30,
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: IconButton(
+                              color: buttonColor,
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () => Get.off(DashboardScreen()),
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig().yMargin(context, 4),
+                          ),
+                          _prompt(),
+                          _form(controller),
+                          state.buttonState == ButtonState.Idle
+                              ? _loginBtn(state, controller)
+                              : SpinKitThreeBounce(
+                                  color: buttonColor,
+                                  size: 30,
+                                ),
+                          SizedBox(height: SizeConfig().yMargin(context, 3)),
+                          Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.off(CreatedCategories());
+                              },
+                              child: Text(
+                                'View Categories',
+                                style: GoogleFonts.poppins(
+                                    color: buttonColor,
+                                    fontSize:
+                                        SizeConfig().textSize(context, 2.6)),
                               ),
-                        SizedBox(height: SizeConfig().yMargin(context, 3)),
-                        Align(
-                          alignment: Alignment.center,
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(CreatedCategories());
-                            },
-                            child: Text(
-                              'View Categories',
-                              style: GoogleFonts.poppins(
-                                  color: buttonColor,
-                                  fontSize:
-                                      SizeConfig().textSize(context, 2.6)),
                             ),
                           ),
-                        ),
-                        SizedBox(height: SizeConfig().yMargin(context, 3)),
-                        Align(
-                          alignment: Alignment.center,
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(ViewQuestions());
-                            },
-                            child: Text(
-                              'View Questions',
-                              style: GoogleFonts.poppins(
-                                  color: buttonColor,
-                                  fontSize:
-                                      SizeConfig().textSize(context, 2.6)),
+                          SizedBox(height: SizeConfig().yMargin(context, 3)),
+                          Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.off(ViewQuestions());
+                              },
+                              child: Text(
+                                'View Questions',
+                                style: GoogleFonts.poppins(
+                                    color: buttonColor,
+                                    fontSize:
+                                        SizeConfig().textSize(context, 2.6)),
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          );
+        );
   }
 
   Widget _prompt() {
@@ -248,7 +252,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                       if (value != null)
                         {
                           Future.delayed(Duration(seconds: 2)).then((value) {
-                            Get.to(CreatedCategories());
+                            Get.off(CreatedCategories());
                             controller.clear();
                           })
                         }
