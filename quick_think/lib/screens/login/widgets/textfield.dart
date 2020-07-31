@@ -11,15 +11,16 @@ class TextFieldContainer extends StatelessWidget {
   final TextEditingController controller;
   final String Function(String) validator;
   final Widget suffixIcon;
-
-  const TextFieldContainer(
-      {Key key,
-      this.text,
-      this.controller,
-      this.validator,
-      this.obscure,
-      this.suffixIcon})
-      : super(key: key);
+  final TextInputType textInputType;
+  const TextFieldContainer({
+    Key key,
+    this.text,
+    this.controller,
+    this.validator,
+    this.obscure,
+    this.suffixIcon,
+    this.textInputType,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,8 +31,9 @@ class TextFieldContainer extends StatelessWidget {
         controller: controller,
         validator: validator,
         obscureText: obscure,
+        keyboardType: textInputType,
         decoration: InputDecoration(
-            
+
             // contentPadding: EdgeInsets.fromLTRB(14.0, 12.0, 0.0, 12.0),
             fillColor: textFieldColor,
             filled: true,
