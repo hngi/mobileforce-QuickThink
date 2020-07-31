@@ -421,12 +421,12 @@ class ApiCallService with ChangeNotifier {
         return null;
       } else if (response.statusCode == 201) {
         final Map user = json.decode(response.body);
-        String catName = user['name'];
+        
         SnackBarService.instance
             .showSnackBarSuccess('Category updated successfully');
         setState(ButtonState.Idle);
 
-        return catName;
+        return 'Success';
       }
       print(response.statusCode);
       setState(ButtonState.Idle);

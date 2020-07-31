@@ -265,23 +265,46 @@ class _CreateCategoryState extends State<CreateCategory> {
           elevation: 8.0,
           padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
           onPressed: () async {
-            final form = formKey.currentState;
-            if (form.validate()) {
-              form.save();
-              print(controller.text);
-              apiCallService.createCategory(controller.text).then(
-                    (value) => {
-                      if (value != null)
-                        {
-                          Future.delayed(Duration(seconds: 2)).then((value) {
-                            Get.off(CreatedCategories());
-                            controller.clear();
-                          })
-                        }
-                      else
-                        {controller.clear()}
-                    },
-                  );
+            if (widget.categoryState == CategoryState.Adding) {
+              final form = formKey.currentState;
+              if (form.validate()) {
+                form.save();
+                print(controller.text);
+                apiCallService.createCategory(controller.text).then(
+                      (value) => {
+                        if (value != null)
+                          {
+                            Future.delayed(Duration(seconds: 2)).then((value) {
+                              Get.off(CreatedCategories());
+                              controller.clear();
+                            })
+                          }
+                        else
+                          {controller.clear()}
+                      },
+                    );
+              }
+            } else {
+              final form = formKey.currentState;
+              if (form.validate()) {
+                form.save();
+                print(controller.text);
+                apiCallService
+                    .editCategory(widget.oldName, controller.text)
+                    .then(
+                      (value) {
+                        if (value != null)
+                          {
+                            Future.delayed(Duration(seconds: 2)).then((value)=>
+                              Get.off(CreatedCategories())
+                              
+                            );
+                          }
+                        else
+                          {controller.clear();}
+                      },
+                    );
+              }
             }
           },
           textColor: Colors.white,
