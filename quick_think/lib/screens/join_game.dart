@@ -292,6 +292,7 @@ class _JoinGameState extends State<JoinGame> {
       ),
       child: TextFormField(
         controller: username,
+        keyboardType: TextInputType.text,
         style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
