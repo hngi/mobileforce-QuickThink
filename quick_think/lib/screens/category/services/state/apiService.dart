@@ -311,7 +311,7 @@ class ApiCallService with ChangeNotifier {
     setState(ButtonState.Pressed);
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    
+
     if (token != null) {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -379,6 +379,60 @@ class ApiCallService with ChangeNotifier {
       setState(ButtonState.Idle);
       final Map error = json.decode(response.body);
       SnackBarService.instance.showSnackBarError(error['error']);
+      return null;
+    }
+    return null;
+  }
+
+  Future<String> editCategory(String categoryname, String newName) async {
+    setState(ButtonState.Pressed);
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    if (token != null) {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
+      Map data = {
+        "name": categoryname,
+        "newname": newName,
+      };
+      String payload = json.encode(data);
+      Response response =
+          await http.put(editCategoryUrl, headers: headers, body: payload);
+      if (response.statusCode == 500) {
+        setState(ButtonState.Idle);
+        final Map error = json.decode(response.body);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
+        return null;
+      } else if (response.statusCode == 404) {
+        setState(ButtonState.Idle);
+        final Map error = json.decode(response.body);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
+        return null;
+      } else if (response.statusCode == 400) {
+        setState(ButtonState.Idle);
+        final Map error = json.decode(response.body);
+        SnackBarService.instance
+            .showSnackBarError(error['error'] ?? error['name'][0]);
+        return null;
+      } else if (response.statusCode == 201) {
+        final Map user = json.decode(response.body);
+        String catName = user['name'];
+        SnackBarService.instance
+            .showSnackBarSuccess('Category updated successfully');
+        setState(ButtonState.Idle);
+
+        return catName;
+      }
+      print(response.statusCode);
+      setState(ButtonState.Idle);
+      final Map error = json.decode(response.body);
+      SnackBarService.instance
+          .showSnackBarError(error['error'] ?? error['name'][0]);
       return null;
     }
     return null;
