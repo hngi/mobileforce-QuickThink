@@ -292,18 +292,15 @@ class _CreateCategoryState extends State<CreateCategory> {
                 apiCallService
                     .editCategory(widget.oldName, controller.text)
                     .then(
-                      (value) {
-                        if (value != null)
-                          {
-                            Future.delayed(Duration(seconds: 2)).then((value)=>
-                              Get.off(CreatedCategories())
-                              
-                            );
-                          }
-                        else
-                          {controller.clear();}
-                      },
-                    );
+                  (value) {
+                    if (value != null) {
+                      Future.delayed(Duration(seconds: 2))
+                          .then((value) => Get.off(CreatedCategories()));
+                    } else {
+                      controller.clear();
+                    }
+                  },
+                );
               }
             }
           },
