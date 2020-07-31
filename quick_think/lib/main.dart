@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
         BoardScreen.id: (context) => BoardScreen(),
         JoinGame.routeName: (context) => JoinGame(),
         CreatedCategories.routeName: (context) => CreatedCategories(),
-        CreateCategory.routeName: (context) => CreateCategory(),
+        CreateCategory.routeName: (context) => CreateCategory(categoryState: CategoryState.Adding,),
         CreateGame.routeName: (context) => CreateGame(),
         LoginScreen.routeName: (context) => LoginScreen(),
         RegistrationScreen.routeName: (context) => RegistrationScreen(),

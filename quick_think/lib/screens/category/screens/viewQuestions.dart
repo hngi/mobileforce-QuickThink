@@ -78,7 +78,7 @@ class _ViewQuestionsState extends State<ViewQuestions> {
     return _connection
         ? NoInternet()
         : WillPopScope(
-            onWillPop: () => Get.off(CreateCategory()),
+            onWillPop: () => Get.off(CreateCategory(categoryState: CategoryState.Adding)),
             child: Scaffold(
                 backgroundColor: Theme.of(context).primaryColor,
                 body: Padding(
@@ -94,7 +94,7 @@ class _ViewQuestionsState extends State<ViewQuestions> {
                         child: IconButton(
                           color: buttonColor,
                           icon: Icon(Icons.arrow_back),
-                          onPressed: () => Get.off(CreateCategory()),
+                          onPressed: () => Get.off(CreateCategory(categoryState: CategoryState.Adding,)),
                         ),
                       ),
                       SizedBox(

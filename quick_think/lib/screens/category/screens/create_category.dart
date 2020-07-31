@@ -20,8 +20,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'create_question.dart';
 
+enum CategoryState { Adding, Editing }
+
 class CreateCategory extends StatefulHookWidget {
+  final CategoryState categoryState;
   static const routeName = 'create_category';
+  final String oldName;
+
+  CreateCategory({
+    this.oldName,
+    @required this.categoryState,
+  });
   @override
   _CreateCategoryState createState() => _CreateCategoryState();
 }
@@ -47,7 +56,7 @@ class _CreateCategoryState extends State<CreateCategory> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-           // startTimer();
+            // startTimer();
             _connection = false;
           });
         } else {
@@ -84,8 +93,10 @@ class _CreateCategoryState extends State<CreateCategory> {
     return _connection
         ? NoInternet()
         : WillPopScope(
-          onWillPop: () => Get.off(DashboardScreen()),
-                  child: Scaffold(
+            onWillPop: () => widget.categoryState == CategoryState.Adding
+                ? Get.off(DashboardScreen())
+                : Get.off(CreatedCategories()),
+            child: Scaffold(
               backgroundColor: Theme.of(context).primaryColor,
               body: SafeArea(
                 child: GestureDetector(
@@ -107,7 +118,10 @@ class _CreateCategoryState extends State<CreateCategory> {
                             child: IconButton(
                               color: buttonColor,
                               icon: Icon(Icons.arrow_back),
-                              onPressed: () => Get.off(DashboardScreen()),
+                              onPressed: () =>
+                                  widget.categoryState == CategoryState.Adding
+                                      ? Get.off(DashboardScreen())
+                                      : Get.off(CreatedCategories()),
                             ),
                           ),
                           SizedBox(
@@ -124,34 +138,38 @@ class _CreateCategoryState extends State<CreateCategory> {
                           SizedBox(height: SizeConfig().yMargin(context, 3)),
                           Align(
                             alignment: Alignment.center,
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.off(CreatedCategories());
-                              },
-                              child: Text(
-                                'View Categories',
-                                style: GoogleFonts.poppins(
-                                    color: buttonColor,
-                                    fontSize:
-                                        SizeConfig().textSize(context, 2.6)),
-                              ),
-                            ),
+                            child: widget.categoryState == CategoryState.Adding
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Get.off(CreatedCategories());
+                                    },
+                                    child: Text(
+                                      'View Categories',
+                                      style: GoogleFonts.poppins(
+                                          color: buttonColor,
+                                          fontSize: SizeConfig()
+                                              .textSize(context, 2.6)),
+                                    ),
+                                  )
+                                : Container(),
                           ),
                           SizedBox(height: SizeConfig().yMargin(context, 3)),
                           Align(
                             alignment: Alignment.center,
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.off(ViewQuestions());
-                              },
-                              child: Text(
-                                'View Questions',
-                                style: GoogleFonts.poppins(
-                                    color: buttonColor,
-                                    fontSize:
-                                        SizeConfig().textSize(context, 2.6)),
-                              ),
-                            ),
+                            child: widget.categoryState == CategoryState.Adding
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Get.off(ViewQuestions());
+                                    },
+                                    child: Text(
+                                      'View Questions',
+                                      style: GoogleFonts.poppins(
+                                          color: buttonColor,
+                                          fontSize: SizeConfig()
+                                              .textSize(context, 2.6)),
+                                    ),
+                                  )
+                                : Container(),
                           )
                         ],
                       ),
@@ -160,12 +178,14 @@ class _CreateCategoryState extends State<CreateCategory> {
                 ),
               ),
             ),
-        );
+          );
   }
 
   Widget _prompt() {
     return Text(
-      'Create category',
+      this.widget.categoryState == CategoryState.Adding
+          ? 'Create category'
+          : 'Edit category',
       style: TextStyle(
         fontFamily: 'Poppins',
         color: Colors.white,
@@ -218,7 +238,9 @@ class _CreateCategoryState extends State<CreateCategory> {
       },
       // onSaved: (val) => username.text = val,
       decoration: InputDecoration(
-        hintText: 'Type category here',
+        hintText: this.widget.categoryState == CategoryState.Adding
+            ? 'Type category here'
+            : widget.oldName,
         hintStyle: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
@@ -243,23 +265,43 @@ class _CreateCategoryState extends State<CreateCategory> {
           elevation: 8.0,
           padding: EdgeInsets.fromLTRB(70, 20, 70, 20),
           onPressed: () async {
-            final form = formKey.currentState;
-            if (form.validate()) {
-              form.save();
-              print(controller.text);
-              apiCallService.createCategory(controller.text).then(
-                    (value) => {
-                      if (value != null)
-                        {
-                          Future.delayed(Duration(seconds: 2)).then((value) {
-                            Get.off(CreatedCategories());
-                            controller.clear();
-                          })
-                        }
-                      else
-                        {controller.clear()}
-                    },
-                  );
+            if (widget.categoryState == CategoryState.Adding) {
+              final form = formKey.currentState;
+              if (form.validate()) {
+                form.save();
+                print(controller.text);
+                apiCallService.createCategory(controller.text).then(
+                      (value) => {
+                        if (value != null)
+                          {
+                            Future.delayed(Duration(seconds: 2)).then((value) {
+                              Get.off(CreatedCategories());
+                              controller.clear();
+                            })
+                          }
+                        else
+                          {controller.clear()}
+                      },
+                    );
+              }
+            } else {
+              final form = formKey.currentState;
+              if (form.validate()) {
+                form.save();
+                print(controller.text);
+                apiCallService
+                    .editCategory(widget.oldName, controller.text)
+                    .then(
+                  (value) {
+                    if (value != null) {
+                      Future.delayed(Duration(seconds: 2))
+                          .then((value) => Get.off(CreatedCategories()));
+                    } else {
+                      controller.clear();
+                    }
+                  },
+                );
+              }
             }
           },
           textColor: Colors.white,
