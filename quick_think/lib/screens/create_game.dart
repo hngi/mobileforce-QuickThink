@@ -484,6 +484,7 @@ class _CreateGameState extends State<CreateGame> {
       ),
       child: TextFormField(
         controller: userNameController,
+        keyboardType: TextInputType.text,
         style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,

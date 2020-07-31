@@ -93,9 +93,11 @@ class _CreateCategoryState extends State<CreateCategory> {
     return _connection
         ? NoInternet()
         : WillPopScope(
+
             onWillPop: () => widget.categoryState == CategoryState.Adding
                 ? Get.off(DashboardScreen())
                 : Get.off(CreatedCategories()),
+
             child: Scaffold(
               backgroundColor: Theme.of(context).primaryColor,
               body: SafeArea(
@@ -224,6 +226,7 @@ class _CreateCategoryState extends State<CreateCategory> {
           fontSize: SizeConfig().textSize(context, 3),
           color: Colors.white),
       controller: controller,
+      keyboardType: TextInputType.text,
       validator: (val) {
         if (val.length == 0) {
           return 'Field Should Not Be Empty';
