@@ -56,11 +56,11 @@ helpAlert(BuildContext context) {
                     ),
                     infoRow(
                       context,
-                        "Points are calculated based on the difficulty level selected. ",
+                        "Points are calculated based on number of correct answers given by user. ",
                         'assets/images/coins.png'),
                     infoRow(
                       context,
-                        "Each level has a fixed allocated time that is divided equally among questions. ",
+                        "Each question has a fixed allocated time. Once the time runs out, it moves to the next question. ",
                         'assets/images/clock.png'),
                     SizedBox(height: 32.0),
                     Container(
