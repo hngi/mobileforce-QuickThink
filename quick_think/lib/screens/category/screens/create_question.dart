@@ -56,7 +56,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-         //   startTimer();
+            //   startTimer();
             _connection = false;
           });
         } else {
@@ -311,10 +311,9 @@ class _CreateQuestionState extends State<CreateQuestion> {
           ),
         ),
         onPressed: () {
-         
           if (widget.questionState == QuestionState.Adding) {
             final form = formKey.currentState;
-            
+
             if (form.validate()) {
               if (correctAnswer != null) {
                 form.save();

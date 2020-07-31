@@ -47,7 +47,7 @@ class _CreateCategoryState extends State<CreateCategory> {
             connectivityResult == ConnectivityResult.mobile) {
           if (!mounted) return;
           setState(() {
-           // startTimer();
+            // startTimer();
             _connection = false;
           });
         } else {
@@ -84,8 +84,8 @@ class _CreateCategoryState extends State<CreateCategory> {
     return _connection
         ? NoInternet()
         : WillPopScope(
-          onWillPop: () => Get.off(DashboardScreen()),
-                  child: Scaffold(
+            onWillPop: () => Get.off(DashboardScreen()),
+            child: Scaffold(
               backgroundColor: Theme.of(context).primaryColor,
               body: SafeArea(
                 child: GestureDetector(
@@ -160,7 +160,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                 ),
               ),
             ),
-        );
+          );
   }
 
   Widget _prompt() {
@@ -204,6 +204,7 @@ class _CreateCategoryState extends State<CreateCategory> {
           fontSize: SizeConfig().textSize(context, 3),
           color: Colors.white),
       controller: controller,
+      keyboardType: TextInputType.text,
       validator: (val) {
         if (val.length == 0) {
           return 'Field Should Not Be Empty';
