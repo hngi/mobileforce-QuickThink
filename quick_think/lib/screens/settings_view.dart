@@ -27,6 +27,8 @@ class SettingsView extends StatefulHookWidget with WidgetsBindingObserver {
 }
 
 class _SettingsViewState extends State<SettingsView> {
+
+  final dashboardModel = DashboardScreen();
   static List<String> hoursList = ['1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00',
                             '9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00',
                             '17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00'];
@@ -34,8 +36,6 @@ class _SettingsViewState extends State<SettingsView> {
   String token;
   bool reminderValue;
   SharedPreferences sharedPreferences;
-  NotificationsManager notificationsManager = NotificationsManager();
-  bool _checked;
   //Check Internet Connectivity
   var _connectionStatus = 'Unknown';
   Connectivity connectivity;
@@ -83,14 +83,11 @@ class _SettingsViewState extends State<SettingsView> {
     );
     getUsername();
     super.initState();
-    notificationsManager.initializeNotifications();
-    notificationsManager.setOnNotificationClick(onNotificationClick);
   }
 
   @override
   void dispose() {
     subscription.cancel();
-
     super.dispose();
   }
 
@@ -220,7 +217,9 @@ class _SettingsViewState extends State<SettingsView> {
                   reminderValue = value;
                   saveReminderValue('reminder', value);
                   if(value == false) {
-                    notificationsManager.cancelNotificationWith(999);
+                    dashboardModel.notificationsManager.cancelNotificationWith(999);
+                  }else{
+                    dashboardModel.notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
                   }
                 });
               },
@@ -304,13 +303,6 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  onNotificationClick(String payload) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => DashboardScreen()),
-    );
-  }
-
  Widget getDropDown() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -349,7 +341,8 @@ class _SettingsViewState extends State<SettingsView> {
             setState(() {
               dropDownValue = value;
               saveTimeValue('time', value);
-              notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
+              dashboardModel.notificationsManager.cancelNotificationWith(999);
+              dashboardModel.notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
             });
           },
           items: hoursList.map<DropdownMenuItem<String>>((String value) {
@@ -362,6 +355,8 @@ class _SettingsViewState extends State<SettingsView> {
       ],
     );
  }
+
+
 
   Future getReminderValue(String s) async{
     final sharedPreferences = await SharedPreferences.getInstance();

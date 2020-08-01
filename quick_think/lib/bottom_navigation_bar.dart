@@ -8,6 +8,7 @@ import 'package:quickthink/screens/leaderboard.dart';
 import 'package:quickthink/screens/new_dashboard.dart';
 import 'package:quickthink/screens/new_leaderboard.dart';
 import 'package:quickthink/screens/settings_view.dart';
+import 'package:quickthink/utils/notifications_manager.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 //import 'package:quickthink/screens/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ class DashboardScreen extends StatefulWidget {
   DashboardScreen({Key key, this.username, this.uri}) : super(key: key);
   final String username;
   final String uri;
+  NotificationsManager notificationsManager = NotificationsManager();
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
@@ -59,6 +61,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
 
     super.initState();
+    widget.notificationsManager.initializeNotifications();
+    widget.notificationsManager.setOnNotificationClick();
+    _configureSelectNotificationSubject();
     this._dataFunction();
     _pageController = new PageController();
   }
@@ -77,6 +82,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
     subscription.cancel();
     _pageController.dispose();
+    widget.notificationsManager.selectNotificationSubject.close();
   }
 
   _dataFunction() async {
@@ -128,6 +134,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           );
+  }
+
+  void _configureSelectNotificationSubject() {
+    widget.notificationsManager.selectNotificationSubject.stream.listen((String payload) async {
+      if(payload != null){
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen()),
+        );
+      }
+    });
   }
 }
 

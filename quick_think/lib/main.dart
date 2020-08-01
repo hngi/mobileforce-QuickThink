@@ -49,6 +49,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  final model = SettingsView();
+
   @override
   void initState() {
     super.initState();
@@ -93,5 +96,5 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-
 }
+
