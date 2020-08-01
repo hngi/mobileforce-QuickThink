@@ -8,6 +8,8 @@ import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/results.dart';
 import 'package:quickthink/screens/settings_view.dart';
+import 'package:quickthink/utils/notifications_manager.dart';
+import 'bottom_navigation_bar.dart';
 import 'screens/category/screens/create_category.dart';
 import 'bottom_navigation_bar.dart';
 import 'screens/category/screens/created_categories.dart';
@@ -91,4 +93,5 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
+
 }
