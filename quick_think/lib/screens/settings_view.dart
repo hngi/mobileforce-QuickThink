@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/config.dart';
+import 'package:quickthink/main.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
 import 'package:quickthink/utils/notifications_manager.dart';
 import 'package:quickthink/utils/responsiveness.dart';
@@ -28,7 +29,7 @@ class SettingsView extends StatefulHookWidget with WidgetsBindingObserver {
 
 class _SettingsViewState extends State<SettingsView> {
 
-  final dashboardModel = DashboardScreen();
+  NotificationsManager notificationsManager = NotificationsManager();
   static List<String> hoursList = ['1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00',
                             '9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00',
                             '17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00'];
@@ -83,6 +84,7 @@ class _SettingsViewState extends State<SettingsView> {
     );
     getUsername();
     super.initState();
+    notificationsManager.initializeNotifications();
   }
 
   @override
@@ -217,9 +219,9 @@ class _SettingsViewState extends State<SettingsView> {
                   reminderValue = value;
                   saveReminderValue('reminder', value);
                   if(value == false) {
-                    dashboardModel.notificationsManager.cancelNotificationWith(999);
+                    notificationsManager.cancelNotificationWith(999);
                   }else{
-                    dashboardModel.notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
+                    notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
                   }
                 });
               },
@@ -341,8 +343,8 @@ class _SettingsViewState extends State<SettingsView> {
             setState(() {
               dropDownValue = value;
               saveTimeValue('time', value);
-              dashboardModel.notificationsManager.cancelNotificationWith(999);
-              dashboardModel.notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
+              notificationsManager.cancelNotificationWith(999);
+              notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
             });
           },
           items: hoursList.map<DropdownMenuItem<String>>((String value) {
