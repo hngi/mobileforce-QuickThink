@@ -141,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: McGyver.rsDoubleH(context, 5)),
                       TextFieldContainer(
                         text: 'Username',
+                        textInputType: TextInputType.text,
                         obscure: false,
                         controller: usernameController,
                         validator: UsernameValidator.validate,
@@ -149,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFieldContainer(
                           text: 'Password',
                           controller: passwordController,
+                          textInputType: TextInputType.text,
                           validator: PasswordValidator.validate,
                           obscure: obscure,
                           suffixIcon: IconButton(
@@ -181,8 +183,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           .then((value) {
                                         if (value != null) {
                                           Future.delayed(Duration(seconds: 3))
-                                              .then((value) =>
-                                                  Get.offAll(DashboardScreen()));
+                                              .then((value) => Get.offAll(
+                                                  DashboardScreen()));
                                         }
                                       });
                                     }

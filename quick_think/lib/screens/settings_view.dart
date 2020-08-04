@@ -134,7 +134,7 @@ class _SettingsViewState extends State<SettingsView> {
             InkWell(
               child: ListTile(
                 contentPadding: EdgeInsets.all(0),
-                onTap: currentTheme.darkTheme,
+                //onTap: currentTheme.darkTheme,
                 title: Text(
                   "Dark Theme",
                   style: GoogleFonts.poppins(
@@ -160,7 +160,7 @@ class _SettingsViewState extends State<SettingsView> {
             InkWell(
               child: ListTile(
                 contentPadding: EdgeInsets.all(0),
-                onTap: currentTheme.lightTheme,
+                //onTap: currentTheme.lightTheme,
                 title: Text(
                   "Light Theme",
                   style: GoogleFonts.poppins(
@@ -177,7 +177,7 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             ),
             SizedBox(height: SizeConfig().yMargin(context, 8)),
-            token == null 
+            token == null
                 ? Container()
                 : Text(
                     "Account",
