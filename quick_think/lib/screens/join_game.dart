@@ -19,6 +19,8 @@ import 'package:quickthink/utils/urls.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'login/responsiveness/res.dart';
+
 const String url = 'https://brainteaser.pythonanywhere.com/game/play';
 const String checkUrl =
     'https://brainteaser.pythonanywhere.com/game/user/play/check';
@@ -160,12 +162,20 @@ class _JoinGameState extends State<JoinGame> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(
-                        height: SizeConfig().yMargin(context, 4),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: McGyver.rsDoubleW(context, 30),
+                          height: McGyver.rsDoubleH(context, 20),
+                          decoration: BoxDecoration(
+                              // color: Colors.red,
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/app_name_vector.png'))),
+                        ),
                       ),
-                      _logoText(),
                       SizedBox(
-                        height: SizeConfig().yMargin(context, 10),
+                        height: SizeConfig().yMargin(context, 1.7),
                       ),
                       _prompt(),
                       _form(),
@@ -256,7 +266,7 @@ class _JoinGameState extends State<JoinGame> {
           fontFamily: 'Poppins',
           color: Colors.white,
           fontWeight: FontWeight.w600,
-          fontSize: SizeConfig().textSize(context, 3.7),
+          fontSize: SizeConfig().textSize(context, 3.2),
         ),
       ),
     );
