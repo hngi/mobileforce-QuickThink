@@ -17,7 +17,7 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
     notificationsManager.initializeNotifications();
-    notificationsManager.setOnNotificationClick();
+    /*notificationsManager.setOnNotificationClick();*/
     _checked = false;
   }
   @override
