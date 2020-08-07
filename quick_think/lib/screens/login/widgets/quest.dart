@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quickthink/screens/login/view/login.dart';
 import 'package:quickthink/screens/registration_screen.dart';
 
 import '../../../utils/responsiveness.dart';
@@ -51,7 +50,7 @@ class Quest2 extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamed(LoginScreen.routeName);
+            Navigator.pop(context);
           },
           child: Text(
             ' Log in',

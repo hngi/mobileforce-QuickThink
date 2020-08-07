@@ -44,7 +44,7 @@ helpAlert(BuildContext context) {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(top: 32.0, bottom: 12.0),
+                      margin: EdgeInsets.only(top: 24.0, bottom: 8.0),
                       child: Text(
                         'Help',
                         style: style.copyWith(
@@ -56,13 +56,13 @@ helpAlert(BuildContext context) {
                     ),
                     infoRow(
                       context,
-                        "Points are calculated based on the difficulty level selected. ",
+                        "Points are calculated based on number of correct answers given by user. ",
                         'assets/images/coins.png'),
                     infoRow(
                       context,
-                        "Each level has a fixed allocated time that is divided equally among questions. ",
+                        "Each question has a fixed allocated time. Once the time runs out, it moves to the next question. ",
                         'assets/images/clock.png'),
-                    SizedBox(height: 32.0),
+                    SizedBox(height: 16.0),
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
@@ -93,7 +93,7 @@ helpAlert(BuildContext context) {
 
 Widget infoRow(context, String text, String imageUrl) {
   return Container(
-    margin: EdgeInsets.all(16.0),
+    margin: EdgeInsets.only(top:12.0, bottom: 12.0, left: 16.0, right: 16.0),
     child: Row(
       children: <Widget>[
         Container(

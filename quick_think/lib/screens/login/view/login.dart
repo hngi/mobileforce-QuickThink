@@ -142,6 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: McGyver.rsDoubleH(context, 5)),
                       TextFieldContainer(
                         text: 'Username',
+                        textInputType: TextInputType.text,
                         obscure: false,
                         controller: usernameController,
                         validator: UsernameValidator.validate,
@@ -150,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFieldContainer(
                           text: 'Password',
                           controller: passwordController,
+                          textInputType: TextInputType.text,
                           validator: PasswordValidator.validate,
                           obscure: obscure,
                           suffixIcon: IconButton(

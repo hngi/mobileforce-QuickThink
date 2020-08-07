@@ -90,7 +90,9 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
     return _connection
         ? NoInternet()
         : WillPopScope(
-            onWillPop: () => Get.off(CreateCategory()),
+            onWillPop: () => Get.off(CreateCategory(
+              categoryState: CategoryState.Adding,
+            )),
             child: Scaffold(
               backgroundColor: Theme.of(context).primaryColor,
               body: SafeArea(
@@ -107,10 +109,10 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
                         Align(
                           alignment: Alignment.topLeft,
                           child: IconButton(
-                            color: buttonColor,
-                            icon: Icon(Icons.arrow_back),
-                            onPressed: () => Get.off(CreateCategory()),
-                          ),
+                              color: buttonColor,
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () => Get.off(CreateCategory(
+                                  categoryState: CategoryState.Adding))),
                         ),
                         // SizedBox(
                         //   height: SizeConfig().yMargin(context, 2),
@@ -310,6 +312,19 @@ class _CreatedCategoriesState extends State<CreatedCategories> {
             child: Padding(
               padding: const EdgeInsets.all(1.0),
               child: ListTile(
+                trailing: IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: buttonColor,
+                  ),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateCategory(
+                            oldName: game,
+                                categoryState: CategoryState.Editing,
+                              ))),
+                ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 // mainAxisSize: MainAxisSize.min,
