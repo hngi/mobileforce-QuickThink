@@ -82,7 +82,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                                 child: model.listData.length == 3 ?
                                                 _roundContainer('3', model.listData[2].userName, light)
                                                     :
-                                                _roundContainer('2', "---", light)
+                                                _roundContainer('3', "---", light)
                                             )
                                           ],
                                         )

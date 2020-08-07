@@ -13,6 +13,7 @@ import 'package:quickthink/utils/notifications_manager.dart';
 import 'package:quickthink/widgets/noInternet.dart';
 //import 'package:quickthink/screens/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quickthink/screens/new_settings_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const String id = 'dashboardboard screen';
@@ -108,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final widgetOptions = [
       new DashBoard(uri: uri),
       new BoardScreen(),
-      new SettingsView(),
+      new NewSettingsView(),
     ];
     return _connection
         ? NoInternet()

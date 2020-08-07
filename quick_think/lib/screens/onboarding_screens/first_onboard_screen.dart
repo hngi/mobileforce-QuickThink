@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:quickthink/screens/login/responsiveness/res.dart';
 import 'package:quickthink/screens/onboarding_screens/second_onboard_screen.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 
@@ -20,12 +21,22 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           //  mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: _logoText(),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: McGyver.rsDoubleW(context, 30),
+                height: McGyver.rsDoubleH(context, 20),
+                decoration: BoxDecoration(
+                    // color: Colors.red,
+                    image: DecorationImage(
+                        image: AssetImage('assets/app_name_vector.png'))),
+              ),
+            ),
+             SizedBox(
+              height: SizeConfig().yMargin(context, 6.0),
             ),
             Expanded(
-              flex: 3,
+              flex: 2,
               child: _vector(height, width),
             ),
             Expanded(
@@ -36,31 +47,12 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
               flex: 1,
               child: _showButton(context),
             ),
+            SizedBox(
+              height: SizeConfig().yMargin(context, 6.0),
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _logoText() {
-    return RichText(
-      text: TextSpan(children: <TextSpan>[
-        TextSpan(
-            text: 'Quick',
-            style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontWeight: FontWeight.w700,
-                fontSize: SizeConfig().textSize(context, 3),
-                color: Colors.white)),
-        TextSpan(
-            text: 'Think',
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontWeight: FontWeight.w700,
-              fontSize: SizeConfig().textSize(context, 3),
-              color: Color.fromRGBO(24, 197, 217, 1),
-            ))
-      ]),
     );
   }
 
@@ -75,31 +67,6 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         ),
         fit: BoxFit.fitHeight,
       )),
-    );
-  }
-
-  Widget _headerName() {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Quick',
-            style: TextStyle(
-                fontSize: SizeConfig().textSize(context, 3),
-                color: Colors.white),
-          ),
-          Text(
-            'Think',
-            style: TextStyle(
-                color: Hexcolor('#18C5D9'),
-                fontSize: SizeConfig().textSize(context, 3),
-                fontFamily: 'DM Sans',
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
     );
   }
 
@@ -131,8 +98,8 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: SizeConfig().textSize(context, 2.7),
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig().textSize(context, 2.5),
               fontFamily: 'Poppins'),
         ),
       ),
