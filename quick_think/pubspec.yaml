@@ -29,7 +29,7 @@ dependencies:
   google_fonts: ^1.1.0
   share: ^0.6.4+3
   flutter_icons: ^1.1.0
-  flutter_svg: ^0.17.4
+  flutter_svg: 
   progress_dialog: ^1.2.4
   flushbar: ^1.10.4
   clipboard: ^0.1.2+8
