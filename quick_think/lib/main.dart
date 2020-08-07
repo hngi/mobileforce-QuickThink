@@ -10,6 +10,8 @@ import 'package:quickthink/screens/create_game.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/results.dart';
 import 'package:quickthink/screens/settings_view.dart';
+import 'package:quickthink/utils/notifications_manager.dart';
+import 'bottom_navigation_bar.dart';
 import 'screens/category/screens/create_category.dart';
 import 'bottom_navigation_bar.dart';
 import 'screens/category/screens/created_categories.dart';
@@ -24,8 +26,11 @@ import 'theme/theme.dart';
 import 'package:flutter/services.dart';
 
 int onBoardCount;
+NotificationsManager notificationsManager = NotificationsManager();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  notificationsManager.initializeNotifications();
+  notificationsManager.setOnNotificationClick();
   SharedPreferences pref = await SharedPreferences.getInstance();
   onBoardCount = pref.getInt("first");
   await pref.setInt("first", 1);
@@ -46,16 +51,36 @@ void main() async {
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
+
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   void initState() {
     super.initState();
+    _configureSelectNotificationSubject();
     currentTheme.addListener(() {
       print("something");
-      setState(() {});
+
     });
+  }
+
+  void _configureSelectNotificationSubject() {
+    notificationsManager.selectNotificationSubject.stream.listen((String payload) async {
+      if(payload != null){
+/*        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen()),*/
+
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    notificationsManager.selectNotificationSubject.close();
+    super.dispose();
   }
 
   @override
@@ -94,3 +119,4 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
