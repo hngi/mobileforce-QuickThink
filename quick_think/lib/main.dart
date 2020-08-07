@@ -7,6 +7,7 @@ import 'package:quickthink/model/question_sorting_model.dart';
 import 'package:quickthink/screens/board_screen.dart';
 import 'package:quickthink/screens/category/screens/viewQuestions.dart';
 import 'package:quickthink/screens/create_game.dart';
+import 'package:quickthink/screens/forgot_password/views/forgot_password.dart';
 import 'package:quickthink/screens/join_game.dart';
 import 'package:quickthink/screens/results.dart';
 import 'package:quickthink/screens/settings_view.dart';
@@ -30,10 +31,9 @@ void main() async {
   onBoardCount = pref.getInt("first");
   await pref.setInt("first", 1);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-    .then((_) {
-      runApp(ProviderScope(child: MyApp()));
-    });
-  
+      .then((_) {
+    runApp(ProviderScope(child: MyApp()));
+  });
 
   // runApp(DevicePreview(
   //   enabled: !kReleaseMode,
@@ -83,13 +83,15 @@ class _MyAppState extends State<MyApp> {
         BoardScreen.id: (context) => BoardScreen(),
         JoinGame.routeName: (context) => JoinGame(),
         CreatedCategories.routeName: (context) => CreatedCategories(),
-        CreateCategory.routeName: (context) => CreateCategory(categoryState: CategoryState.Adding,),
+        CreateCategory.routeName: (context) =>
+            CreateCategory(categoryState: CategoryState.Adding),
         CreateGame.routeName: (context) => CreateGame(),
         LoginScreen.routeName: (context) => LoginScreen(),
         RegistrationScreen.routeName: (context) => RegistrationScreen(),
         SettingsView.routeName: (context) => SettingsView(),
         ViewQuestions.routeName: (context) => ViewQuestions(),
         Result.routeName: (context) => Result(),
+        ForgotPassword.routeName: (context) => ForgotPassword(),
       },
     );
   }
