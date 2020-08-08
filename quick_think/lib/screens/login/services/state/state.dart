@@ -26,7 +26,7 @@ class LoginState extends ChangeNotifier {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
-    Map data = {"user_name": username, "password": password};
+    Map data = {"username": username, "password": password};
     String payload = json.encode(data);
     Response response =
         await http.post(loginUrl, headers: headers, body: payload);
@@ -90,7 +90,7 @@ class LoginState extends ChangeNotifier {
       SnackBarService.instance
           .showSnackBarError(error['error']);
       return null;
-    } else if (response.statusCode == 201) {
+    } else if (response.statusCode == 200) {
       final Map user = json.decode(response.body);
       String apiKey = user['id'].toString();
       SnackBarService.instance

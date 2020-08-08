@@ -37,7 +37,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {"name": category};
       String payload = json.encode(data);
@@ -88,7 +88,7 @@ class ApiCallService with ChangeNotifier {
         Map<String, String> headers = {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
+          'Authorization': 'Token $token'
         };
         Response response = await http.get(getUsersCategory, headers: headers);
         if (response.statusCode == 200) {
@@ -122,7 +122,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {
         "Question": {
@@ -171,7 +171,7 @@ class ApiCallService with ChangeNotifier {
       // Map<String, String> headers = {
       //   'Content-Type': 'application/json',
       //   'Accept': 'application/json',
-      //   'Authorization': 'Bearer $token'
+      //   'Authorization': 'Token $token'
       // };
       // Response response = await http.post(logoutUrl, headers: headers);
       // if (response.statusCode == 200) {
@@ -200,7 +200,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Response response = await http.post(deleteAccountUrl, headers: headers);
       if (response.statusCode == 200) {
@@ -232,7 +232,7 @@ class ApiCallService with ChangeNotifier {
         Map<String, String> headers = {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
+          'Authorization': 'Token $token'
         };
         Response response = await http.get(getUsersQuestions, headers: headers);
         if (response.statusCode == 200) {
@@ -270,7 +270,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {
         "Question": {
@@ -316,7 +316,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {"name": name, "id": id};
       String payload = json.encode(data);
@@ -355,9 +355,9 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
-      Map data = {"name": name};
+      Map data = {"category": name};
       String payload = json.encode(data);
       Response response =
           await http.post(deleteCategoryUrl, headers: headers, body: payload);
@@ -392,7 +392,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {
         "name": categoryname,
@@ -419,7 +419,7 @@ class ApiCallService with ChangeNotifier {
         SnackBarService.instance
             .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
-      } else if (response.statusCode == 201) {
+      } else if (response.statusCode == 200) {
         final Map user = json.decode(response.body);
         
         SnackBarService.instance

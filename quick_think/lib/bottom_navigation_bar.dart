@@ -109,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final widgetOptions = [
       new DashBoard(uri: uri),
       new BoardScreen(),
-      new NewSettingsView(),
+      /* new NewSettingsView() */SettingsView(),
     ];
     return _connection
         ? NoInternet()
