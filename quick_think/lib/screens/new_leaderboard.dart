@@ -68,7 +68,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                           children: <Widget>[
                                             Expanded(
                                               flex: 1,
-                                                child: model.listData.length == 2 ?
+                                                child: model.listData.length >= 2 ?
                                                 _roundContainer('2', model.listData[1].userName, light)
                                                     :
                                                 _roundContainer('2', "--", light)
@@ -79,7 +79,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                             ),
                                             Expanded(
                                               flex: 1,
-                                                child: model.listData.length == 3 ?
+                                                child: model.listData.length >= 3 ?
                                                 _roundContainer('3', model.listData[2].userName, light)
                                                     :
                                                 _roundContainer('3', "---", light)
