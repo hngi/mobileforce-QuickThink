@@ -16,7 +16,8 @@ Future<List<LeaderboardList>> getLeaderboard(String gameCode) async {
 
   _stateController.add(fetchState.Busy);
 
-  final String fetchUrl = "https://brainteaser.pythonanywhere.com/game/code/leaderboard?n=100&game_code=$gameCode";
+  final String fetchUrl = "https://brainteaserdev.pythonanywhere.com//usergame/leaderboard/game/$gameCode/100/";
+
   Response data = await get(fetchUrl);
 
   if(data.statusCode == 200){
