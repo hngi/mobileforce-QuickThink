@@ -21,9 +21,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login/responsiveness/res.dart';
 
-const String url = 'https://brainteaser.pythonanywhere.com/game/play';
-const String checkUrl =
-    'https://brainteaser.pythonanywhere.com/game/user/play/check';
+// const String url = 'https://brainteaser.pythonanywhere.com/game/play';
+// const String checkUrl =
+//     'https://brainteaser.pythonanywhere.com/game/user/play/check';
 
 class JoinGame extends StatefulWidget {
   static const routeName = 'join-game';
