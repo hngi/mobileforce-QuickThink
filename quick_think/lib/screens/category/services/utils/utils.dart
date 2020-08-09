@@ -7,8 +7,8 @@ final String getUsersCategory =
 final String logoutUrl = 'https://brainteaserdev.pythonanywhere.com/user/logout';
 
 final String getUsersQuestions = 'https://brainteaserdev.pythonanywhere.com/question/list/user/';
-final String editQuestionsUrl = 'https://brainteaserdev.pythonanywhere.com/game/update/question';
-final String deleteQuestionUrl = 'https://brainteaserdev.pythonanywhere.com/game/delete/question';
+final String editQuestionsUrl = 'https://brainteaserdev.pythonanywhere.com/question/update/';
+final String deleteQuestionUrl = 'https://brainteaserdev.pythonanywhere.com/question/delete/';
 
 final String deleteAccountUrl =
     'https://brainteaserdev.pythonanywhere.com/user/delete';
