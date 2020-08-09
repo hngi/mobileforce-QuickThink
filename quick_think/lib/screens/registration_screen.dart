@@ -143,7 +143,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       SizedBox(height: McGyver.rsDoubleH(context, 5)),
                       TextFieldContainer(
                         obscure: false,
-                        text: 'Name',
+                        text: 'Username',
                         textInputType: TextInputType.text,
                         controller: usernameController,
                         validator: UsernameValidator.validate,

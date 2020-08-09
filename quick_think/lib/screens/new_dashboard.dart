@@ -38,7 +38,6 @@ class _DashBoardState extends State<DashBoard> {
     duration: snackBarDuration,
   );
 
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime backButtonPressTime;
 
@@ -102,7 +101,7 @@ class _DashBoardState extends State<DashBoard> {
       ),
       body: WillPopScope(
         onWillPop: onWillPop,
-              child: Container(
+        child: Container(
           padding: EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,20 +118,23 @@ class _DashBoardState extends State<DashBoard> {
                             TextSpan(
                                 text: "Hello, ",
                                 style: GoogleFonts.poppins(
-                                    fontSize: SizeConfig().textSize(context, 3.2),
+                                    fontSize:
+                                        SizeConfig().textSize(context, 3.2),
                                     color: Colors.white,
                                     fontWeight: FontWeight.w400)),
                             TextSpan(
                                 text: username ?? na,
                                 style: GoogleFonts.poppins(
-                                    fontSize: SizeConfig().textSize(context, 3.2),
+                                    fontSize:
+                                        SizeConfig().textSize(context, 3.2),
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold)),
                             TextSpan(text: '\n'),
                             TextSpan(
                                 text: "Glad you're back",
                                 style: GoogleFonts.poppins(
-                                    fontSize: SizeConfig().textSize(context, 2.2),
+                                    fontSize:
+                                        SizeConfig().textSize(context, 2.2),
                                     color: Colors.white60,
                                     fontWeight: FontWeight.bold)),
                           ]),
@@ -191,7 +193,7 @@ class _DashBoardState extends State<DashBoard> {
                           height: SizeConfig().yMargin(context, 4),
                         ),
                         QuestionSelectionCard(
-                          text: 'Create questions',
+                          text: 'Customize Game',
                           onPressed: () async {
                             SharedPreferences pref =
                                 await SharedPreferences.getInstance();
@@ -234,10 +236,11 @@ class QuestionSelectionCard extends StatelessWidget {
       // width: SizeConfig().xMargin(context, 4),
       height: SizeConfig().yMargin(context, 13),
       child: InkWell(
-              onTap: (){},
-              child: RaisedButton(
-                elevation: 8.0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        onTap: () {},
+        child: RaisedButton(
+          elevation: 8.0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
           color: light ? Color(0xff38208c) : Hexcolor('#4C4C4C'),
           padding: EdgeInsets.fromLTRB(32, 20, 0, 17),
           child: Align(

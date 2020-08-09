@@ -438,7 +438,7 @@ class _JoinGameState extends State<JoinGame> {
         } else {
           progressDialog.hide();
           setState(() {
-            showError("Oops! Cannot join game at this time \n Try again later");
+            showError(json.decode(response.body)['error']);
           });
         }
       });
@@ -514,7 +514,7 @@ class _JoinGameState extends State<JoinGame> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0)),
                     color: Hexcolor('#18C5D9'),
-                    child: Text('Join new game',
+                    child: Text('OK',
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w700,
