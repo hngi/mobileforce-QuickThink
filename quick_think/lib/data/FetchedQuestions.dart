@@ -67,14 +67,8 @@ class FetchedQuestions {
   }
 
   Future updateScore(String userID) async{
-    /* Map data = {
-      "UserGames" : {
-        "category" : 
-      },
-    }; */
-    final jsonEndpoint = "https://brainteaserdev.pythonanywhere.com/usergame/score/increment/";
-    return await http.post(jsonEndpoint, body: {
-      "user_game_id" : userID
-    });
+   
+    final jsonEndpoint = "https://brainteaserdev.pythonanywhere.com/usergame/score/increment/$userID/";
+     await http.post(jsonEndpoint);
   }
 }

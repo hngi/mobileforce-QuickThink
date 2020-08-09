@@ -295,6 +295,7 @@ class ApiCallService with ChangeNotifier {
         return null;
       } else if (response.statusCode == 200) {
         final Map list = json.decode(response.body);
+        print(list);
         final Map listt = list['data'];
         SnackBarService.instance
             .showSnackBarSuccess('Question updated successfully');
@@ -322,7 +323,7 @@ class ApiCallService with ChangeNotifier {
         'Accept': 'application/json',
         'Authorization': 'Token $token'
       };
-      Map data = {"name": name, "id": id};
+      Map data = {/* "name": name, */ "id": id};
       String payload = json.encode(data);
       Response response =
           await http.post(deleteQuestionUrl, headers: headers, body: payload);
@@ -341,6 +342,7 @@ class ApiCallService with ChangeNotifier {
         return 'deleted';
       }
       print(response.statusCode);
+      print(id);
       setState(ButtonState.Idle);
       // final Map error = json.decode(response.body);
       SnackBarService.instance.showSnackBarError('Some error occured');
