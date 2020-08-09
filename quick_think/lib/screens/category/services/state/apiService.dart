@@ -48,6 +48,7 @@ class ApiCallService with ChangeNotifier {
         final Map error = json.decode(response.body);
         SnackBarService.instance
             .showSnackBarError(error['error'] ?? error['name'][0]);
+
         return null;
       } else if (response.statusCode == 404) {
         setState(ButtonState.Idle);
@@ -61,11 +62,12 @@ class ApiCallService with ChangeNotifier {
         SnackBarService.instance
             .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
-      } else if (response.statusCode == 201) {
+      } else if (response.statusCode == 200) {
         final Map user = json.decode(response.body);
         String catName = user['name'];
         SnackBarService.instance
-            .showSnackBarSuccess('Category ${catName} created successfully');
+            .showSnackBarSuccess('Category $catName created successfully');
+        print(user);
         setState(ButtonState.Idle);
 
         return catName;
@@ -75,6 +77,7 @@ class ApiCallService with ChangeNotifier {
       final Map error = json.decode(response.body);
       SnackBarService.instance
           .showSnackBarError(error['error'] ?? error['name'][0]);
+      print(error);
       return null;
     }
     return null;
@@ -203,6 +206,7 @@ class ApiCallService with ChangeNotifier {
         'Authorization': 'Token $token'
       };
       Response response = await http.post(deleteAccountUrl, headers: headers);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         setState(ButtonState.Idle);
         SharedPreferences pref = await SharedPreferences.getInstance();
@@ -421,7 +425,7 @@ class ApiCallService with ChangeNotifier {
         return null;
       } else if (response.statusCode == 200) {
         final Map user = json.decode(response.body);
-        
+
         SnackBarService.instance
             .showSnackBarSuccess('Category updated successfully');
         setState(ButtonState.Idle);
