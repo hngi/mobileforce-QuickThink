@@ -357,6 +357,7 @@ class ApiCallService with ChangeNotifier {
     String token = prefs.getString('token');
     print(name);
     print(token);
+
     if (token != null) {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -364,16 +365,17 @@ class ApiCallService with ChangeNotifier {
         'Authorization': 'Token $token'
       };
       Map data = {"category": name};
+      var url = Uri.parse(deleteCategoryUrl + '$name/');
+      print('URL: $url');
       String payload = json.encode(data);
-      Response response =
-          await http.post(deleteCategoryUrl, headers: headers, body: payload);
+      Response response = await http.delete(url, headers: headers);
       print(response.statusCode);
       if (response.statusCode == 400) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error']);
+        SnackBarService.instance.showSnackBarError(error['error'] ?? 'Error');
         return null;
-      } else if (response.statusCode == 204) {
+      } else if (response.statusCode == 200) {
         setState(ButtonState.Idle);
         print('here');
         SnackBarService.instance
@@ -384,7 +386,8 @@ class ApiCallService with ChangeNotifier {
       print(response.statusCode);
       setState(ButtonState.Idle);
       final Map error = json.decode(response.body);
-      SnackBarService.instance.showSnackBarError(error['error']);
+      SnackBarService.instance.showSnackBarError(error['error'] ?? 'Error');
+      print(error);
       return null;
     }
     return null;

@@ -19,6 +19,9 @@ class UsernameValidator {
     if (value.isEmpty) {
       return 'Field cannot be empty';
     }
+    if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(value)) {
+      return "can only include _ or -";
+    }
     return null;
   }
 }
