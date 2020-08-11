@@ -134,7 +134,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Forgot your password?',
+                            'Change your password',
                             style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -161,6 +161,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       TextFieldContainer(
                         text: 'Email',
                         obscure: false,
+                        textInputType: TextInputType.emailAddress,
                         controller: emailController,
                         validator: EmailValidator.validate,
                       ),
@@ -251,8 +252,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     final form = formKey.currentState;
                                     if (form.validate()) {
                                       form.save();
-                                      if (!(passwordController.text ==
-                                          passwordControllerAgain.text)) {
+                                      if (!(passwordController.text.trim() ==
+                                          passwordControllerAgain.text
+                                              .trim())) {
                                         SnackBarService.instance
                                             .showSnackBarError(
                                                 'Passwords do not match!');

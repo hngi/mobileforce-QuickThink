@@ -310,13 +310,13 @@ class _JoinGameState extends State<JoinGame> {
             color: Colors.white),
         onChanged: (val) {},
         validator: (val) {
-          if (val.length == 0) {
+          if (val.trim().length == 0) {
             return 'Username Should Not Be Empty';
           }
-          if (val.length <= 2) {
+          if (val.trim().length <= 2) {
             return 'should be 3 or more characters';
           }
-          if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val)) {
+          if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val.trim())) {
             return "can only include _ or -";
           }
           return null;
@@ -416,7 +416,8 @@ class _JoinGameState extends State<JoinGame> {
       } */
       progressDialog.show();
 
-      await _joiningGame(gameCode.text, username.text).then((response) {
+      await _joiningGame(gameCode.text.trim(), username.text.trim())
+          .then((response) {
         if (response.statusCode == 200) {
           ///Persisting the played gameCodes to sharedprefs
           playedGames.insert(0, gameCode.text);
@@ -427,8 +428,8 @@ class _JoinGameState extends State<JoinGame> {
               context,
               MaterialPageRoute(
                   builder: (o) => QuizPage(
-                        gameCode: gameCode.text,
-                        userName: username.text,
+                        gameCode: gameCode.text.trim(),
+                        userName: username.text.trim(),
                       )));
         } else if (response.statusCode == 400) {
           progressDialog.hide();

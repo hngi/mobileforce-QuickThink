@@ -12,6 +12,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/config.dart';
 import 'package:quickthink/main.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
+import 'package:quickthink/screens/forgot_password/views/forgot_password.dart';
 import 'package:quickthink/utils/notifications_manager.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/widgets/noInternet.dart';
@@ -273,6 +274,34 @@ class _SettingsViewState extends State<SettingsView> {
             //     color: Colors.white70,
             //   ),
             // ),
+            token == null
+                ? Container()
+                : InkWell(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      onTap: () {
+                        // state.logout().then((value) {
+                        //   if (value != null) {
+                        //     Get.to(LoginScreen());
+                        //   }
+                        // });
+                        // logout();
+                        Get.to(ForgotPassword());
+                      },
+                      title: Text(
+                        "Change Password",
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0),
+                        ),
+                      ),
+                      leading: SvgPicture.asset('images/log-out.svg'),
+                    ),
+                  ),
+
             token == null
                 ? Container()
                 : InkWell(

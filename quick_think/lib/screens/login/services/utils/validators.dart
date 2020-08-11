@@ -16,10 +16,10 @@ class EmailValidator {
 
 class UsernameValidator {
   static String validate(String value) {
-    if (value.isEmpty) {
+    if (value.trim().isEmpty) {
       return 'Field cannot be empty';
     }
-    if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(value)) {
+    if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(value.trim())) {
       return "can only include _ or -";
     }
     return null;

@@ -198,8 +198,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       form.save();
                                       state
                                           .login(
-                                        usernameController.text,
-                                        passwordController.text,
+                                        usernameController.text.trim(),
+                                        passwordController.text.trim(),
                                       )
                                           .then((value) {
                                         if (value != null) {

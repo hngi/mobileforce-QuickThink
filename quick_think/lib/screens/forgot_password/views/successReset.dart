@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/bottom_navigation_bar.dart';
 import 'package:quickthink/screens/login/responsiveness/res.dart';
 import 'package:quickthink/screens/login/services/utils/loginUtil.dart';
-import 'package:quickthink/screens/login/view/login.dart';
 import 'package:quickthink/screens/login/widgets/button.dart';
+import 'package:quickthink/screens/new_dashboard.dart';
 import 'package:quickthink/utils/responsiveness.dart';
-
-import 'forgot_password.dart';
 
 class ResetSuccess extends StatelessWidget {
   @override
@@ -23,7 +22,7 @@ class ResetSuccess extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Text(
-                'Password Reset Success',
+                'Password Change Success',
                 style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -34,7 +33,7 @@ class ResetSuccess extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Text(
-                'Your Password has been saved. Click next to log in',
+                'Your Password has been changed successfully!',
                 style: GoogleFonts.poppins(
                     color: Colors.white,
                     //fontWeight: FontWeight.w600,
@@ -46,7 +45,7 @@ class ResetSuccess extends StatelessWidget {
               alignment: Alignment.center,
               child: ResetSuccessButton(
                 onPressed: () {
-                  Get.offAll(LoginScreen());
+                  Get.offAll(DashboardScreen());
                 },
               ),
             ),
