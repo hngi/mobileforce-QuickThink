@@ -260,8 +260,6 @@ Widget _row(
       children: <Widget>[
         SvgPicture.asset(image1),
         SizedBox(width: 10),
-        Image.asset(image2, width: 20, height: 20),
-        SizedBox(width: 10),
         Text(text1, style: GoogleFonts.poppins(
             fontSize: 14,
             color: light ? Color(0xff1C1046) : Colors.white
@@ -288,8 +286,6 @@ Widget _row1(
       children: <Widget>[
         Text(text, style: GoogleFonts.poppins(fontSize: 14)),
         SizedBox(width: 20),
-        Image.asset(image2, width: 20, height: 20),
-        SizedBox(width: 13),
         Text(text1, style: GoogleFonts.poppins(fontSize: 14)),
         Spacer(),
         SvgPicture.asset(image3, width: 20, height: 20),
