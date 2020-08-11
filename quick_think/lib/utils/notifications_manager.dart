@@ -26,15 +26,14 @@ class NotificationsManager{
     'Challenge yourself. Play Now'
   ];
 
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
   factory NotificationsManager() {
     return _shared;
   }
-  Future<void> initializeNotifications() async {
-    notificationAppLaunchDetails =
-        await _flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  FlutterLocalNotificationsPlugin initializeNotifications() {
+
+    _flutterLocalNotificationsPlugin =  FlutterLocalNotificationsPlugin();
 
     var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
 
@@ -45,6 +44,8 @@ class NotificationsManager{
         );
     initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
+
+    return _flutterLocalNotificationsPlugin;
   }
 
   FlutterLocalNotificationsPlugin getCurrentNotificationPlugin() {
@@ -68,7 +69,15 @@ class NotificationsManager{
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         '999',
         'Daily Reminder',
-        'Schedule daily reminders!');
+        'Schedule daily reminders!',
+        importance: Importance.Max,
+      priority: Priority.High,
+      playSound: true,
+      enableLights: true,
+      ledColor: Color(0xff18C5D9),
+      ledOnMs: 1000,
+      ledOffMs: 400
+    );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
