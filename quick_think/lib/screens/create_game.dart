@@ -241,26 +241,25 @@ class _CreateGameState extends State<CreateGame> {
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                         /* SizedBox(
+                        /* SizedBox(
                           height: SizeConfig().yMargin(context, 10),
                         ),
                         _logoText(), */
                         Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          width: McGyver.rsDoubleW(context, 30),
-                          height: McGyver.rsDoubleH(context, 20),
-                          decoration: BoxDecoration(
-                              // color: Colors.red,
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/app_name_vector.png'))),
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: McGyver.rsDoubleW(context, 30),
+                            height: McGyver.rsDoubleH(context, 20),
+                            decoration: BoxDecoration(
+                                // color: Colors.red,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/app_name_vector.png'))),
+                          ),
                         ),
-                      ),
-                      
+
                         SizedBox(
                           height: SizeConfig().yMargin(context, 4),
                         ),
@@ -510,13 +509,13 @@ class _CreateGameState extends State<CreateGame> {
             fontSize: SizeConfig().textSize(context, 3),
             color: Colors.white),
         validator: (val) {
-          if (val.length == 0) {
+          if (val.trim().length == 0) {
             return 'Quiz Name Should Not Be Empty';
           }
-          if (val.length <= 2) {
+          if (val.trim().length <= 2) {
             return 'should be 3 or more characters';
           }
-          if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val)) {
+          if (!RegExp(r"^[a-z0-9A-Z_-]{3,16}$").hasMatch(val.trim())) {
             return "can only include _ or -";
           }
 
@@ -754,7 +753,7 @@ class _CreateGameState extends State<CreateGame> {
         progressDialog.show();
       });
 
-      hintText = await getCode(userName, category);
+      hintText = await getCode(userName.trim(), category);
 
       setState(() {
         progressDialog.hide();

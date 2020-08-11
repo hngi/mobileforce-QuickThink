@@ -65,7 +65,7 @@ class ForgotPasswordButton extends StatelessWidget {
       width: McGyver.rsDoubleW(context, 65),
       child: MaterialButton(
           child: Text(
-            'Reset Password',
+            'Change Password',
             style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
