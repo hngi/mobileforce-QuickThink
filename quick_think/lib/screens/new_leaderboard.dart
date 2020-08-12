@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -230,11 +231,11 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
               itemBuilder: (context,index){
                 if (index == 0) {
                   return _row(
-                      'images/cup.svg', 'images/face1.png', 'images/coin2.svg',
+                      'images/cup.svg', 'images/startl.svg', 'images/coin2.svg',
                       model.listData[index].userName,
                       model.listData[index].score.toString(), light);
                 } else {
-                  return _row1((index + 1).toString(), 'images/face2.png',
+                  return _row1((index + 1).toString(), 'images/startl.svg',
                       'images/coin2.svg', model.listData[index].userName,
                       model.listData[index].score.toString(), light);
                 }
