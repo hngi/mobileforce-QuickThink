@@ -201,12 +201,12 @@ class ApiCallService with ChangeNotifier {
     String token = prefs.getString('token');
     if (token != null) {
       Map<String, String> headers = {
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Token $token'
       };
-      Response response = await http.post(deleteAccountUrl, headers: headers);
+      Response response = await http.delete(deleteAccountUrl, headers: headers);
       print(response.statusCode);
+      print(token);
       if (response.statusCode == 200) {
         setState(ButtonState.Idle);
         SharedPreferences pref = await SharedPreferences.getInstance();
@@ -217,11 +217,15 @@ class ApiCallService with ChangeNotifier {
         SnackBarService.instance
             .showSnackBarSuccess('Account Deleted succesfully');
         final listt = list['data'];
+        print("List: $list");
+        print(response.statusCode);
         return listt;
       } else {
         print(response.statusCode);
         setState(ButtonState.Idle);
         SnackBarService.instance.showSnackBarError('Server Error. Try again');
+        print(response.body);
+        print(response.statusCode);
         return null;
       }
     }
