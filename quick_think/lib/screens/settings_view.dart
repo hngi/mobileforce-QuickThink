@@ -28,11 +28,33 @@ class SettingsView extends StatefulHookWidget with WidgetsBindingObserver {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-
   NotificationsManager notificationsManager = NotificationsManager();
-  static List<String> hoursList = ['1:00','2:00','3:00','4:00','5:00','6:00','7:00','8:00',
-    '9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00',
-    '17:00','18:00','19:00','20:00','21:00','22:00','23:00','24:00'];
+  static List<String> hoursList = [
+    '1:00',
+    '2:00',
+    '3:00',
+    '4:00',
+    '5:00',
+    '6:00',
+    '7:00',
+    '8:00',
+    '9:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+    '24:00'
+  ];
   String dropDownValue = hoursList[10];
   String token;
   bool reminderValue;
@@ -58,13 +80,13 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   @override
-  void initState(){
+  void initState() {
     //Check Internet Connectivity
     getReminderValue('reminder');
     getTimeValue('time');
     connectivity = new Connectivity();
     subscription = connectivity.onConnectivityChanged.listen(
-          (ConnectivityResult connectivityResult) {
+      (ConnectivityResult connectivityResult) {
         _connectionStatus = connectivityResult.toString();
         print(_connectionStatus);
         if (connectivityResult == ConnectivityResult.wifi ||
@@ -97,7 +119,7 @@ class _SettingsViewState extends State<SettingsView> {
   startTimer() async {
     return new Timer(
       Duration(milliseconds: 500),
-          () {
+      () {
         Navigator.pushReplacementNamed(context, 'settings_view');
       },
     );
@@ -107,32 +129,33 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     final state = useProvider(apiState);
     return
-      // _connection
-      //  ? NoInternet()
-      //:
-      Scaffold(
+        // _connection
+        //  ? NoInternet()
+        //:
+        Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).primaryColor,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 0,
-          title: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
-            child: Text(
-              "Settings",
-              style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2.0)),
-            ),
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+          child: Text(
+            "Settings",
+            style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2.0)),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
 /*              Text(
                 "App Theme",
                 style: GoogleFonts.poppins(
@@ -191,94 +214,93 @@ class _SettingsViewState extends State<SettingsView> {
                 ),
               ),
               SizedBox(height: 10.0),*/
-              reminderValue == null ? SpinKitThreeBounce(
-                color: Colors.white,
-                size: 12.0,
-              ) :
-              SwitchListTile(
-                contentPadding: EdgeInsets.only(right: 30),
-                title: Text(
-                  "Set Daily Reminders!",
-                  style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 2.0
-                      )
+            reminderValue == null
+                ? SpinKitThreeBounce(
+                    color: Colors.white,
+                    size: 12.0,
+                  )
+                : SwitchListTile(
+                    contentPadding: EdgeInsets.only(right: 30),
+                    title: Text(
+                      "Set Daily Reminders!",
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0)),
+                    ),
+                    secondary: Icon(
+                      FlutterIcons.ios_notifications_ion,
+                      color: Colors.white,
+                    ),
+                    activeColor: Color(0xff18C5D9),
+                    value: reminderValue,
+                    onChanged: (bool value) {
+                      setState(() {
+                        reminderValue = value;
+                        saveReminderValue('reminder', value);
+                        if (value == false) {
+                          notificationsManager.cancelNotificationWith(999);
+                        } else {
+                          notificationsManager.scheduleDailyNotifications(
+                              int.parse(dropDownValue.split(':')[0]));
+                        }
+                      });
+                    },
                   ),
-                ),
-                secondary: Icon(
-                  FlutterIcons.ios_notifications_ion,
-                  color: Colors.white,
-                ),
-                activeColor: Color(0xff18C5D9),
-                value: reminderValue,
-                onChanged: (bool value){
-                  setState(() {
-                    reminderValue = value;
-                    saveReminderValue('reminder', value);
-                    if(value == false) {
-                      notificationsManager.cancelNotificationWith(999);
-                    }else{
-                      notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
-                    }
-                  });
-                },
-              ),
-              SizedBox(height: 10.0),
-              reminderValue == false ? Container()
-                  : getDropDown(),
-              SizedBox(height: SizeConfig().yMargin(context, 8)),
-              token == null
-                  ? Container()
-                  : Text(
-                "Account",
-                style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 2.0)),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
-              //   child: Divider(
-              //     height: 5.0,
-              //     color: Colors.white70,
-              //   ),
-              // ),
-              token == null
-                  ? Container()
-                  : InkWell(
-                child: ListTile(
-                  contentPadding: EdgeInsets.all(0),
-                  onTap: () {
-                    // state.logout().then((value) {
-                    //   if (value != null) {
-                    //     Get.to(LoginScreen());
-                    //   }
-                    // });
-                    logout();
-                    Get.off(LoginScreen());
-                  },
-                  title: Text(
-                    "Log out",
+            SizedBox(height: 10.0),
+            reminderValue == false ? Container() : getDropDown(),
+            SizedBox(height: SizeConfig().yMargin(context, 8)),
+            token == null
+                ? Container()
+                : Text(
+                    "Account",
                     style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 2.0),
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 2.0)),
+                  ),
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
+            //   child: Divider(
+            //     height: 5.0,
+            //     color: Colors.white70,
+            //   ),
+            // ),
+            token == null
+                ? Container()
+                : InkWell(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      onTap: () {
+                        // state.logout().then((value) {
+                        //   if (value != null) {
+                        //     Get.to(LoginScreen());
+                        //   }
+                        // });
+                        logout();
+                        Get.off(LoginScreen());
+                      },
+                      title: Text(
+                        "Log out",
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0),
+                        ),
+                      ),
+                      leading: SvgPicture.asset('images/log-out.svg'),
                     ),
                   ),
-                  leading: SvgPicture.asset('images/log-out.svg'),
-                ),
-              ),
-              token == null
-                  ? Container()
-                  : InkWell(
-                  child: ListTile(
+            token == null
+                ? Container()
+                : InkWell(
+                    child: ListTile(
                     contentPadding: EdgeInsets.all(0),
                     onTap: () {
                       state.deleteAccount().then((value) {
@@ -299,17 +321,18 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     leading: SvgPicture.asset('images/trash-2.svg'),
                   )),
-            ],
-          ),
+          ],
         ),
-      );
+      ),
+    );
   }
 
   Widget getDropDown() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Text('Set Reminder Time: ',
+        Text(
+          'Set Reminder Time: ',
           style: GoogleFonts.poppins(
               textStyle: TextStyle(
                   color: Colors.white,
@@ -344,7 +367,8 @@ class _SettingsViewState extends State<SettingsView> {
               dropDownValue = value;
               saveTimeValue('time', value);
               notificationsManager.cancelNotificationWith(999);
-              notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
+              notificationsManager.scheduleDailyNotifications(
+                  int.parse(dropDownValue.split(':')[0]));
             });
           },
           items: hoursList.map<DropdownMenuItem<String>>((String value) {
@@ -358,26 +382,24 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-
-
-  Future getReminderValue(String s) async{
+  Future getReminderValue(String s) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final valueStored = sharedPreferences.getBool(s) ?? false;
     reminderValue = valueStored;
   }
 
-  Future saveReminderValue(String s, bool value) async{
+  Future saveReminderValue(String s, bool value) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool(s, value);
   }
 
-  Future getTimeValue(String s) async{
+  Future getTimeValue(String s) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final valueStored = sharedPreferences.getString(s) ?? hoursList[10];
     dropDownValue = valueStored;
   }
 
-  Future saveTimeValue(String s, String value) async{
+  Future saveTimeValue(String s, String value) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(s, value);
   }
