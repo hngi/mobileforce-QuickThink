@@ -37,6 +37,7 @@ class _QuizPage2State extends State<QuizPage2>
   Color optionColor;
   List<Color> optionColors = List();
   bool isCorrect;
+  int correctOption;
 
   AnimationController _controller;
   Animation<Offset> _offsetAnimation;
@@ -424,6 +425,9 @@ class _QuizPage2State extends State<QuizPage2>
 
     for (var i = 0; i < questionFunctions.getOptions().length; i++) {
       optionColors.add(Colors.white);
+      if (questionFunctions.getOptions()[i] == questionFunctions.getCorrectAnswer()) {
+        correctOption = i;
+      }
       option.add(
         InkWell(
           onTap: () {
@@ -435,14 +439,19 @@ class _QuizPage2State extends State<QuizPage2>
               _isSelected = !_isSelected;
               isPicked[i] = _isSelected;
               optionColors[i] = optionColorFunc(isPicked[i], isCorrect);
-
-              Future.delayed(Duration(milliseconds: 500), () {
+              if(!isCorrect){
+                optionColors[correctOption] =  Color(0xFF86EC88);
+              }
+             
+              Future.delayed(Duration(milliseconds: 700), () {
+                
                 setState(() {
                   if (userAnswer.isNotEmpty && userAnswer != null) {
                     isPicked = [false, false, false, false];
                     checkAnswer(userAnswer);
                   }
                   optionColors[i] = Colors.white;
+                  optionColors[correctOption] = Colors.white;
                 });
               });
             });

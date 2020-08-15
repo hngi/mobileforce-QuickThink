@@ -12,7 +12,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quickthink/config.dart';
 import 'package:quickthink/main.dart';
 import 'package:quickthink/screens/category/services/state/provider.dart';
-import 'package:quickthink/screens/forgot_password/views/forgot_password.dart';
 import 'package:quickthink/utils/notifications_manager.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/widgets/noInternet.dart';
@@ -147,7 +146,7 @@ class _SettingsViewState extends State<SettingsView> {
                 textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w900,
                     letterSpacing: 2.0)),
           ),
         ),
@@ -157,105 +156,101 @@ class _SettingsViewState extends State<SettingsView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "App Theme",
-              style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
+/*              Text(
+                "App Theme",
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 2.0)),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              InkWell(
+                child: ListTile(
+                  contentPadding: EdgeInsets.all(0),
+                  //onTap: currentTheme.darkTheme,
+                  title: Text(
+                    "Dark Theme",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 2.0)),
+                  ),
+                  leading: Icon(
+                    FlutterIcons.moon_fea,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
+                child: Divider(
+                  height: 5.0,
+                  color: Colors.white70,
+                ),
+              ),
+              InkWell(
+                child: ListTile(
+                  contentPadding: EdgeInsets.all(0),
+                  //onTap: currentTheme.lightTheme,
+                  title: Text(
+                    "Light Theme",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 2.0)),
+                  ),
+                  leading: Icon(
+                    FlutterIcons.sun_fea,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.0),*/
+            reminderValue == null
+                ? SpinKitThreeBounce(
+                    color: Colors.white,
+                    size: 12.0,
+                  )
+                : SwitchListTile(
+                    contentPadding: EdgeInsets.only(right: 30),
+                    title: Text(
+                      "Set Daily Reminders!",
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2.0)),
+                    ),
+                    secondary: Icon(
+                      FlutterIcons.ios_notifications_ion,
                       color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 2.0)),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            InkWell(
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                //onTap: currentTheme.darkTheme,
-                title: Text(
-                  "Dark Theme",
-                  style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 2.0)),
-                ),
-                leading: Icon(
-                  FlutterIcons.moon_fea,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
-              child: Divider(
-                height: 5.0,
-                color: Colors.white70,
-              ),
-            ),
-            InkWell(
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0),
-                //onTap: currentTheme.lightTheme,
-                title: Text(
-                  "Light Theme",
-                  style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 2.0)),
-                ),
-                leading: Icon(
-                  FlutterIcons.sun_fea,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+                    ),
+                    activeColor: Color(0xff18C5D9),
+                    value: reminderValue,
+                    onChanged: (bool value) {
+                      setState(() {
+                        reminderValue = value;
+                        saveReminderValue('reminder', value);
+                        if (value == false) {
+                          notificationsManager.cancelNotificationWith(999);
+                        } else {
+                          notificationsManager.scheduleDailyNotifications(
+                              int.parse(dropDownValue.split(':')[0]));
+                        }
+                      });
+                    },
+                  ),
             SizedBox(height: 10.0),
-
-            ///Commented out to prevent Crash. @ KingOsborne please check into this.
-
-            // reminderValue == null ? SpinKitThreeBounce(
-            //   color: Colors.white,
-            //   size: 12.0,
-            // ) :
-            // SwitchListTile(
-            //   contentPadding: EdgeInsets.only(right: 30),
-            //   title: Text(
-            //     "Set Daily Reminders!",
-            //     style: GoogleFonts.poppins(
-            //         textStyle: TextStyle(
-            //             color: Colors.white,
-            //             fontSize: 14,
-            //             fontWeight: FontWeight.w500,
-            //             letterSpacing: 2.0
-            //         )
-            //     ),
-            //   ),
-            //   secondary: Icon(
-            //     FlutterIcons.ios_notifications_ion,
-            //     color: Colors.white,
-            //   ),
-            //   activeColor: Color(0xff18C5D9),
-            //   value: reminderValue,
-            //   onChanged: (bool value){
-            //     setState(() {
-            //       reminderValue = value;
-            //       saveReminderValue('reminder', value);
-            //       if(value == false) {
-            //         notificationsManager.cancelNotificationWith(999);
-            //       }else{
-            //         notificationsManager.scheduleDailyNotifications(int.parse(dropDownValue.split(':')[0]));
-            //       }
-            //     });
-            //   },
-            // ),
-            // SizedBox(height: 10.0),
-            // reminderValue == false ? Container()
-            //             : getDropDown(),
+            reminderValue == false ? Container() : getDropDown(),
             SizedBox(height: SizeConfig().yMargin(context, 8)),
             token == null
                 ? Container()
@@ -275,34 +270,6 @@ class _SettingsViewState extends State<SettingsView> {
             //     color: Colors.white70,
             //   ),
             // ),
-            token == null
-                ? Container()
-                : InkWell(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      onTap: () {
-                        // state.logout().then((value) {
-                        //   if (value != null) {
-                        //     Get.to(LoginScreen());
-                        //   }
-                        // });
-                        // logout();
-                        Get.to(ForgotPassword());
-                      },
-                      title: Text(
-                        "Change Password",
-                        style: GoogleFonts.poppins(
-                          textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 2.0),
-                        ),
-                      ),
-                      leading: SvgPicture.asset('images/log-out.svg'),
-                    ),
-                  ),
-
             token == null
                 ? Container()
                 : InkWell(
