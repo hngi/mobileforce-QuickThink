@@ -136,6 +136,7 @@ class _SettingsViewState extends State<SettingsView> {
         Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
         title: Padding(
@@ -146,7 +147,7 @@ class _SettingsViewState extends State<SettingsView> {
                 textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 2.0)),
           ),
         ),
