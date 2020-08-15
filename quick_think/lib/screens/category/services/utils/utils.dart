@@ -1,19 +1,24 @@
 final String categoryUrl =
-    'https://brainteaser.pythonanywhere.com/game/create/category';
+    'https://brainteaserdev.pythonanywhere.com/category/create/';
 final String questionUrl =
-    'https://brainteaser.pythonanywhere.com/game/create/question';
+    'https://brainteaserdev.pythonanywhere.com/question/create/';
 final String getUsersCategory =
-    'https://brainteaser.pythonanywhere.com/game/category/user';
-final String logoutUrl = 'https://brainteaser.pythonanywhere.com/user/logout';
+    'https://brainteaserdev.pythonanywhere.com/category/list/user/';
+final String logoutUrl =
+    'https://brainteaserdev.pythonanywhere.com/user/logout';
 
-final String getUsersQuestions = 'https://brainteaser.pythonanywhere.com/game/questions/user';
-final String editQuestionsUrl = 'https://brainteaser.pythonanywhere.com/game/update/question';
-final String deleteQuestionUrl = 'https://brainteaser.pythonanywhere.com/game/delete/question';
+final String getUsersQuestions =
+    'https://brainteaserdev.pythonanywhere.com/question/list/user/';
+final String editQuestionsUrl =
+    'https://brainteaserdev.pythonanywhere.com/question/update/';
+final String deleteQuestionUrl =
+    'https://brainteaserdev.pythonanywhere.com/question/delete/';
 
 final String deleteAccountUrl =
-    'https://brainteaser.pythonanywhere.com/user/delete';
+    'https://brainteaserdev.pythonanywhere.com/user/delete';
 
-final String editCategoryUrl = 'http://brainteaser.pythonanywhere.com/game/update/category';
+final String editCategoryUrl =
+    'https://brainteaserdev.pythonanywhere.com/category/update/';
 
-final String deleteCategoryUrl = 'https://brainteaser.pythonanywhere.com/game/delete/category';
-
+final String deleteCategoryUrl =
+    'https://brainteaserdev.pythonanywhere.com/category/delete/';

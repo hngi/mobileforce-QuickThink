@@ -29,7 +29,7 @@ dependencies:
   google_fonts: ^1.1.0
   share: ^0.6.4+3
   flutter_icons: ^1.1.0
-  flutter_svg: ^0.17.4
+  flutter_svg: 
   progress_dialog: ^1.2.4
   flushbar: ^1.10.4
   clipboard: ^0.1.2+8
@@ -41,6 +41,10 @@ dependencies:
   giffy_dialog: ^1.8.0
   connectivity: ^0.4.9
   connectivity_macos: ^0.1.0+3
+  flutter_local_notifications: ^1.4.4+2
+  path_provider: ^1.6.11
+  notification_permissions: ^0.4.6
+  rxdart: ^0.24.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,6 +55,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

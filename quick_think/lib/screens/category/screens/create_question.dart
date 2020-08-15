@@ -323,14 +323,14 @@ class _CreateQuestionState extends State<CreateQuestion> {
                 // print(option4Controller.text);
                 state
                     .createQuestion(Questions(
-                        category: categoryController.text,
-                        question: questionController.text,
-                        answer: correctAnswer,
+                        category: categoryController.text.trim(),
+                        question: questionController.text.trim(),
+                        answer: correctAnswer.trim(),
                         options: [
-                      option1Controller.text,
-                      option2Controller.text,
-                      option3Controller.text,
-                      option4Controller.text
+                      option1Controller.text.trim(),
+                      option2Controller.text.trim(),
+                      option3Controller.text.trim(),
+                      option4Controller.text.trim(),
                     ]))
                     .then((value) {
                   if (value != null) {

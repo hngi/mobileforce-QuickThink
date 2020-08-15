@@ -143,7 +143,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       SizedBox(height: McGyver.rsDoubleH(context, 5)),
                       TextFieldContainer(
                         obscure: false,
-                        text: 'Name',
+                        text: 'Username',
                         textInputType: TextInputType.text,
                         controller: usernameController,
                         validator: UsernameValidator.validate,
@@ -189,9 +189,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       form.save();
                                       state
                                           .signup(
-                                        usernameController.text,
-                                        emailController.text,
-                                        passwordController.text,
+                                        usernameController.text.trim(),
+                                        emailController.text.trim(),
+                                        passwordController.text.trim(),
                                       )
                                           .then((value) {
                                         if (value != null) {

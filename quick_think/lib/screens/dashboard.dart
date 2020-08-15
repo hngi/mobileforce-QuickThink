@@ -259,15 +259,13 @@ class _DashBoardState extends State<DashBoard> {
                               style: GoogleFonts.poppins(
                                   fontSize: SizeConfig().textSize(context, 3.2),
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w400)
-                                  ),
+                                  fontWeight: FontWeight.w400)),
                           TextSpan(
                               text: widget.username,
                               style: GoogleFonts.poppins(
                                   fontSize: SizeConfig().textSize(context, 3.2),
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold)
-                                  ),
+                                  fontWeight: FontWeight.bold)),
                           TextSpan(text: '\n'),
                           TextSpan(
                               text: "Glad you're back",
@@ -321,9 +319,9 @@ class _DashBoardState extends State<DashBoard> {
                         height: SizeConfig().yMargin(context, 4),
                       ),
                       QuestionSelectionCard(
-                        text: 'Create game',
+                        text: 'Customize Game',
                         onPressed: () {
-                         //Navigate to Create Game Page
+                          //Navigate to Create Game Page
                         },
                         light: light,
                       ),

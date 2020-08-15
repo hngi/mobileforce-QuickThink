@@ -42,7 +42,7 @@ class FetchedQuestions {
 
   Future<List<QuestionModel>> questionUpdate(
       String gameCode, String userName) async {
-    final jsonEndpoint = "http://brainteaser.pythonanywhere.com/game/play";
+    final jsonEndpoint = "https://brainteaserdev.pythonanywhere.com/usergame/play/";
     return await http.post(jsonEndpoint, body: {
       "game_code": gameCode,
       "user_name": userName
@@ -67,9 +67,8 @@ class FetchedQuestions {
   }
 
   Future updateScore(String userID) async{
-    final jsonEndpoint = "http://brainteaser.pythonanywhere.com/game/score";
-    return await http.post(jsonEndpoint, body: {
-      "user_game_id" : userID
-    });
+   
+    final jsonEndpoint = "https://brainteaserdev.pythonanywhere.com/usergame/score/increment/$userID/";
+     await http.post(jsonEndpoint);
   }
 }

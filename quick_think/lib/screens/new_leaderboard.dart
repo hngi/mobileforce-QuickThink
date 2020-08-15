@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -68,7 +69,10 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                           children: <Widget>[
                                             Expanded(
                                               flex: 1,
-                                                child: _roundContainer('2', model.listData[1].userName, light)
+                                                child: model.listData.length >= 2 ?
+                                                _roundContainer('2', model.listData[1].userName, light)
+                                                    :
+                                                _roundContainer('2', "--", light)
                                             ),
                                             Expanded(
                                               flex: 1,
@@ -76,7 +80,10 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                             ),
                                             Expanded(
                                               flex: 1,
-                                                child: _roundContainer('3', model.listData[2].userName, light)
+                                                child: model.listData.length >= 3 ?
+                                                _roundContainer('3', model.listData[2].userName, light)
+                                                    :
+                                                _roundContainer('3', "---", light)
                                             )
                                           ],
                                         )
@@ -224,11 +231,11 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
               itemBuilder: (context,index){
                 if (index == 0) {
                   return _row(
-                      'images/cup.svg', 'images/face1.png', 'images/coin2.svg',
+                      'images/cup.svg', 'images/startl.svg', 'images/coin2.svg',
                       model.listData[index].userName,
                       model.listData[index].score.toString(), light);
                 } else {
-                  return _row1((index + 1).toString(), 'images/face2.png',
+                  return _row1((index + 1).toString(), 'images/startl.svg',
                       'images/coin2.svg', model.listData[index].userName,
                       model.listData[index].score.toString(), light);
                 }
@@ -253,8 +260,6 @@ Widget _row(
     child: Row(
       children: <Widget>[
         SvgPicture.asset(image1),
-        SizedBox(width: 10),
-        Image.asset(image2, width: 20, height: 20),
         SizedBox(width: 10),
         Text(text1, style: GoogleFonts.poppins(
             fontSize: 14,
@@ -282,8 +287,6 @@ Widget _row1(
       children: <Widget>[
         Text(text, style: GoogleFonts.poppins(fontSize: 14)),
         SizedBox(width: 20),
-        Image.asset(image2, width: 20, height: 20),
-        SizedBox(width: 13),
         Text(text1, style: GoogleFonts.poppins(fontSize: 14)),
         Spacer(),
         SvgPicture.asset(image3, width: 20, height: 20),

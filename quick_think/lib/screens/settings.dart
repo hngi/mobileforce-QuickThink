@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickthink/utils/notifications_manager.dart';
 
-class Settings extends StatelessWidget {
+import '../bottom_navigation_bar.dart';
+
+class Settings extends StatefulWidget {
+  @override
+  _SettingsState createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  NotificationsManager notificationsManager = NotificationsManager();
+  bool _checked;
+  @override
+  void initState() {
+    super.initState();
+    notificationsManager.initializeNotifications();
+    /*notificationsManager.setOnNotificationClick();*/
+    _checked = false;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,10 +111,48 @@ class Settings extends StatelessWidget {
                 ),
               ),
             ),
-
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
+              child: Divider(
+                height: 5.0,
+                color: Colors.white70,
+              ),
+            ),
+            CheckboxListTile(
+              title: Text(
+                "Set Daily Reminders!",
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 2.0
+                    )
+                ),
+              ),
+                secondary: Icon(
+                  FlutterIcons.ios_notifications_ion,
+                  color: Colors.white,
+                ),
+                value: _checked,
+                onChanged: (bool value){
+                  setState(() {
+                    _checked = value;
+                  });
+                },
+            )
           ],
         ),
       ),
     );
   }
+
+  onNotificationClick(String payload) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DashboardScreen()),
+    );
+  }
 }
+
+

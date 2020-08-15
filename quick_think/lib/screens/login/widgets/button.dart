@@ -54,3 +54,53 @@ class SignUpButton extends StatelessWidget {
     );
   }
 }
+
+class ForgotPasswordButton extends StatelessWidget {
+  final Function onPressed;
+
+  const ForgotPasswordButton({Key key, this.onPressed}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: McGyver.rsDoubleW(context, 65),
+      child: MaterialButton(
+          child: Text(
+            'Change Password',
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: SizeConfig().textSize(context, 2.4)),
+          ),
+          height: McGyver.rsDoubleH(context, 9.7),
+          color: buttonColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          onPressed: onPressed),
+    );
+  }
+}
+
+class ResetSuccessButton extends StatelessWidget {
+  final Function onPressed;
+
+  const ResetSuccessButton({Key key, this.onPressed}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: McGyver.rsDoubleW(context, 85),
+      child: MaterialButton(
+          child: Text(
+            'Next',
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: SizeConfig().textSize(context, 2.4)),
+          ),
+          height: McGyver.rsDoubleH(context, 9.7),
+          color: buttonColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          onPressed: onPressed),
+    );
+  }
+}

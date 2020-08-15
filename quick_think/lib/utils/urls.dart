@@ -1,5 +1,6 @@
-String playGameUrl = 'https://brainteaser.pythonanywhere.com/game/play';
-String checkUrl = 'https://brainteaser.pythonanywhere.com/game/user/play/check';
-String fetchGameCodeApi = 'https://brainteaser.pythonanywhere.com/game';
+String playGameUrl = 'https://brainteaserdev.pythonanywhere.com/usergame/play/';
+//Check if gameCode is valid
+String checkUrl = 'https://brainteaserdev.pythonanywhere.com/usergame/valid/';
+String fetchGameCodeApi = 'https://brainteaserdev.pythonanywhere.com/game/';
 String fetchCategoriesUrl =
-    'https://brainteaser.pythonanywhere.com/game/category';
+    'https://brainteaserdev.pythonanywhere.com/usergame/category/list/';

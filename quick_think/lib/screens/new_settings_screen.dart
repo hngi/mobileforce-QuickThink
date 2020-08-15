@@ -19,15 +19,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'category/screens/create_category.dart';
 import 'help.dart';
 
-class DashBoard extends StatefulWidget {
-  DashBoard({Key key, this.uri}) : super(key: key);
+class NewSettingsView extends StatefulWidget {
+
+  NewSettingsView({Key key, this.uri}) : super(key: key);
   final String uri;
 
   @override
-  _DashBoardState createState() => _DashBoardState();
+  _NewSettingsViewState createState() => _NewSettingsViewState();
 }
 
-class _DashBoardState extends State<DashBoard> {
+class _NewSettingsViewState extends State<NewSettingsView> {
   bool light = CustomTheme.light;
   String na = 'There';
   String username;
@@ -116,7 +117,7 @@ class _DashBoardState extends State<DashBoard> {
                         RichText(
                           text: TextSpan(children: [
                             TextSpan(
-                                text: "Hello ",
+                                text: "Hello, ",
                                 style: GoogleFonts.poppins(
                                     fontSize:
                                         SizeConfig().textSize(context, 3.2),
@@ -131,7 +132,7 @@ class _DashBoardState extends State<DashBoard> {
                                     fontWeight: FontWeight.bold)),
                             TextSpan(text: '\n'),
                             TextSpan(
-                                text: "Glad you're here",
+                                text: "Glad you're back",
                                 style: GoogleFonts.poppins(
                                     fontSize:
                                         SizeConfig().textSize(context, 2.2),
@@ -158,42 +159,42 @@ class _DashBoardState extends State<DashBoard> {
                 child: SingleChildScrollView(
                   child: Container(
                     margin:
-                        EdgeInsets.only(top: SizeConfig().yMargin(context, 3)),
+                        EdgeInsets.only(top: SizeConfig().yMargin(context, 2)),
                     padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text('Activity',
+                        Text('Settings',
                             style: GoogleFonts.poppins(
                                 fontSize: SizeConfig().textSize(context, 3),
                                 color: Colors.white,
-                                fontWeight: FontWeight.w600)),
+                                fontWeight: FontWeight.w400)),
                         SizedBox(
-                          height: SizeConfig().yMargin(context, 4),
+                          height: SizeConfig().yMargin(context, 2),
                         ),
                         QuestionSelectionCard(
-                          text: 'Join game',
+                          text: 'Change Avatar',
                           onPressed: () async {
                             Navigator.pushNamed(context, JoinGame.routeName);
                           },
                           light: light,
                         ),
                         SizedBox(
-                          height: SizeConfig().yMargin(context, 4),
+                          height: SizeConfig().yMargin(context, 2),
                         ),
                         QuestionSelectionCard(
-                          text: 'Create game',
+                          text: 'Delete Account',
                           onPressed: () async {
                             Navigator.pushNamed(context, CreateGame.routeName);
                           },
                           light: light,
                         ),
                         SizedBox(
-                          height: SizeConfig().yMargin(context, 4),
+                          height: SizeConfig().yMargin(context, 2),
                         ),
                         QuestionSelectionCard(
-                          text: 'Customize Game',
+                          text: 'Create questions',
                           onPressed: () async {
                             SharedPreferences pref =
                                 await SharedPreferences.getInstance();
@@ -210,6 +211,50 @@ class _DashBoardState extends State<DashBoard> {
                           },
                           light: light,
                         ),
+                      SizedBox(
+                          height: SizeConfig().yMargin(context, 2),
+                        ),
+                        QuestionSelectionCard(
+                          text: 'About Us',
+                          onPressed: () async {
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                            final key = "token";
+                            final valueStored = pref.getString(key) ?? null;
+                            print(valueStored);
+                            if (valueStored == null) {
+                              Get.to(LoginScreen());
+                            } else {
+                              //Navigate to create questions page
+                              Navigator.pushNamed(
+                                  context, CreateCategory.routeName);
+                            }
+                          },
+                          light: light,
+                        ),
+                        SizedBox(
+                          height: SizeConfig().yMargin(context, 2),
+                        ),
+                        QuestionSelectionCard(
+                          text: 'Log out',
+                          onPressed: () async {
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                            final key = "token";
+                            final valueStored = pref.getString(key) ?? null;
+                            print(valueStored);
+                            if (valueStored == null) {
+                              Get.to(LoginScreen());
+                            } else {
+                              //Navigate to create questions page
+                              Navigator.pushNamed(
+                                  context, CreateCategory.routeName);
+                            }
+                          },
+                          tabColor: Color(0xffff4d55),
+                        ),
+                      
+                      
                       ],
                     ),
                   ),
@@ -227,27 +272,28 @@ class QuestionSelectionCard extends StatelessWidget {
   final String text;
   final onPressed;
   final light;
+  final Color tabColor;
 
-  QuestionSelectionCard({@required this.text, this.onPressed, this.light});
+  QuestionSelectionCard({@required this.text, this.onPressed, this.light, this.tabColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       // width: SizeConfig().xMargin(context, 4),
-      height: SizeConfig().yMargin(context, 13),
+      height: SizeConfig().yMargin(context, 8),
       child: InkWell(
         onTap: () {},
         child: RaisedButton(
           elevation: 8.0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-          color: light ? Color(0xff38208c) : Hexcolor('#4C4C4C'),
-          padding: EdgeInsets.fromLTRB(32, 20, 0, 17),
+          color: tabColor ?? Color(0xff38208c) /* : Hexcolor('#4C4C4C') */,
+          // padding: EdgeInsets.fromLTRB(32, 20, 0, 17),
           child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: Text(text,
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       fontSize: SizeConfig().textSize(context, 2.3),
                       color: Colors.white))),
           onPressed: onPressed,

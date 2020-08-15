@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:quickthink/bottom_navigation_bar.dart';
+import 'package:quickthink/screens/login/responsiveness/res.dart';
 import 'package:quickthink/utils/responsiveness.dart';
 import 'package:quickthink/screens/join_game.dart';
 
@@ -21,12 +22,22 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           //  mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: _logoText(),
+             Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: McGyver.rsDoubleW(context, 30),
+                height: McGyver.rsDoubleH(context, 20),
+                decoration: BoxDecoration(
+                    // color: Colors.red,
+                    image: DecorationImage(
+                        image: AssetImage('assets/app_name_vector.png'))),
+              ),
+            ),
+             SizedBox(
+              height: SizeConfig().yMargin(context, 6.0),
             ),
             Expanded(
-              flex: 3,
+              flex: 2,
               child: _vector(height, width),
             ),
             Expanded(
@@ -37,34 +48,16 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
               flex: 1,
               child: _showButton(context),
             ),
+            SizedBox(
+              height: SizeConfig().yMargin(context, 6.0),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _logoText() {
-    return RichText(
-      text: TextSpan(children: <TextSpan>[
-        TextSpan(
-            text: 'Quick',
-            style: TextStyle(
-                fontFamily: 'DM Sans',
-                fontWeight: FontWeight.w700,
-                fontSize: SizeConfig().textSize(context, 3),
-                color: Colors.white)),
-        TextSpan(
-            text: 'Think',
-            style: TextStyle(
-              fontFamily: 'DM Sans',
-              fontWeight: FontWeight.w700,
-              fontSize: SizeConfig().textSize(context, 3),
-              color: Color.fromRGBO(24, 197, 217, 1),
-            ))
-      ]),
-    );
-  }
-
+  
   Widget _vector(height, width) {
     return Container(
       height: SizeConfig().yMargin(context, 70),
@@ -92,8 +85,8 @@ class _ThirdOnBoardScreenState extends State<ThirdOnBoardScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: SizeConfig().textSize(context, 3),
+              fontWeight: FontWeight.w400,
+              fontSize: SizeConfig().textSize(context, 2.5),
               fontFamily: 'Poppins'),
         ),
       ),

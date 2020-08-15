@@ -37,7 +37,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {"name": category};
       String payload = json.encode(data);
@@ -48,6 +48,7 @@ class ApiCallService with ChangeNotifier {
         final Map error = json.decode(response.body);
         SnackBarService.instance
             .showSnackBarError(error['error'] ?? error['name'][0]);
+
         return null;
       } else if (response.statusCode == 404) {
         setState(ButtonState.Idle);
@@ -61,11 +62,12 @@ class ApiCallService with ChangeNotifier {
         SnackBarService.instance
             .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
-      } else if (response.statusCode == 201) {
+      } else if (response.statusCode == 200) {
         final Map user = json.decode(response.body);
         String catName = user['name'];
         SnackBarService.instance
-            .showSnackBarSuccess('Category ${catName} created successfully');
+            .showSnackBarSuccess('Category $catName created successfully');
+        print(user);
         setState(ButtonState.Idle);
 
         return catName;
@@ -75,6 +77,7 @@ class ApiCallService with ChangeNotifier {
       final Map error = json.decode(response.body);
       SnackBarService.instance
           .showSnackBarError(error['error'] ?? error['name'][0]);
+      print(error);
       return null;
     }
     return null;
@@ -88,7 +91,7 @@ class ApiCallService with ChangeNotifier {
         Map<String, String> headers = {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
+          'Authorization': 'Token $token'
         };
         Response response = await http.get(getUsersCategory, headers: headers);
         if (response.statusCode == 200) {
@@ -122,7 +125,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {
         "Question": {
@@ -171,7 +174,7 @@ class ApiCallService with ChangeNotifier {
       // Map<String, String> headers = {
       //   'Content-Type': 'application/json',
       //   'Accept': 'application/json',
-      //   'Authorization': 'Bearer $token'
+      //   'Authorization': 'Token $token'
       // };
       // Response response = await http.post(logoutUrl, headers: headers);
       // if (response.statusCode == 200) {
@@ -200,9 +203,10 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Response response = await http.post(deleteAccountUrl, headers: headers);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         setState(ButtonState.Idle);
         SharedPreferences pref = await SharedPreferences.getInstance();
@@ -232,7 +236,7 @@ class ApiCallService with ChangeNotifier {
         Map<String, String> headers = {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
+          'Authorization': 'Token $token'
         };
         Response response = await http.get(getUsersQuestions, headers: headers);
         if (response.statusCode == 200) {
@@ -270,7 +274,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {
         "Question": {
@@ -291,6 +295,7 @@ class ApiCallService with ChangeNotifier {
         return null;
       } else if (response.statusCode == 200) {
         final Map list = json.decode(response.body);
+        print(list);
         final Map listt = list['data'];
         SnackBarService.instance
             .showSnackBarSuccess('Question updated successfully');
@@ -316,9 +321,9 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
-      Map data = {"name": name, "id": id};
+      Map data = {/* "name": name, */ "id": id};
       String payload = json.encode(data);
       Response response =
           await http.post(deleteQuestionUrl, headers: headers, body: payload);
@@ -327,7 +332,7 @@ class ApiCallService with ChangeNotifier {
         // final Map error = json.decode(response.body);
         SnackBarService.instance.showSnackBarError('Some error occured');
         return null;
-      } else if (response.statusCode == 204) {
+      } else if (response.statusCode == 200) {
         // final Map list = json.decode(response.body);
         // final Map listt = list['data'];
         setState(ButtonState.Idle);
@@ -337,6 +342,7 @@ class ApiCallService with ChangeNotifier {
         return 'deleted';
       }
       print(response.statusCode);
+      print(id);
       setState(ButtonState.Idle);
       // final Map error = json.decode(response.body);
       SnackBarService.instance.showSnackBarError('Some error occured');
@@ -351,23 +357,25 @@ class ApiCallService with ChangeNotifier {
     String token = prefs.getString('token');
     print(name);
     print(token);
+
     if (token != null) {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
-      Map data = {"name": name};
+      Map data = {"category": name};
+      var url = Uri.parse(deleteCategoryUrl + '$name/');
+      print('URL: $url');
       String payload = json.encode(data);
-      Response response =
-          await http.post(deleteCategoryUrl, headers: headers, body: payload);
+      Response response = await http.delete(url, headers: headers);
       print(response.statusCode);
       if (response.statusCode == 400) {
         setState(ButtonState.Idle);
         final Map error = json.decode(response.body);
-        SnackBarService.instance.showSnackBarError(error['error']);
+        SnackBarService.instance.showSnackBarError(error['error'] ?? 'Error');
         return null;
-      } else if (response.statusCode == 204) {
+      } else if (response.statusCode == 200) {
         setState(ButtonState.Idle);
         print('here');
         SnackBarService.instance
@@ -378,7 +386,8 @@ class ApiCallService with ChangeNotifier {
       print(response.statusCode);
       setState(ButtonState.Idle);
       final Map error = json.decode(response.body);
-      SnackBarService.instance.showSnackBarError(error['error']);
+      SnackBarService.instance.showSnackBarError(error['error'] ?? 'Error');
+      print(error);
       return null;
     }
     return null;
@@ -392,7 +401,7 @@ class ApiCallService with ChangeNotifier {
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Token $token'
       };
       Map data = {
         "name": categoryname,
@@ -419,9 +428,9 @@ class ApiCallService with ChangeNotifier {
         SnackBarService.instance
             .showSnackBarError(error['error'] ?? error['name'][0]);
         return null;
-      } else if (response.statusCode == 201) {
+      } else if (response.statusCode == 200) {
         final Map user = json.decode(response.body);
-        
+
         SnackBarService.instance
             .showSnackBarSuccess('Category updated successfully');
         setState(ButtonState.Idle);

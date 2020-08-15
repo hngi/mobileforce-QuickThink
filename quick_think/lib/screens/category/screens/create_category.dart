@@ -93,11 +93,9 @@ class _CreateCategoryState extends State<CreateCategory> {
     return _connection
         ? NoInternet()
         : WillPopScope(
-
             onWillPop: () => widget.categoryState == CategoryState.Adding
                 ? Get.off(DashboardScreen())
                 : Get.off(CreatedCategories()),
-
             child: Scaffold(
               backgroundColor: Theme.of(context).primaryColor,
               body: SafeArea(
@@ -273,7 +271,7 @@ class _CreateCategoryState extends State<CreateCategory> {
               if (form.validate()) {
                 form.save();
                 print(controller.text);
-                apiCallService.createCategory(controller.text).then(
+                apiCallService.createCategory(controller.text.trim()).then(
                       (value) => {
                         if (value != null)
                           {
