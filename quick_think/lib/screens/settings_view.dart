@@ -133,7 +133,7 @@ class _SettingsViewState extends State<SettingsView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
+/*              Text(
                 "App Theme",
                 style: GoogleFonts.poppins(
                     textStyle: TextStyle(
@@ -190,7 +190,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                 ),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 10.0),*/
               reminderValue == null ? SpinKitThreeBounce(
                 color: Colors.white,
                 size: 12.0,

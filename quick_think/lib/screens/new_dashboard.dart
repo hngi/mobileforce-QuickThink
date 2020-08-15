@@ -116,7 +116,7 @@ class _DashBoardState extends State<DashBoard> {
                         RichText(
                           text: TextSpan(children: [
                             TextSpan(
-                                text: "Hello, ",
+                                text: "Hello ",
                                 style: GoogleFonts.poppins(
                                     fontSize:
                                         SizeConfig().textSize(context, 3.2),
@@ -131,7 +131,7 @@ class _DashBoardState extends State<DashBoard> {
                                     fontWeight: FontWeight.bold)),
                             TextSpan(text: '\n'),
                             TextSpan(
-                                text: "Glad you're back",
+                                text: "Glad you're here",
                                 style: GoogleFonts.poppins(
                                     fontSize:
                                         SizeConfig().textSize(context, 2.2),
