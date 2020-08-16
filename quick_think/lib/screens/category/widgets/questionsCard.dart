@@ -236,7 +236,7 @@ class QuestionsCard extends HookWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Text(
-                        '30 sec',
+                        '10 sec',
                         style: GoogleFonts.poppins(
                             fontSize: SizeConfig().textSize(context, 1.7),
                             fontWeight: FontWeight.w400),
