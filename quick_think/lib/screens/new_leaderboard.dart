@@ -57,7 +57,8 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                 children: <Widget>[
                                   _arrow(context),
                                   _text(widget.gameCode),
-                                  Container(
+                                  _headerContainer(light,context,model)
+                                  /*Container(
                                     margin: EdgeInsets.only(top: 30),
                                     child: (model.listData == null || model.listData.length == 0) ?
                                     SpinKitFoldingCube(
@@ -87,7 +88,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
                                             )
                                           ],
                                         )
-                                  )
+                                  )*/
                                 ],
                             ),
                           ),
@@ -241,6 +242,93 @@ Widget _resultContainer(bool light,BuildContext context, LeaderboardModel model)
                 }
               }
           ),
+        );
+      }
+  );
+}
+
+Widget _headerContainer(bool light,BuildContext context, LeaderboardModel model){
+  return StreamBuilder(
+      stream: model.headerState,
+      builder: (context,snapshot){
+        if(snapshot.hasError || snapshot.data == fetchState.NoData){
+          return Container(
+              margin: EdgeInsets.only(top: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: _roundContainer('2', "--", light)
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: _roundContainer1("-", light)
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: _roundContainer('3', "---", light)
+                  )
+                ],
+              )
+          );
+        }
+        if(!snapshot.hasData || snapshot.data == fetchState.Busy){
+          return Container(
+            padding: EdgeInsets.only(top: 30),
+            child: SpinKitFoldingCube(
+              color: Colors.white,
+              size: 20.0,
+            ),
+          );
+        }
+        if(model.listData.length == 0){
+          return Container(
+              margin: EdgeInsets.only(top: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: _roundContainer('2', "--", light)
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: _roundContainer1("-", light)
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: _roundContainer('3', "---", light)
+                  )
+                ],
+              )
+          );
+        }
+        return Container(
+          margin: EdgeInsets.only(top: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Expanded(
+                  flex: 1,
+                  child: model.listData.length >= 2 ?
+                  _roundContainer('2', model.listData[1].userName, light)
+                      :
+                  _roundContainer('2', "--", light)
+              ),
+              Expanded(
+                  flex: 1,
+                  child: _roundContainer1(model.listData[0].userName, light)
+              ),
+              Expanded(
+                  flex: 1,
+                  child: model.listData.length >= 3 ?
+                  _roundContainer('3', model.listData[2].userName, light)
+                      :
+                  _roundContainer('3', "---", light)
+              )
+            ],
+          )
         );
       }
   );
