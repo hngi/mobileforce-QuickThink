@@ -134,7 +134,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Change your password',
+                            'Reset your password',
                             style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,

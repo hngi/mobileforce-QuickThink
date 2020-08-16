@@ -15,7 +15,7 @@ final String deleteQuestionUrl =
     'https://brainteaserdev.pythonanywhere.com/question/delete/';
 
 final String deleteAccountUrl =
-    'https://brainteaserdev.pythonanywhere.com/user/delete';
+    'https://brainteaserdev.pythonanywhere.com/user/delete/';
 
 final String editCategoryUrl =
     'https://brainteaserdev.pythonanywhere.com/category/update/';
